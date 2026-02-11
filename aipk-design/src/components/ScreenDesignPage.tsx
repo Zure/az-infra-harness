@@ -4,7 +4,7 @@ import { ArrowLeft, Maximize2, GripVertical, Layout, Smartphone, Tablet, Monitor
 import { Button } from '@/components/ui/button'
 import { ThemeToggle } from '@/components/ThemeToggle'
 import { loadScreenDesignComponent, sectionUsesShell } from '@/lib/section-loader'
-import { loadAppShell, hasShellComponents, loadShellInfo } from '@/lib/shell-loader'
+import { loadAppShell, hasShellComponents } from '@/lib/shell-loader'
 import { loadProductData } from '@/lib/product-loader'
 import React from 'react'
 
@@ -249,39 +249,28 @@ export function ScreenDesignFullscreen() {
 
         // Create a wrapper that provides default props to the shell
         const ShellWrapper = ({ children }: { children?: React.ReactNode }) => {
-          // Try to get navigation items from shell spec
-          const shellInfo = loadShellInfo()
-          const specNavItems = shellInfo?.spec?.navigationItems || []
+          // Load product roadmap to get sections
+          const productData = loadProductData()
+          const roadmapSections = productData.roadmap?.sections || []
 
-          // Parse navigation items from spec (format: "**Label** → Description")
-          const navigationItems = specNavItems.length > 0
-            ? specNavItems.map((item, index) => {
-                // Extract label from **Label** format
-                const labelMatch = item.match(/\*\*([^*]+)\*\*/)
-                const label = labelMatch ? labelMatch[1] : item.split('→')[0]?.trim() || `Item ${index + 1}`
-                return {
-                  label,
-                  href: `/${label.toLowerCase().replace(/\s+/g, '-')}`,
-                  isActive: index === 0,
-                }
-              })
-            : [
-                { label: 'Dashboard', href: '/', isActive: true },
-                { label: 'Items', href: '/items' },
-                { label: 'Settings', href: '/settings' },
-              ]
+          // Convert roadmap sections to workflow steps
+          const steps = roadmapSections.map((section, index) => ({
+            id: section.id,
+            number: index + 1,
+            label: section.title,
+            status: (index === 0 ? 'current' : 'upcoming') as 'completed' | 'current' | 'upcoming',
+          }))
 
-          const defaultUser = {
-            name: 'Demo User',
-          }
+          // Find current step based on sectionId from URL
+          const currentStepIndex = roadmapSections.findIndex((s) => s.id === sectionId)
+          const currentStep = currentStepIndex >= 0 ? currentStepIndex + 1 : 1
 
-          // Pass props dynamically - the shell component decides what it needs
+          // Pass props that AppShell expects
           return (
             <ShellComponent
-              navigationItems={navigationItems}
-              user={defaultUser}
+              steps={steps}
+              currentStep={currentStep}
               onNavigate={() => {}}
-              onLogout={() => {}}
             >
               {children}
             </ShellComponent>

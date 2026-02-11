@@ -2,23 +2,17 @@
 
 ## Sections
 
-### 1. Application Overview
-Define the application being deployed - name, description, type, and core requirements that determine which infrastructure sections are relevant.
+### 1. Application Definition
+High-level functional overview of the application being deployed - name, description, purpose, and key features that will inform infrastructure requirements.
 
-### 2. Compute
-Determine compute requirements through guided questions (users, traffic, scaling, availability) and recommend appropriate Azure services (App Service, Container Apps, AKS, Functions, Static Web Apps).
+### 2. Context
+Define the landscape the application lives in - enterprise landing zone with existing platform configurations, greenfield deployment, hybrid setup, or other organizational context that affects infrastructure choices.
 
-### 3. Data Storage
-If needed based on app type, gather data requirements (type, volume, consistency, distribution) and recommend storage solutions (SQL Database, Cosmos DB, Storage Account, Redis Cache).
+### 3. Application Architecture
+Define the application's components in detail - compute resources (App Service, Container Apps, AKS, Functions), data storage (SQL Database, Cosmos DB, Storage Account), networking (VNet, private endpoints), security (Managed Identity, Key Vault), monitoring (Application Insights), and deployment needs.
 
-### 4. Networking
-Configure network infrastructure including VNet integration, private endpoints, and load balancing - can reference existing platform team configurations.
+### 4. Architecture Decisions
+Review and refine the architecture decisions generated based on the application architecture - each decision documented as an ADR with context, options considered, chosen solution, and rationale.
 
-### 5. Security & Identity
-Define security requirements including Managed Identity, Key Vault integration, and access policies - can reference existing platform configurations.
-
-### 6. Monitoring & Observability
-Set up Application Insights, Log Analytics, and alerting - can reference existing platform monitoring infrastructure.
-
-### 7. CI/CD & Deployment
-Define deployment pipelines and strategies (GitHub Actions, Azure DevOps) including environment configuration and IaC language choice.
+### 5. Export
+Generate the complete infrastructure planning package with ready-to-use prompts for coding agents, implementation instructions, ADRs, and all specifications needed to implement the infrastructure as code.

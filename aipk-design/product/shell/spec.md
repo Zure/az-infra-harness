@@ -4,13 +4,11 @@
 The Azure Infra Prompt Kit shell provides a sidebar-based navigation system that guides developers through the infrastructure planning process. The shell uses a vertical sidebar on the left showing the workflow steps with clear visual indicators for progress, and a content area on the right for the guided questions and forms.
 
 ## Navigation Structure
-- Step 1: Application Overview
-- Step 2: Compute
-- Step 3: Data Storage
-- Step 4: Networking
-- Step 5: Security & Identity
-- Step 6: Monitoring & Observability
-- Step 7: CI/CD & Deployment
+- Step 1: Application Definition
+- Step 2: Context
+- Step 3: Application Architecture
+- Step 4: Architecture Decisions
+- Step 5: Export
 
 ## Layout Pattern
 **Sidebar Navigation** - A fixed-width sidebar (256px) on the left side showing all workflow steps vertically, with a flexible content area on the right.

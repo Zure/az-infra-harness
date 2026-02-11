@@ -2,13 +2,11 @@ import { AppShell, type WorkflowStep } from './components/AppShell'
 
 export default function ShellPreview() {
   const steps: WorkflowStep[] = [
-    { id: 'app-overview', number: 1, label: 'Application Overview', status: 'completed' },
-    { id: 'compute', number: 2, label: 'Compute', status: 'completed' },
-    { id: 'data-storage', number: 3, label: 'Data Storage', status: 'current' },
-    { id: 'networking', number: 4, label: 'Networking', status: 'upcoming' },
-    { id: 'security', number: 5, label: 'Security & Identity', status: 'upcoming' },
-    { id: 'monitoring', number: 6, label: 'Monitoring & Observability', status: 'upcoming' },
-    { id: 'cicd', number: 7, label: 'CI/CD & Deployment', status: 'upcoming' },
+    { id: 'app-definition', number: 1, label: 'Application Definition', status: 'completed' },
+    { id: 'context', number: 2, label: 'Context', status: 'completed' },
+    { id: 'app-architecture', number: 3, label: 'Application Architecture', status: 'current' },
+    { id: 'arch-decisions', number: 4, label: 'Architecture Decisions', status: 'upcoming' },
+    { id: 'export', number: 5, label: 'Export', status: 'upcoming' },
   ]
 
   return (
@@ -19,38 +17,49 @@ export default function ShellPreview() {
     >
       <div className="rounded-lg border border-slate-200 bg-white p-8 dark:border-slate-700 dark:bg-slate-800">
         <h1 className="mb-2 text-3xl font-bold text-slate-900 dark:text-slate-100">
-          Data Storage Requirements
+          Application Architecture
         </h1>
         <p className="mb-8 text-slate-600 dark:text-slate-400">
-          Let's determine what data storage your application needs.
+          Define your application's infrastructure components in detail.
         </p>
         
-        <div className="space-y-6">
-          <div>
-            <label className="mb-2 block text-sm font-medium text-slate-700 dark:text-slate-300">
-              What type of data will your application store?
-            </label>
-            <select className="w-full rounded-md border border-slate-300 bg-white px-3 py-2 text-slate-900 focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500 dark:border-slate-600 dark:bg-slate-900 dark:text-slate-100">
-              <option>Select data type...</option>
-              <option>Relational data (tables, SQL)</option>
-              <option>Document/JSON data</option>
-              <option>Files and blobs</option>
-              <option>Key-value pairs</option>
-              <option>Time-series data</option>
-            </select>
+        <div className="space-y-8">
+          <div className="space-y-4">
+            <h2 className="text-xl font-semibold text-slate-900 dark:text-slate-100">
+              Compute Resources
+            </h2>
+            <div>
+              <label className="mb-2 block text-sm font-medium text-slate-700 dark:text-slate-300">
+                What compute service best fits your application?
+              </label>
+              <select className="w-full rounded-md border border-slate-300 bg-white px-3 py-2 text-slate-900 focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500 dark:border-slate-600 dark:bg-slate-900 dark:text-slate-100">
+                <option>Select compute service...</option>
+                <option>App Service (Web apps, APIs)</option>
+                <option>Container Apps (Containerized apps)</option>
+                <option>AKS (Kubernetes workloads)</option>
+                <option>Functions (Serverless, event-driven)</option>
+                <option>Static Web Apps (Static sites, SPAs)</option>
+              </select>
+            </div>
           </div>
 
-          <div>
-            <label className="mb-2 block text-sm font-medium text-slate-700 dark:text-slate-300">
-              What's your expected data volume?
-            </label>
-            <select className="w-full rounded-md border border-slate-300 bg-white px-3 py-2 text-slate-900 focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500 dark:border-slate-600 dark:bg-slate-900 dark:text-slate-100">
-              <option>Select volume...</option>
-              <option>Small (&lt; 10 GB)</option>
-              <option>Medium (10-100 GB)</option>
-              <option>Large (100 GB - 1 TB)</option>
-              <option>Very Large (&gt; 1 TB)</option>
-            </select>
+          <div className="space-y-4">
+            <h2 className="text-xl font-semibold text-slate-900 dark:text-slate-100">
+              Data Storage
+            </h2>
+            <div>
+              <label className="mb-2 block text-sm font-medium text-slate-700 dark:text-slate-300">
+                What type of data storage do you need?
+              </label>
+              <select className="w-full rounded-md border border-slate-300 bg-white px-3 py-2 text-slate-900 focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500 dark:border-slate-600 dark:bg-slate-900 dark:text-slate-100">
+                <option>Select storage type...</option>
+                <option>SQL Database (Relational data)</option>
+                <option>Cosmos DB (NoSQL, distributed)</option>
+                <option>Storage Account (Blobs, files, queues)</option>
+                <option>Redis Cache (In-memory cache)</option>
+                <option>None (Stateless application)</option>
+              </select>
+            </div>
           </div>
 
           <div className="flex gap-3">

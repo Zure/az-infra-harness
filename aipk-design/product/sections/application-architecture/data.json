@@ -1,0 +1,126 @@
+{
+  "_meta": {
+    "models": {
+      "Component": "An application component with its Azure infrastructure configuration details.",
+      "ComponentConfiguration": "The Azure service configuration for a component including service type, SKU, settings, and other infrastructure details.",
+      "DeploymentStrategy": "The unified deployment approach for all components including CI/CD setup, environments, and deployment process.",
+      "ArchitectureDiagram": "Visual representation of the architecture showing resource groups, resources, and connections between components."
+    },
+    "relationships": [
+      "Component has one ComponentConfiguration (if configured)",
+      "All components share one DeploymentStrategy",
+      "ArchitectureDiagram visualizes all Components and their relationships"
+    ]
+  },
+  "components": [
+    {
+      "id": "web-frontend",
+      "name": "Web Frontend",
+      "type": "compute",
+      "description": "React-based single-page application that provides the customer-facing interface",
+      "isConfigured": true,
+      "configuration": {
+        "azureService": "Static Web Apps",
+        "sku": "Standard",
+        "region": "East US 2",
+        "settings": {
+          "customDomain": "portal.contoso.com",
+          "cdn": "Azure Front Door",
+          "authentication": "Azure AD B2C"
+        }
+      }
+    },
+    {
+      "id": "api-backend",
+      "name": "API Backend",
+      "type": "compute",
+      "description": "RESTful API service that handles business logic and integrates with on-premises systems",
+      "isConfigured": true,
+      "configuration": {
+        "azureService": "Container Apps",
+        "sku": "Consumption",
+        "region": "East US 2",
+        "settings": {
+          "minReplicas": 2,
+          "maxReplicas": 10,
+          "cpu": "1.0",
+          "memory": "2Gi",
+          "ingress": "External",
+          "privateEndpoint": true
+        }
+      }
+    },
+    {
+      "id": "background-worker",
+      "name": "Background Worker",
+      "type": "compute",
+      "description": "Processes asynchronous tasks like email notifications and report generation",
+      "isConfigured": true,
+      "configuration": {
+        "azureService": "Container Apps",
+        "sku": "Consumption",
+        "region": "East US 2",
+        "settings": {
+          "minReplicas": 1,
+          "maxReplicas": 5,
+          "cpu": "0.5",
+          "memory": "1Gi",
+          "ingress": "Internal",
+          "eventDriven": true
+        }
+      }
+    },
+    {
+      "id": "customer-database",
+      "name": "Customer Database",
+      "type": "data",
+      "description": "Stores customer profiles, preferences, and authentication data",
+      "isConfigured": true,
+      "configuration": {
+        "azureService": "Azure SQL Database",
+        "sku": "General Purpose - Gen5, 4 vCores",
+        "region": "East US 2",
+        "settings": {
+          "backup": "Automated daily backups, 30-day retention",
+          "highAvailability": "Zone-redundant",
+          "encryption": "TDE enabled",
+          "privateEndpoint": true
+        }
+      }
+    },
+    {
+      "id": "document-storage",
+      "name": "Document Storage",
+      "type": "data",
+      "description": "Stores customer documents for download and reference",
+      "isConfigured": false,
+      "configuration": null
+    },
+    {
+      "id": "session-cache",
+      "name": "Session Cache",
+      "type": "data",
+      "description": "Distributed cache for user sessions and API response caching",
+      "isConfigured": false,
+      "configuration": null
+    },
+    {
+      "id": "application-gateway",
+      "name": "Application Gateway",
+      "type": "networking",
+      "description": "Entry point for incoming HTTPS traffic with SSL termination and WAF",
+      "isConfigured": false,
+      "configuration": null
+    }
+  ],
+  "deployment": {
+    "isConfigured": true,
+    "command": "/deployment-strategy",
+    "content": "# Deployment Strategy\n\n## Source Control\n- **Repository**: GitHub (github.com/contoso/customer-portal)\n- **Branching**: GitFlow (main, develop, feature branches)\n- **Protection**: Branch protection on main and develop\n\n## CI/CD Platform\n- **Platform**: GitHub Actions\n- **Workflows**: Separate workflows per component\n- **Secrets**: Stored in GitHub Secrets, synced from Azure Key Vault\n\n## Environments\n- **Development**: Auto-deploy from develop branch\n- **Staging**: Manual approval required\n- **Production**: Manual approval + change management ticket\n\n## Deployment Process\n1. Developer creates PR to develop branch\n2. Automated tests and security scans run on PR\n3. Merge triggers deployment to Development environment\n4. Staging deployment requires approval from tech lead\n5. Production deployment requires approval from change board\n6. All deployments use infrastructure-as-code (Bicep)\n7. Rollback capability via GitHub Actions rerun with previous commit\n\n## Quality Gates\n- Unit tests must pass (80% coverage minimum)\n- Integration tests must pass\n- Security scan (no high/critical vulnerabilities)\n- Infrastructure validation (Bicep lint + what-if)\n- Performance tests (staging only)"
+  },
+  "architectureDiagram": {
+    "isConfigured": true,
+    "command": "/generate-architecture-diagram",
+    "content": "```mermaid\ngraph TB\n    subgraph hub[\"Hub VNet (10.0.0.0/16)\"]\n        fw[Azure Firewall]\n        appgw[Application Gateway]\n    end\n\n    subgraph spoke[\"Spoke VNet: rg-customerportal-prod-eastus2 (10.1.0.0/16)\"]\n        subgraph web_tier[\"Web Tier Subnet\"]\n            frontend[Web Frontend<br/>Static Web Apps]\n        end\n        \n        subgraph app_tier[\"App Tier Subnet\"]\n            api[API Backend<br/>Container Apps]\n            worker[Background Worker<br/>Container Apps]\n        end\n        \n        subgraph data_tier[\"Data Tier Subnet\"]\n            sqldb[(Customer Database<br/>SQL Database)]\n            storage[(Document Storage<br/>Storage Account)]\n            cache[(Session Cache<br/>Redis Cache)]\n        end\n        \n        subgraph platform[\"Platform Services\"]\n            kv[Key Vault]\n            monitor[Application Insights]\n        end\n    end\n\n    internet([Internet]) --> appgw\n    appgw --> frontend\n    frontend --> api\n    api --> worker\n    api --> sqldb\n    api --> storage\n    api --> cache\n    worker --> sqldb\n    \n    api -.uses.-> kv\n    worker -.uses.-> kv\n    api -.logs to.-> monitor\n    worker -.logs to.-> monitor\n    frontend -.logs to.-> monitor\n    \n    api -.private connection.-> onprem[On-Premises<br/>Systems]\n    \n    style hub fill:#dbeafe,stroke:#3b82f6,stroke-width:2px\n    style spoke fill:#f1f5f9,stroke:#64748b,stroke-width:2px\n    style web_tier fill:#e0f2fe,stroke:#0ea5e9,stroke-width:1px\n    style app_tier fill:#cffafe,stroke:#06b6d4,stroke-width:1px\n    style data_tier fill:#e0e7ff,stroke:#6366f1,stroke-width:1px\n    style platform fill:#f1f5f9,stroke:#94a3b8,stroke-width:1px\n```"
+  }
+}
