@@ -1,0 +1,87 @@
+{
+  "_meta": {
+    "models": {
+      "PlanningBox": "Represents one of the three planning boxes in the Application Definition section - shows completion status and either prompts the user to run a command or displays generated markdown content.",
+      "Component": "Represents an application component with name, type (compute/data/networking), and description.",
+      "ApplicationDefinition": "The complete application definition containing all three planning boxes (overview, non-functional requirements, application components) with their content and completion status."
+    },
+    "relationships": [
+      "ApplicationDefinition contains three PlanningBox instances (overview, nonFunctionalRequirements, applicationComponents)",
+      "Each PlanningBox tracks whether it's completed and stores either null (not filled) or markdown content (filled)",
+      "The applicationComponents box contains an array of Component objects"
+    ]
+  },
+  "planningBoxes": [
+    {
+      "id": "app-overview",
+      "title": "Application Overview",
+      "command": "/application-overview",
+      "isCompleted": true,
+      "content": "# Customer Portal\n\n## Description\nA self-service customer portal that allows users to manage their accounts, view order history, track shipments, and access support resources. The portal integrates with existing backend systems and provides a modern, responsive web experience.\n\n## Purpose\nReduce support call volume by enabling customers to handle common tasks themselves while providing 24/7 access to account information and order tracking.\n\n## Key Features\n- Account management (profile, preferences, billing)\n- Order history and tracking\n- Support ticket creation and tracking\n- Knowledge base and FAQ search\n- Document download center"
+    },
+    {
+      "id": "non-functional-reqs",
+      "title": "Non-Functional Requirements",
+      "command": "/non-functional-requirements",
+      "isCompleted": true,
+      "content": "# Non-Functional Requirements\n\n## Scale\n- **Expected Users**: 50,000 registered users, ~5,000 daily active users\n- **Concurrent Users**: Peak of 500 concurrent users during business hours\n- **Growth**: Anticipate 30% year-over-year growth\n- **Data Volume**: ~2GB current, growing to 10GB over 2 years\n\n## Availability\n- **Target Uptime**: 99.5% (allows ~3.6 hours downtime per month)\n- **Maintenance Windows**: Acceptable during off-peak hours (weekends 2-6 AM)\n- **Critical Period**: Business hours Monday-Friday 8 AM - 6 PM EST\n\n## Security & Confidentiality\n- **Data Sensitivity**: Contains PII (names, addresses, emails, phone numbers)\n- **Compliance**: Must comply with GDPR, CCPA\n- **Authentication**: Multi-factor authentication required for account access\n- **Data at Rest**: Encryption required for customer data\n- **Data in Transit**: TLS 1.2+ required for all connections\n\n## Integrity\n- **Backup Frequency**: Daily automated backups with 30-day retention\n- **Recovery Time Objective (RTO)**: 4 hours\n- **Recovery Point Objective (RPO)**: 24 hours (acceptable to lose up to 1 day of data)\n- **Data Consistency**: Eventually consistent acceptable for order status updates\n\n## Usage Patterns\n- **Traffic Type**: Steady baseline with moderate spikes during business hours\n- **Peak Times**: Monday mornings (8-10 AM EST), post-marketing campaigns\n- **Seasonal Variance**: 40% increase during holiday shopping season (Nov-Dec)\n- **Geographic Distribution**: 80% North America, 15% Europe, 5% Asia-Pacific"
+    },
+    {
+      "id": "application-components",
+      "title": "Application Components",
+      "command": "/application-components",
+      "isCompleted": true,
+      "content": null
+    }
+  ],
+  "components": [
+    {
+      "id": "web-frontend",
+      "name": "Web Frontend",
+      "type": "compute",
+      "description": "React-based single-page application that provides the customer-facing interface for account management, order tracking, and support"
+    },
+    {
+      "id": "api-backend",
+      "name": "API Backend",
+      "type": "compute",
+      "description": "RESTful API service that handles business logic, integrates with on-premises systems, and serves data to the web frontend"
+    },
+    {
+      "id": "background-worker",
+      "name": "Background Worker",
+      "type": "compute",
+      "description": "Processes asynchronous tasks like sending email notifications, generating reports, and syncing data with external systems"
+    },
+    {
+      "id": "customer-database",
+      "name": "Customer Database",
+      "type": "data",
+      "description": "Stores customer profiles, preferences, authentication data, and application state"
+    },
+    {
+      "id": "document-storage",
+      "name": "Document Storage",
+      "type": "data",
+      "description": "Stores customer documents (invoices, receipts, guides) for download and reference"
+    },
+    {
+      "id": "session-cache",
+      "name": "Session Cache",
+      "type": "data",
+      "description": "Distributed cache for user sessions, API response caching, and temporary data storage"
+    },
+    {
+      "id": "application-gateway",
+      "name": "Application Gateway",
+      "type": "networking",
+      "description": "Entry point for incoming HTTPS traffic with SSL termination, WAF protection, and routing to backend services"
+    }
+  ],
+  "applicationDefinition": {
+    "completionPercentage": 100,
+    "completedBoxes": 3,
+    "totalBoxes": 3,
+    "lastUpdated": "2026-02-10T14:30:00Z"
+  }
+}

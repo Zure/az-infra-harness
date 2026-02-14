@@ -1,0 +1,41 @@
+{
+  "_meta": {
+    "models": {
+      "PlanningBox": "Represents one of the three planning boxes in the Context section - shows completion status and either prompts the user to run a command or displays generated markdown content about the deployment landscape.",
+      "ContextDefinition": "The complete context definition containing all three planning boxes (infrastructure, platform, development) with their content and completion status."
+    },
+    "relationships": [
+      "ContextDefinition contains three PlanningBox instances (infrastructureContext, platformContext, developmentContext)",
+      "Each PlanningBox tracks whether it's completed and stores either null (not filled) or markdown content (filled)"
+    ]
+  },
+  "planningBoxes": [
+    {
+      "id": "infrastructure-context",
+      "title": "Infrastructure Context",
+      "command": "/infrastructure-context",
+      "isCompleted": true,
+      "content": "# Infrastructure Context\n\n## Network Topology\n- **Model**: Hub-spoke architecture\n- **Hub VNet**: Shared services VNet managed by platform team (10.0.0.0/16)\n- **Spoke VNets**: Application-specific VNets peered to hub\n- **Connectivity**: ExpressRoute to on-premises datacenter\n\n## Landing Zone\n- **Type**: Enterprise-scale landing zone (CAF)\n- **Management Groups**: Corp → Landing Zones → Production\n- **Subscription**: Prod-CustomerPortal-001\n- **Resource Group Naming**: rg-{workload}-{environment}-{region}-{instance}\n\n## Existing Resources\n- **VNet**: Not yet provisioned - will create spoke VNet\n- **Subnets Required**: Web tier, app tier, data tier\n- **Private DNS Zones**: Managed centrally by platform team\n- **Network Security**: NSGs and Azure Firewall rules managed by network team\n\n## Connectivity Requirements\n- Outbound internet via Azure Firewall in hub\n- Inbound traffic via Azure Application Gateway in hub\n- Private connectivity to on-premises SQL Server"
+    },
+    {
+      "id": "platform-context",
+      "title": "Platform Context",
+      "command": "/platform-context",
+      "isCompleted": true,
+      "content": "# Platform Context\n\n## Identity & Access\n- **Azure AD Tenant**: Managed by platform team\n- **Managed Identity**: Will create app-specific managed identity\n- **RBAC**: Custom roles defined at management group level\n- **Service Principals**: Created via platform team request process\n\n## Security Services\n- **Key Vault**: Centralized Key Vault per subscription (kv-prod-shared-eastus2)\n- **Secrets Management**: Application secrets stored in shared Key Vault\n- **Certificate Management**: Platform team manages SSL certificates\n- **Security Center**: Enabled at subscription level with standard tier\n\n## Monitoring & Logging\n- **Log Analytics Workspace**: Centralized workspace (log-prod-eastus2)\n- **Application Insights**: Will create app-specific instance, linked to central workspace\n- **Diagnostic Settings**: Platform policy auto-configures for all resources\n- **Alert Action Groups**: Centralized action groups for different severity levels\n\n## Platform Services Available\n- Azure Monitor (centralized)\n- Azure Policy (enforced at management group)\n- Microsoft Defender for Cloud (enabled)\n- Azure Backup (centralized vault)\n- Cost Management (subscription-level budgets and alerts)"
+    },
+    {
+      "id": "development-context",
+      "title": "Development Context",
+      "command": "/development-context",
+      "isCompleted": false,
+      "content": null
+    }
+  ],
+  "contextDefinition": {
+    "completionPercentage": 67,
+    "completedBoxes": 2,
+    "totalBoxes": 3,
+    "lastUpdated": "2026-02-10T15:45:00Z"
+  }
+}
