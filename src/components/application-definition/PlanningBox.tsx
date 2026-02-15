@@ -1,3 +1,5 @@
+'use client'
+
 import { Terminal, CheckCircle2, Circle, Copy, Check } from 'lucide-react'
 import ReactMarkdown from 'react-markdown'
 import { useState } from 'react'

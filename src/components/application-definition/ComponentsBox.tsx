@@ -1,5 +1,4 @@
-import { Terminal, CheckCircle2, Circle, Server, Database, Network, ChevronRight } from 'lucide-react'
-import { useState } from 'react'
+import { Terminal, CheckCircle2, Circle, Server, Database, Network } from 'lucide-react'
 import { CopyButton } from './PlanningBox'
 import type { Component } from './types'
 
@@ -12,11 +11,7 @@ interface ComponentsBoxProps {
   onComponentClick?: (componentId: string) => void
 }
 
-function ComponentCard({ component, onClick }: { component: Component; onClick?: (id: string) => void }) {
-  const handleClick = () => {
-    onClick?.(component.id)
-  }
-
+function ComponentCard({ component }: { component: Component }) {
   // Icon based on component type
   const Icon = component.type === 'compute' ? Server : component.type === 'data' ? Database : Network
 
@@ -34,8 +29,7 @@ function ComponentCard({ component, onClick }: { component: Component; onClick?:
 
   return (
     <div
-      className="group cursor-pointer rounded-lg border border-slate-200 bg-white p-4 transition-all hover:border-slate-300 hover:shadow-sm dark:border-slate-700 dark:bg-slate-800 dark:hover:border-slate-600"
-      onClick={handleClick}
+      className="rounded-lg border border-slate-200 bg-white p-4 dark:border-slate-700 dark:bg-slate-800"
     >
       <div className="flex items-start gap-3">
         {/* Icon */}
@@ -47,7 +41,6 @@ function ComponentCard({ component, onClick }: { component: Component; onClick?:
         <div className="flex-1 min-w-0">
           <div className="flex items-start justify-between gap-2 mb-2">
             <h4 className="font-semibold text-slate-900 dark:text-slate-100">{component.name}</h4>
-            <ChevronRight className="h-5 w-5 text-slate-400 shrink-0 transition-transform group-hover:translate-x-0.5" />
           </div>
 
           {/* Type badge */}
@@ -101,7 +94,6 @@ export function ComponentsBox({ title, command, description, isCompleted, compon
                 <ComponentCard
                   key={component.id}
                   component={component}
-                  onClick={onComponentClick}
                 />
               ))}
             </div>
