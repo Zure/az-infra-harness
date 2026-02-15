@@ -3,9 +3,9 @@
 ## Define Section Variables
 
 Before using this prompt, replace these variables:
-- **SECTION_NAME** = Application Definition
-- **SECTION_ID** = 02-application-definition
-- **NN** = 02
+- **SECTION_NAME** = Export
+- **SECTION_ID** = 06-export.md
+- **NN** = 06
 
 ---
 

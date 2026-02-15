@@ -3,7 +3,7 @@
 import { Terminal, Server, Database, Network, CheckCircle2, Circle, ArrowLeft } from 'lucide-react'
 import Link from 'next/link'
 import type { Component } from './types'
-import { CopyButton } from '@/components/application-definition/PlanningBox'
+import { CopyButton } from '@/components/shared/CopyButton'
 
 interface ComponentDetailProps {
   component: Component

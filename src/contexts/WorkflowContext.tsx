@@ -11,6 +11,7 @@ interface WorkflowContextType {
   navigateToStep: (stepId: string) => void
   completeCurrentStep: () => void
   completeStep: (stepId: string) => void
+  uncompleteStep: (stepId: string) => void
   isStepClickable: (stepId: string) => boolean
 }
 
@@ -237,6 +238,18 @@ export function WorkflowProvider({ children }: { children: ReactNode }) {
     })
   }, [])
 
+  const uncompleteStep = useCallback((stepId: string) => {
+    // Remove a step from the completed list
+    setCompletedStepIds(prev => {
+      if (!prev.has(stepId)) {
+        return prev // Not completed, no update needed
+      }
+      const newSet = new Set(prev)
+      newSet.delete(stepId)
+      return newSet
+    })
+  }, [])
+
   const isStepClickable = useCallback((stepId: string) => {
     const step = steps.find(s => s.id === stepId)
     if (!step) return false
@@ -260,6 +273,7 @@ export function WorkflowProvider({ children }: { children: ReactNode }) {
         navigateToStep,
         completeCurrentStep,
         completeStep,
+        uncompleteStep,
         isStepClickable,
       }}
     >

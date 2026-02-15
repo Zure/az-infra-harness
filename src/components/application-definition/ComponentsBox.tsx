@@ -1,5 +1,5 @@
 import { Terminal, CheckCircle2, Circle, Server, Database, Network } from 'lucide-react'
-import { CopyButton } from './PlanningBox'
+import { CopyButton } from '@/components/shared/CopyButton'
 import type { Component } from './types'
 
 interface ComponentsBoxProps {

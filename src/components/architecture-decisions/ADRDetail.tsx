@@ -1,6 +1,6 @@
 import { ArrowLeft, Terminal } from 'lucide-react'
 import ReactMarkdown from 'react-markdown'
-import { CopyButton } from '@/components/application-definition/PlanningBox'
+import { CopyButton } from '@/components/shared/CopyButton'
 import type { ADR } from './types'
 
 interface ADRDetailProps {

@@ -1,5 +1,5 @@
 import { Terminal, CheckCircle2, Circle, FileText } from 'lucide-react'
-import { CopyButton } from '@/components/application-definition/PlanningBox'
+import { CopyButton } from '@/components/shared/CopyButton'
 import type { ADRsListBox as ADRsListBoxType } from './types'
 
 interface ADRsListBoxProps {

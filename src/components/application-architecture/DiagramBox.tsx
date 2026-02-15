@@ -1,5 +1,5 @@
 import { CheckCircle2, Circle, Terminal } from 'lucide-react'
-import { CopyButton } from '@/components/application-definition/PlanningBox'
+import { CopyButton } from '@/components/shared/CopyButton'
 import { MermaidDiagram } from './MermaidDiagram'
 
 interface DiagramBoxProps {
