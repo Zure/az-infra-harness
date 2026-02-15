@@ -3,9 +3,9 @@
 ## Define Section Variables
 
 Before using this prompt, replace these variables:
-- **SECTION_NAME** = Shell
-- **SECTION_ID** = 01-shell
-- **NN** = 01
+- **SECTION_NAME** = Application Definition
+- **SECTION_ID** = 02-application-definition
+- **NN** = 02
 
 ---
 
