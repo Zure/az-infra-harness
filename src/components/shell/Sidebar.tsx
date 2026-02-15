@@ -8,9 +8,10 @@ export interface SidebarProps {
   currentStep: number
   onNavigate?: (stepId: string) => void
   isOpen?: boolean
+  isStepClickable?: (stepId: string) => boolean
 }
 
-export function Sidebar({ steps, currentStep, onNavigate, isOpen = false }: SidebarProps) {
+export function Sidebar({ steps, currentStep, onNavigate, isOpen = false, isStepClickable }: SidebarProps) {
   return (
     <aside 
       className={`
@@ -24,19 +25,22 @@ export function Sidebar({ steps, currentStep, onNavigate, isOpen = false }: Side
       <nav className="flex-1 overflow-y-auto px-3 py-4" aria-label="Workflow progress">
         <div className="space-y-1">
           {steps.map((step) => {
-            const isClickable = step.status === 'completed' && onNavigate
+            // Use the isStepClickable function from context if available, otherwise fall back to completed check
+            const isClickable = isStepClickable 
+              ? isStepClickable(step.id) && onNavigate
+              : step.status === 'completed' && onNavigate
             const isActive = step.number === currentStep
 
             return (
               <button
                 key={step.id}
-                onClick={() => isClickable && onNavigate(step.id)}
+                onClick={() => isClickable && onNavigate?.(step.id)}
                 disabled={!isClickable}
                 className={`
                   w-full flex items-start gap-3 rounded-lg px-3 py-3 text-left transition-colors
                   ${isActive 
                     ? 'bg-blue-50 text-blue-700 dark:bg-blue-900/30 dark:text-blue-400' 
-                    : step.status === 'completed'
+                    : isClickable
                     ? 'text-slate-700 hover:bg-slate-50 dark:text-slate-300 dark:hover:bg-slate-700/50'
                     : 'text-slate-400 dark:text-slate-500'
                   }

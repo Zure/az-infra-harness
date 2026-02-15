@@ -9,6 +9,7 @@ interface WorkflowContextType {
   currentStep: number
   navigateToStep: (stepId: string) => void
   completeCurrentStep: () => void
+  isStepClickable: (stepId: string) => boolean
 }
 
 const WorkflowContext = createContext<WorkflowContextType | undefined>(undefined)
@@ -87,6 +88,7 @@ export function WorkflowProvider({ children }: { children: ReactNode }) {
   const pathname = usePathname()
   const [steps, setSteps] = useState<WorkflowStep[]>(WORKFLOW_STEPS)
   const [currentStep, setCurrentStep] = useState(1)
+  const [completedStepIds, setCompletedStepIds] = useState<Set<string>>(new Set())
   const [initialized, setInitialized] = useState(false)
 
   // Initialize workflow state from localStorage and current route on mount
@@ -99,13 +101,14 @@ export function WorkflowProvider({ children }: { children: ReactNode }) {
 
     if (saved && currentStepObj) {
       // Use saved state but sync with current route
-      const completedStepIds = new Set(saved.completedSteps)
+      const savedCompletedSteps = new Set(saved.completedSteps)
       const currentStepNum = currentStepObj.number
 
+      setCompletedStepIds(savedCompletedSteps)
       setSteps(WORKFLOW_STEPS.map(s => {
         if (s.number === currentStepNum) {
           return { ...s, status: 'current' as const }
-        } else if (s.number < currentStepNum || completedStepIds.has(s.id)) {
+        } else if (savedCompletedSteps.has(s.id)) {
           return { ...s, status: 'completed' as const }
         } else {
           return { ...s, status: 'upcoming' as const }
@@ -146,44 +149,54 @@ export function WorkflowProvider({ children }: { children: ReactNode }) {
       prevSteps.map(s => {
         if (s.number === stepObj.number) {
           return { ...s, status: 'current' as const }
-        } else if (s.status === 'completed') {
-          // Keep completed status
-          return s
-        } else if (s.number < stepObj.number) {
-          // Mark previous steps as completed
+        } else if (completedStepIds.has(s.id)) {
+          // Keep completed status for all completed steps
           return { ...s, status: 'completed' as const }
         } else {
           return { ...s, status: 'upcoming' as const }
         }
       })
     )
-  }, [pathname, initialized])
+  }, [pathname, initialized, completedStepIds])
 
   // Save workflow state whenever it changes
   useEffect(() => {
     if (!initialized) return
 
-    const completedSteps = steps.filter(s => s.status === 'completed').map(s => s.id)
+    const completedSteps = Array.from(completedStepIds)
     saveWorkflowState(completedSteps, currentStep)
-  }, [steps, currentStep, initialized])
+  }, [completedStepIds, currentStep, initialized])
 
   const navigateToStep = useCallback((stepId: string) => {
     const step = steps.find(s => s.id === stepId)
-    if (step && step.status === 'completed') {
+    if (!step) return
+
+    // Find the highest completed step number
+    const maxCompletedStep = Math.max(
+      0,
+      ...Array.from(completedStepIds).map(id => steps.find(s => s.id === id)?.number || 0)
+    )
+
+    // Allow navigation to completed steps OR the next step after the last completed one
+    if (completedStepIds.has(stepId) || step.number === maxCompletedStep + 1) {
       setCurrentStep(step.number)
       setSteps(prevSteps =>
         prevSteps.map(s =>
           s.number === step.number
             ? { ...s, status: 'current' }
-            : s.number < step.number
+            : completedStepIds.has(s.id)
             ? { ...s, status: 'completed' }
             : { ...s, status: 'upcoming' }
         )
       )
     }
-  }, [steps])
+  }, [steps, completedStepIds])
 
   const completeCurrentStep = useCallback(() => {
+    const currentStepObj = steps.find(s => s.number === currentStep)
+    if (currentStepObj) {
+      setCompletedStepIds(prev => new Set([...prev, currentStepObj.id]))
+    }
     setSteps(prevSteps =>
       prevSteps.map(s =>
         s.number === currentStep
@@ -194,7 +207,21 @@ export function WorkflowProvider({ children }: { children: ReactNode }) {
       )
     )
     setCurrentStep(prev => Math.min(prev + 1, steps.length))
-  }, [currentStep, steps.length])
+  }, [currentStep, steps])
+
+  const isStepClickable = useCallback((stepId: string) => {
+    const step = steps.find(s => s.id === stepId)
+    if (!step) return false
+
+    // Find the highest completed step number
+    const maxCompletedStep = Math.max(
+      0,
+      ...Array.from(completedStepIds).map(id => steps.find(s => s.id === id)?.number || 0)
+    )
+
+    // Allow clicking on completed steps OR the next step after the last completed one
+    return completedStepIds.has(stepId) || step.number === maxCompletedStep + 1
+  }, [steps, completedStepIds])
 
   return (
     <WorkflowContext.Provider
@@ -203,6 +230,7 @@ export function WorkflowProvider({ children }: { children: ReactNode }) {
         currentStep,
         navigateToStep,
         completeCurrentStep,
+        isStepClickable,
       }}
     >
       {children}

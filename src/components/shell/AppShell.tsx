@@ -17,9 +17,10 @@ export interface AppShellProps {
   steps: WorkflowStep[]
   currentStep: number
   onNavigate?: (stepId: string) => void
+  isStepClickable?: (stepId: string) => boolean
 }
 
-export function AppShell({ children, steps, currentStep, onNavigate }: AppShellProps) {
+export function AppShell({ children, steps, currentStep, onNavigate, isStepClickable }: AppShellProps) {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false)
 
   const currentStepData = steps.find(s => s.number === currentStep)
@@ -93,6 +94,7 @@ export function AppShell({ children, steps, currentStep, onNavigate }: AppShellP
             setIsSidebarOpen(false) // Close sidebar after navigation on mobile
           }}
           isOpen={isSidebarOpen}
+          isStepClickable={isStepClickable}
         />
 
         {/* Main content */}

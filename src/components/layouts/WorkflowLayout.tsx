@@ -5,7 +5,7 @@ import { useWorkflow } from '@/contexts/WorkflowContext'
 import { useRouter } from 'next/navigation'
 
 export function WorkflowLayout({ children }: { children: React.ReactNode }) {
-  const { steps, currentStep, navigateToStep } = useWorkflow()
+  const { steps, currentStep, navigateToStep, isStepClickable } = useWorkflow()
   const router = useRouter()
 
   const handleNavigate = (stepId: string) => {
@@ -18,6 +18,7 @@ export function WorkflowLayout({ children }: { children: React.ReactNode }) {
       steps={steps}
       currentStep={currentStep}
       onNavigate={handleNavigate}
+      isStepClickable={isStepClickable}
     >
       {children}
     </AppShell>
