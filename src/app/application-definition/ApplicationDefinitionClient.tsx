@@ -1,13 +1,22 @@
 'use client'
 
+import { useEffect } from 'react'
 import { ApplicationDefinition as ApplicationDefinitionComponent } from '@/components/application-definition'
 import type { ApplicationDefinitionProps } from '@/components/application-definition/types'
 import { useWorkflow } from '@/contexts/WorkflowContext'
 import { useRouter } from 'next/navigation'
 
 export function ApplicationDefinitionClient(props: ApplicationDefinitionProps) {
-  const { completeCurrentStep } = useWorkflow()
+  const { completeCurrentStep, completeStep } = useWorkflow()
   const router = useRouter()
+
+  // Auto-complete step if all boxes are filled
+  useEffect(() => {
+    const allBoxesCompleted = props.planningBoxes.every(box => box.isCompleted)
+    if (allBoxesCompleted) {
+      completeStep('application-definition')
+    }
+  }, [props.planningBoxes, completeStep])
 
   const handleBoxClick = (boxId: string) => {
     console.log('Box clicked:', boxId)

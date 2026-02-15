@@ -16,11 +16,12 @@ export interface AppShellProps {
   children: React.ReactNode
   steps: WorkflowStep[]
   currentStep: number
+  completedStepsCount: number
   onNavigate?: (stepId: string) => void
   isStepClickable?: (stepId: string) => boolean
 }
 
-export function AppShell({ children, steps, currentStep, onNavigate, isStepClickable }: AppShellProps) {
+export function AppShell({ children, steps, currentStep, completedStepsCount, onNavigate, isStepClickable }: AppShellProps) {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false)
 
   const currentStepData = steps.find(s => s.number === currentStep)
@@ -89,6 +90,7 @@ export function AppShell({ children, steps, currentStep, onNavigate, isStepClick
         <Sidebar 
           steps={steps} 
           currentStep={currentStep}
+          completedStepsCount={completedStepsCount}
           onNavigate={(stepId) => {
             onNavigate?.(stepId)
             setIsSidebarOpen(false) // Close sidebar after navigation on mobile

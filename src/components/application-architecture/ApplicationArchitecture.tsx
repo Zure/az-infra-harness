@@ -4,7 +4,7 @@ import type { ApplicationArchitectureProps } from './types'
 import { ComponentCard } from './ComponentCard'
 import { PlanningBox } from '@/components/application-definition/PlanningBox'
 import { DiagramBox } from './DiagramBox'
-import { ArrowRight } from 'lucide-react'
+import { ContinueButton } from '@/components/shared/ContinueButton'
 
 export function ApplicationArchitecture({
   components,
@@ -128,25 +128,12 @@ export function ApplicationArchitecture({
       </div>
 
       {/* Next stage button */}
-      <div className="mt-8">
-        <button
-          onClick={() => onNext?.()}
-          disabled={!canContinue}
-          className={`w-full flex items-center justify-center gap-2 rounded-lg px-6 py-4 text-lg font-semibold transition-all ${
-            canContinue
-              ? 'bg-blue-600 text-white hover:bg-blue-700 dark:bg-blue-500 dark:hover:bg-blue-600'
-              : 'bg-slate-200 text-slate-400 cursor-not-allowed dark:bg-slate-700 dark:text-slate-500'
-          }`}
-        >
-          Continue to Architecture Decisions
-          <ArrowRight className="h-5 w-5" />
-        </button>
-        {!canContinue && (
-          <p className="mt-2 text-center text-sm text-slate-500 dark:text-slate-400">
-            Configure all {unconfiguredCount} remaining item{unconfiguredCount !== 1 ? 's' : ''} to continue
-          </p>
-        )}
-      </div>
+      <ContinueButton
+        onClick={() => onNext?.()}
+        disabled={!canContinue}
+        label="Continue to Architecture Decisions"
+        disabledMessage={`Configure all ${unconfiguredCount} remaining item${unconfiguredCount !== 1 ? 's' : ''} to continue`}
+      />
     </div>
   )
 }

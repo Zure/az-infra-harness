@@ -7,8 +7,10 @@ import type { WorkflowStep } from '@/components/shell'
 interface WorkflowContextType {
   steps: WorkflowStep[]
   currentStep: number
+  completedStepsCount: number
   navigateToStep: (stepId: string) => void
   completeCurrentStep: () => void
+  completeStep: (stepId: string) => void
   isStepClickable: (stepId: string) => boolean
 }
 
@@ -159,6 +161,21 @@ export function WorkflowProvider({ children }: { children: ReactNode }) {
     )
   }, [pathname, initialized, completedStepIds])
 
+  // Sync step statuses whenever completedStepIds changes
+  useEffect(() => {
+    if (!initialized) return
+
+    setSteps(prevSteps =>
+      prevSteps.map(s => {
+        if (completedStepIds.has(s.id) && s.status !== 'current') {
+          // Mark as completed if in completedStepIds and not currently active
+          return { ...s, status: 'completed' as const }
+        }
+        return s
+      })
+    )
+  }, [completedStepIds, initialized])
+
   // Save workflow state whenever it changes
   useEffect(() => {
     if (!initialized) return
@@ -209,6 +226,17 @@ export function WorkflowProvider({ children }: { children: ReactNode }) {
     setCurrentStep(prev => Math.min(prev + 1, steps.length))
   }, [currentStep, steps])
 
+  const completeStep = useCallback((stepId: string) => {
+    // Mark a specific step as complete (for auto-completion based on data)
+    // Only update if not already completed to prevent infinite loops
+    setCompletedStepIds(prev => {
+      if (prev.has(stepId)) {
+        return prev // Already completed, no update needed
+      }
+      return new Set([...prev, stepId])
+    })
+  }, [])
+
   const isStepClickable = useCallback((stepId: string) => {
     const step = steps.find(s => s.id === stepId)
     if (!step) return false
@@ -228,8 +256,10 @@ export function WorkflowProvider({ children }: { children: ReactNode }) {
       value={{
         steps,
         currentStep,
+        completedStepsCount: completedStepIds.size,
         navigateToStep,
         completeCurrentStep,
+        completeStep,
         isStepClickable,
       }}
     >

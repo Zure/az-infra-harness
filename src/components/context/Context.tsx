@@ -2,7 +2,7 @@
 
 import type { ContextProps } from './types'
 import { PlanningBox } from '@/components/application-definition/PlanningBox'
-import { ArrowRight } from 'lucide-react'
+import { ContinueButton } from '@/components/shared/ContinueButton'
 
 export function Context({
   planningBoxes,
@@ -32,25 +32,12 @@ export function Context({
       </div>
 
       {/* Next stage button */}
-      <div className="mt-8">
-        <button
-          onClick={() => onNext?.()}
-          disabled={!allBoxesCompleted}
-          className={`w-full flex items-center justify-center gap-2 rounded-lg px-6 py-4 text-lg font-semibold transition-all ${
-            allBoxesCompleted
-              ? 'bg-blue-600 text-white hover:bg-blue-700 dark:bg-blue-500 dark:hover:bg-blue-600'
-              : 'bg-slate-200 text-slate-400 cursor-not-allowed dark:bg-slate-700 dark:text-slate-500'
-          }`}
-        >
-          Continue to Application Architecture
-          <ArrowRight className="h-5 w-5" />
-        </button>
-        {!allBoxesCompleted && (
-          <p className="mt-2 text-center text-sm text-slate-500 dark:text-slate-400">
-            Complete all context boxes to continue
-          </p>
-        )}
-      </div>
+      <ContinueButton
+        onClick={() => onNext?.()}
+        disabled={!allBoxesCompleted}
+        label="Continue to Application Architecture"
+        disabledMessage="Complete all context boxes to continue"
+      />
     </div>
   )
 }

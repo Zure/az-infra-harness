@@ -6,12 +6,13 @@ import type { WorkflowStep } from './AppShell'
 export interface SidebarProps {
   steps: WorkflowStep[]
   currentStep: number
+  completedStepsCount: number
   onNavigate?: (stepId: string) => void
   isOpen?: boolean
   isStepClickable?: (stepId: string) => boolean
 }
 
-export function Sidebar({ steps, currentStep, onNavigate, isOpen = false, isStepClickable }: SidebarProps) {
+export function Sidebar({ steps, currentStep, completedStepsCount, onNavigate, isOpen = false, isStepClickable }: SidebarProps) {
   return (
     <aside 
       className={`
@@ -93,14 +94,14 @@ export function Sidebar({ steps, currentStep, onNavigate, isOpen = false, isStep
         <div className="flex items-center justify-between text-xs text-slate-500 dark:text-slate-400 mb-2">
           <span>Progress</span>
           <span>
-            {steps.filter(s => s.status === 'completed').length} of {steps.length}
+            {completedStepsCount} of {steps.length}
           </span>
         </div>
         <div className="h-2 bg-slate-100 dark:bg-slate-700 rounded-full overflow-hidden">
           <div
             className="h-full bg-blue-600 dark:bg-blue-500 transition-all duration-300"
             style={{
-              width: `${(steps.filter(s => s.status === 'completed').length / steps.length) * 100}%`
+              width: `${(completedStepsCount / steps.length) * 100}%`
             }}
           />
         </div>

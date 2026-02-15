@@ -1,5 +1,6 @@
 'use client'
 
+import { useEffect } from 'react'
 import { ApplicationArchitecture } from '@/components/application-architecture'
 import type { ApplicationArchitectureProps } from '@/components/application-architecture/types'
 import { useWorkflow } from '@/contexts/WorkflowContext'
@@ -8,8 +9,17 @@ import { useRouter } from 'next/navigation'
 export function ApplicationArchitectureClient(
   props: Omit<ApplicationArchitectureProps, 'onComponentClick' | 'onDeploymentClick' | 'onDiagramClick' | 'onNext'>
 ) {
-  const { completeCurrentStep } = useWorkflow()
+  const { completeCurrentStep, completeStep } = useWorkflow()
   const router = useRouter()
+
+  // Auto-complete step if all components are configured and deployment is set
+  useEffect(() => {
+    const allComponentsConfigured = props.components.every(c => c.isConfigured)
+    const isDeploymentConfigured = props.deployment.isConfigured
+    if (allComponentsConfigured && isDeploymentConfigured) {
+      completeStep('architecture')
+    }
+  }, [props.components, props.deployment, completeStep])
 
   const handleComponentClick = (componentId: string) => {
     console.log('Component clicked:', componentId)
