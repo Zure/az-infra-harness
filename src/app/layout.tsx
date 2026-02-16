@@ -4,6 +4,7 @@ import { JetBrains_Mono } from "next/font/google";
 import "./globals.css";
 import { ThemeProvider } from "@/components/providers/ThemeProvider";
 import { WorkflowProvider } from "@/contexts/WorkflowContext";
+import { DemoControl } from "@/components/demo/DemoControl";
 
 const inter = Inter({
   variable: "--font-inter",
@@ -35,6 +36,7 @@ export default function RootLayout({
         <ThemeProvider>
           <WorkflowProvider>
             {children}
+            <DemoControl />
           </WorkflowProvider>
         </ThemeProvider>
       </body>

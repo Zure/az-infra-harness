@@ -35,6 +35,7 @@ cp -r "$BACKUP_DIR/application-architecture/components" "$DATA_DIR/application-a
 
 # Restore architecture-decisions
 echo "  Restoring Architecture Decisions..."
+cp "$BACKUP_DIR/architecture-decisions/adr-template.md" "$DATA_DIR/architecture-decisions/"
 cp -r "$BACKUP_DIR/architecture-decisions/adrs" "$DATA_DIR/architecture-decisions/"
 
 # Restore export data

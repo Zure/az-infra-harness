@@ -29,8 +29,9 @@ rm -f "$DATA_DIR/application-architecture/deployment-strategy.md"
 rm -rf "$DATA_DIR/application-architecture/components"
 mkdir -p "$DATA_DIR/application-architecture/components"
 
-# Remove all ADRs (keep template and README)
+# Remove all ADRs including template
 echo "  Cleaning architecture-decisions..."
+rm -f "$DATA_DIR/architecture-decisions/adr-template.md"
 rm -rf "$DATA_DIR/architecture-decisions/adrs"
 mkdir -p "$DATA_DIR/architecture-decisions/adrs"
 

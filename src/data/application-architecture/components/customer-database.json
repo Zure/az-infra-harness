@@ -1,0 +1,11 @@
+{
+  "azureService": "Azure SQL Database",
+  "sku": "General Purpose - Gen5, 4 vCores",
+  "region": "East US 2",
+  "settings": {
+    "backup": "Automated daily backups, 30-day retention",
+    "highAvailability": "Zone-redundant",
+    "encryption": "TDE enabled",
+    "privateEndpoint": true
+  }
+}

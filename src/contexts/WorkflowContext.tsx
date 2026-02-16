@@ -13,6 +13,7 @@ interface WorkflowContextType {
   completeStep: (stepId: string) => void
   uncompleteStep: (stepId: string) => void
   isStepClickable: (stepId: string) => boolean
+  refreshWorkflowStatus: () => Promise<void>
 }
 
 const WorkflowContext = createContext<WorkflowContextType | undefined>(undefined)
@@ -94,47 +95,51 @@ export function WorkflowProvider({ children }: { children: ReactNode }) {
   const [completedStepIds, setCompletedStepIds] = useState<Set<string>>(new Set())
   const [initialized, setInitialized] = useState(false)
 
-  // Initialize workflow state from localStorage and current route on mount
+  // Initialize workflow state from actual data files and localStorage on mount
   useEffect(() => {
     if (initialized) return
 
-    const saved = loadWorkflowState()
-    const currentStepId = getStepIdFromPathname(pathname)
-    const currentStepObj = WORKFLOW_STEPS.find(s => s.id === currentStepId)
-
-    if (saved && currentStepObj) {
-      // Use saved state but sync with current route
-      const savedCompletedSteps = new Set(saved.completedSteps)
-      const currentStepNum = currentStepObj.number
-
-      setCompletedStepIds(savedCompletedSteps)
-      setSteps(WORKFLOW_STEPS.map(s => {
-        if (s.number === currentStepNum) {
-          return { ...s, status: 'current' as const }
-        } else if (savedCompletedSteps.has(s.id)) {
-          return { ...s, status: 'completed' as const }
-        } else {
-          return { ...s, status: 'upcoming' as const }
+    const initializeWorkflow = async () => {
+      // Fetch actual completion status from data files
+      let actualCompletedSteps: string[] = []
+      try {
+        const response = await fetch('/api/workflow/status')
+        if (response.ok) {
+          const data = await response.json()
+          actualCompletedSteps = data.completedSteps || []
         }
-      }))
-      setCurrentStep(currentStepNum)
-    } else if (currentStepObj) {
-      // No saved state, initialize based on current route
-      const currentStepNum = currentStepObj.number
-      
-      setSteps(WORKFLOW_STEPS.map(s => {
-        if (s.number === currentStepNum) {
-          return { ...s, status: 'current' as const }
-        } else if (s.number < currentStepNum) {
-          return { ...s, status: 'completed' as const }
-        } else {
-          return { ...s, status: 'upcoming' as const }
-        }
-      }))
-      setCurrentStep(currentStepNum)
+      } catch (error) {
+        console.error('Failed to fetch workflow status:', error)
+      }
+
+      const currentStepId = getStepIdFromPathname(pathname)
+      const currentStepObj = WORKFLOW_STEPS.find(s => s.id === currentStepId)
+
+      if (currentStepObj) {
+        // Use actual data-based completion status
+        const actualCompletedStepsSet = new Set(actualCompletedSteps)
+        const currentStepNum = currentStepObj.number
+
+        setCompletedStepIds(actualCompletedStepsSet)
+        setSteps(WORKFLOW_STEPS.map(s => {
+          if (s.number === currentStepNum) {
+            return { ...s, status: 'current' as const }
+          } else if (actualCompletedStepsSet.has(s.id)) {
+            return { ...s, status: 'completed' as const }
+          } else {
+            return { ...s, status: 'upcoming' as const }
+          }
+        }))
+        setCurrentStep(currentStepNum)
+
+        // Save to localStorage for quick access
+        saveWorkflowState(actualCompletedSteps, currentStepNum)
+      }
+
+      setInitialized(true)
     }
 
-    setInitialized(true)
+    initializeWorkflow()
   }, [pathname, initialized])
 
   // Sync workflow state when pathname changes (after initialization)
@@ -264,6 +269,39 @@ export function WorkflowProvider({ children }: { children: ReactNode }) {
     return completedStepIds.has(stepId) || step.number === maxCompletedStep + 1
   }, [steps, completedStepIds])
 
+  const refreshWorkflowStatus = useCallback(async () => {
+    try {
+      const response = await fetch('/api/workflow/status')
+      if (response.ok) {
+        const data = await response.json()
+        const actualCompletedSteps: string[] = data.completedSteps || []
+        const actualCompletedStepsSet = new Set(actualCompletedSteps)
+        
+        setCompletedStepIds(actualCompletedStepsSet)
+        
+        // Update step statuses based on actual data
+        const currentStepId = getStepIdFromPathname(pathname)
+        const currentStepObj = WORKFLOW_STEPS.find(s => s.id === currentStepId)
+        const currentStepNum = currentStepObj?.number || 1
+        
+        setSteps(WORKFLOW_STEPS.map(s => {
+          if (s.number === currentStepNum) {
+            return { ...s, status: 'current' as const }
+          } else if (actualCompletedStepsSet.has(s.id)) {
+            return { ...s, status: 'completed' as const }
+          } else {
+            return { ...s, status: 'upcoming' as const }
+          }
+        }))
+        
+        // Save to localStorage
+        saveWorkflowState(actualCompletedSteps, currentStepNum)
+      }
+    } catch (error) {
+      console.error('Failed to refresh workflow status:', error)
+    }
+  }, [pathname])
+
   return (
     <WorkflowContext.Provider
       value={{
@@ -275,6 +313,7 @@ export function WorkflowProvider({ children }: { children: ReactNode }) {
         completeStep,
         uncompleteStep,
         isStepClickable,
+        refreshWorkflowStatus,
       }}
     >
       {children}
