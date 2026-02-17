@@ -44,10 +44,13 @@ export async function GET() {
     )
     if (hasADRs) completedSteps.push('decisions')
 
-    // Check Export (need at least export prompts)
-    const hasExport = await checkDirectoryHasFiles(
-      path.join(dataDir, 'export/prompts')
-    )
+    // Check Export (check for export folders in root)
+    const rootDir = cwd.endsWith('src')
+      ? path.dirname(cwd)
+      : cwd
+    const hasExportBicep = await checkDirectoryExists(path.join(rootDir, 'export-bicep'))
+    const hasExportTerraform = await checkDirectoryExists(path.join(rootDir, 'export-terraform'))
+    const hasExport = hasExportBicep || hasExportTerraform
     if (hasExport) completedSteps.push('export')
 
     return NextResponse.json({
@@ -80,6 +83,15 @@ async function checkDirectoryHasFiles(dir: string): Promise<boolean> {
     const files = await fs.readdir(dir)
     const mdFiles = files.filter((f) => f.endsWith('.md') && f !== 'README.md')
     return mdFiles.length > 0
+  } catch {
+    return false
+  }
+}
+
+async function checkDirectoryExists(dir: string): Promise<boolean> {
+  try {
+    const stat = await fs.stat(dir)
+    return stat.isDirectory()
   } catch {
     return false
   }

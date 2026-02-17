@@ -1,0 +1,200 @@
+{
+  "components": [
+    {
+      "id": "container-apps",
+      "name": "Azure Container Apps",
+      "category": "compute",
+      "description": "Container hosting platform for microservices and containerized applications",
+      "configuration": {
+        "sku": "Consumption",
+        "environment": {
+          "name": "containerapp-env-prod",
+          "location": "eastus",
+          "zoneRedundant": true
+        },
+        "apps": [
+          {
+            "name": "api-service",
+            "image": "mcr.microsoft.com/azuredocs/containerapps-helloworld:latest",
+            "cpu": 0.5,
+            "memory": "1Gi",
+            "minReplicas": 2,
+            "maxReplicas": 10,
+            "ingress": {
+              "external": true,
+              "targetPort": 80,
+              "traffic": [
+                {
+                  "latestRevision": true,
+                  "weight": 100
+                }
+              ]
+            }
+          }
+        ],
+        "networking": {
+          "vnetIntegration": true,
+          "subnetId": "/subscriptions/{subscription-id}/resourceGroups/rg-networking/providers/Microsoft.Network/virtualNetworks/vnet-hub/subnets/snet-container-apps"
+        }
+      }
+    },
+    {
+      "id": "static-web-app",
+      "name": "Azure Static Web Apps",
+      "category": "compute",
+      "description": "Static website hosting with CDN and serverless APIs",
+      "configuration": {
+        "sku": "Standard",
+        "location": "eastus",
+        "repositoryUrl": "https://github.com/org/frontend-app",
+        "branch": "main",
+        "buildProperties": {
+          "appLocation": "/",
+          "apiLocation": "api",
+          "outputLocation": "dist"
+        },
+        "customDomains": [
+          "www.example.com"
+        ]
+      }
+    },
+    {
+      "id": "sql-database",
+      "name": "Azure SQL Database",
+      "category": "data",
+      "description": "Managed relational database service",
+      "configuration": {
+        "server": {
+          "name": "sql-server-prod",
+          "location": "eastus",
+          "version": "12.0",
+          "administratorLogin": "sqladmin",
+          "azureADAuthenticationOnly": true,
+          "minimalTlsVersion": "1.2"
+        },
+        "database": {
+          "name": "app-database",
+          "sku": {
+            "name": "GP_Gen5",
+            "tier": "GeneralPurpose",
+            "family": "Gen5",
+            "capacity": 2
+          },
+          "maxSizeBytes": 34359738368,
+          "zoneRedundant": true,
+          "backupRetentionDays": 35
+        },
+        "privateEndpoint": {
+          "enabled": true,
+          "subnetId": "/subscriptions/{subscription-id}/resourceGroups/rg-networking/providers/Microsoft.Network/virtualNetworks/vnet-hub/subnets/snet-data"
+        }
+      }
+    },
+    {
+      "id": "virtual-network",
+      "name": "Virtual Network (Hub-Spoke)",
+      "category": "networking",
+      "description": "Hub-spoke network topology for secure connectivity",
+      "configuration": {
+        "hub": {
+          "name": "vnet-hub",
+          "location": "eastus",
+          "addressSpace": ["10.0.0.0/16"],
+          "subnets": [
+            {
+              "name": "snet-container-apps",
+              "addressPrefix": "10.0.1.0/24"
+            },
+            {
+              "name": "snet-data",
+              "addressPrefix": "10.0.2.0/24",
+              "serviceEndpoints": ["Microsoft.Sql"]
+            },
+            {
+              "name": "AzureBastionSubnet",
+              "addressPrefix": "10.0.3.0/26"
+            }
+          ]
+        },
+        "spoke": {
+          "name": "vnet-spoke-apps",
+          "location": "eastus",
+          "addressSpace": ["10.1.0.0/16"],
+          "subnets": [
+            {
+              "name": "snet-apps",
+              "addressPrefix": "10.1.1.0/24"
+            }
+          ]
+        },
+        "peering": {
+          "enabled": true
+        }
+      }
+    },
+    {
+      "id": "managed-identity",
+      "name": "Managed Identity",
+      "category": "security",
+      "description": "Azure AD identity for secure resource authentication",
+      "configuration": {
+        "type": "SystemAssigned",
+        "roleAssignments": [
+          {
+            "role": "Key Vault Secrets User",
+            "scope": "/subscriptions/{subscription-id}/resourceGroups/rg-security/providers/Microsoft.KeyVault/vaults/kv-app-prod"
+          },
+          {
+            "role": "Storage Blob Data Contributor",
+            "scope": "/subscriptions/{subscription-id}/resourceGroups/rg-storage/providers/Microsoft.Storage/storageAccounts/stappdata"
+          }
+        ]
+      }
+    },
+    {
+      "id": "key-vault",
+      "name": "Azure Key Vault",
+      "category": "security",
+      "description": "Secure storage for secrets, keys, and certificates",
+      "configuration": {
+        "name": "kv-app-prod",
+        "location": "eastus",
+        "sku": "premium",
+        "enableRbacAuthorization": true,
+        "enablePurgeProtection": true,
+        "softDeleteRetentionDays": 90,
+        "networkAcls": {
+          "defaultAction": "Deny",
+          "bypass": "AzureServices",
+          "virtualNetworkRules": [
+            {
+              "subnetId": "/subscriptions/{subscription-id}/resourceGroups/rg-networking/providers/Microsoft.Network/virtualNetworks/vnet-hub/subnets/snet-container-apps"
+            }
+          ]
+        },
+        "privateEndpoint": {
+          "enabled": true,
+          "subnetId": "/subscriptions/{subscription-id}/resourceGroups/rg-networking/providers/Microsoft.Network/virtualNetworks/vnet-hub/subnets/snet-data"
+        }
+      }
+    },
+    {
+      "id": "application-insights",
+      "name": "Application Insights",
+      "category": "monitoring",
+      "description": "Application performance monitoring and diagnostics",
+      "configuration": {
+        "name": "appi-app-prod",
+        "location": "eastus",
+        "workspaceId": "/subscriptions/{subscription-id}/resourceGroups/rg-monitoring/providers/Microsoft.OperationalInsights/workspaces/log-analytics-prod",
+        "retentionInDays": 90,
+        "samplingPercentage": 100
+      }
+    }
+  ],
+  "metadata": {
+    "version": "1.0.0",
+    "lastUpdated": "2026-02-11",
+    "environment": "production"
+  }
+}

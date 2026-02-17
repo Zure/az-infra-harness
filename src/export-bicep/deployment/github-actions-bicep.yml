@@ -1,0 +1,190 @@
+name: Deploy Infrastructure - Bicep
+
+on:
+  push:
+    branches:
+      - main
+      - staging
+      - develop
+    paths:
+      - 'infrastructure/**'
+      - '.github/workflows/deploy-bicep.yml'
+  pull_request:
+    branches:
+      - main
+      - staging
+      - develop
+    paths:
+      - 'infrastructure/**'
+
+env:
+  AZURE_REGION: eastus
+
+permissions:
+  id-token: write
+  contents: read
+  pull-requests: write
+
+jobs:
+  validate:
+    name: Validate Bicep
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Bicep
+        uses: Azure/setup-bicep@v1
+
+      - name: Lint Bicep files
+        run: |
+          bicep build infrastructure/main.bicep
+
+      - name: Run security scan
+        uses: azure/bicep-security-scan@v1
+        with:
+          bicep-file: infrastructure/main.bicep
+
+  plan:
+    name: Preview Changes
+    runs-on: ubuntu-latest
+    needs: validate
+    if: github.event_name == 'pull_request'
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Azure Login
+        uses: azure/login@v1
+        with:
+          client-id: ${{ secrets.AZURE_CLIENT_ID }}
+          tenant-id: ${{ secrets.AZURE_TENANT_ID }}
+          subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
+
+      - name: Determine environment
+        id: env
+        run: |
+          if [[ "${{ github.base_ref }}" == "main" ]]; then
+            echo "environment=prod" >> $GITHUB_OUTPUT
+          elif [[ "${{ github.base_ref }}" == "staging" ]]; then
+            echo "environment=staging" >> $GITHUB_OUTPUT
+          else
+            echo "environment=dev" >> $GITHUB_OUTPUT
+          fi
+
+      - name: Preview deployment
+        id: whatif
+        run: |
+          az deployment sub what-if \
+            --template-file infrastructure/main.bicep \
+            --parameters infrastructure/parameters/${{ steps.env.outputs.environment }}.bicepparam \
+            --location ${{ env.AZURE_REGION }} \
+            > whatif-output.txt
+
+      - name: Comment PR
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const fs = require('fs');
+            const output = fs.readFileSync('whatif-output.txt', 'utf8');
+            github.rest.issues.createComment({
+              issue_number: context.issue.number,
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              body: `## Bicep What-If Results\n\n\`\`\`\n${output}\n\`\`\``
+            });
+
+  deploy-dev:
+    name: Deploy to Development
+    runs-on: ubuntu-latest
+    needs: validate
+    if: github.ref == 'refs/heads/develop' && github.event_name == 'push'
+    environment:
+      name: development
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Azure Login
+        uses: azure/login@v1
+        with:
+          client-id: ${{ secrets.AZURE_CLIENT_ID }}
+          tenant-id: ${{ secrets.AZURE_TENANT_ID }}
+          subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
+
+      - name: Deploy infrastructure
+        run: |
+          az deployment sub create \
+            --template-file infrastructure/main.bicep \
+            --parameters infrastructure/parameters/dev.bicepparam \
+            --location ${{ env.AZURE_REGION }} \
+            --name "deploy-$(date +%Y%m%d-%H%M%S)"
+
+      - name: Run smoke tests
+        run: |
+          # Add smoke test commands here
+          echo "Running smoke tests..."
+
+  deploy-staging:
+    name: Deploy to Staging
+    runs-on: ubuntu-latest
+    needs: validate
+    if: github.ref == 'refs/heads/staging' && github.event_name == 'push'
+    environment:
+      name: staging
+      url: https://staging.example.com
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Azure Login
+        uses: azure/login@v1
+        with:
+          client-id: ${{ secrets.AZURE_CLIENT_ID }}
+          tenant-id: ${{ secrets.AZURE_TENANT_ID }}
+          subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
+
+      - name: Deploy infrastructure
+        run: |
+          az deployment sub create \
+            --template-file infrastructure/main.bicep \
+            --parameters infrastructure/parameters/staging.bicepparam \
+            --location ${{ env.AZURE_REGION }} \
+            --name "deploy-$(date +%Y%m%d-%H%M%S)"
+
+      - name: Run integration tests
+        run: |
+          # Add integration test commands here
+          echo "Running integration tests..."
+
+  deploy-prod:
+    name: Deploy to Production
+    runs-on: ubuntu-latest
+    needs: validate
+    if: github.ref == 'refs/heads/main' && github.event_name == 'push'
+    environment:
+      name: production
+      url: https://example.com
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Azure Login
+        uses: azure/login@v1
+        with:
+          client-id: ${{ secrets.AZURE_CLIENT_ID }}
+          tenant-id: ${{ secrets.AZURE_TENANT_ID }}
+          subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
+
+      - name: Deploy infrastructure
+        run: |
+          az deployment sub create \
+            --template-file infrastructure/main.bicep \
+            --parameters infrastructure/parameters/prod.bicepparam \
+            --location ${{ env.AZURE_REGION }} \
+            --name "deploy-$(date +%Y%m%d-%H%M%S)"
+
+      - name: Verify deployment
+        run: |
+          # Add verification commands here
+          echo "Verifying production deployment..."

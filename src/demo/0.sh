@@ -6,6 +6,8 @@ set -e
 
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 DATA_DIR="$(dirname "$SCRIPT_DIR")/data"
+# ROOT_DIR is parent of src/
+ROOT_DIR="$(dirname "$(dirname "$SCRIPT_DIR")")"
 
 echo "🧹 Setting up Demo State 0: Clean Application"
 echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
@@ -38,6 +40,11 @@ mkdir -p "$DATA_DIR/architecture-decisions/adrs"
 # Clean export data (keep structure and READMEs)
 echo "  Cleaning export..."
 find "$DATA_DIR/export" -type f -name "*.md" ! -name "README.md" -delete 2>/dev/null || true
+
+# Remove export folders in root
+echo "  Cleaning export-bicep and export-terraform..."
+rm -rf "$ROOT_DIR/export-bicep"
+rm -rf "$ROOT_DIR/export-terraform"
 
 echo ""
 echo "✅ Demo State 0 ready!"

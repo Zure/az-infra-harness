@@ -16,6 +16,9 @@ async function detectCurrentState(): Promise<DemoState> {
   const dataDir = cwd.endsWith('src')
     ? path.join(cwd, 'data')
     : path.join(cwd, 'src', 'data')
+  const rootDir = cwd.endsWith('src')
+    ? path.dirname(cwd)
+    : cwd
   
   try {
     const fs = require('fs').promises
@@ -37,7 +40,10 @@ async function detectCurrentState(): Promise<DemoState> {
     
     const hasADRs = await checkDirectoryHasFiles(fs, path.join(dataDir, 'architecture-decisions/adrs'))
     
-    const hasExport = await checkDirectoryHasFiles(fs, path.join(dataDir, 'export/prompts'))
+    // Check for export folders in root
+    const hasExportBicep = await checkDirectoryExists(fs, path.join(rootDir, 'export-bicep'))
+    const hasExportTerraform = await checkDirectoryExists(fs, path.join(rootDir, 'export-terraform'))
+    const hasExport = hasExportBicep || hasExportTerraform
     
     // Determine state based on what exists
     if (hasExport && hasADRs && hasArchitecture && hasContext && hasAppDef) return 5
@@ -69,6 +75,15 @@ async function checkDirectoryHasFiles(fs: any, dir: string): Promise<boolean> {
     const files = await fs.readdir(dir)
     const mdFiles = files.filter((f: string) => f.endsWith('.md') && f !== 'README.md')
     return mdFiles.length > 0
+  } catch {
+    return false
+  }
+}
+
+async function checkDirectoryExists(fs: any, dir: string): Promise<boolean> {
+  try {
+    const stat = await fs.stat(dir)
+    return stat.isDirectory()
   } catch {
     return false
   }

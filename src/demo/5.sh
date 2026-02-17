@@ -7,6 +7,8 @@ set -e
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 DATA_DIR="$(dirname "$SCRIPT_DIR")/data"
 BACKUP_DIR="$SCRIPT_DIR/data-backup"
+# ROOT_DIR is parent of src/
+ROOT_DIR="$(dirname "$(dirname "$SCRIPT_DIR")")"
 
 echo "🎉 Setting up Demo State 5: Complete Workflow"
 echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
@@ -49,13 +51,18 @@ find "$BACKUP_DIR/export" -type f -name "*.md" ! -name "README.md" -exec bash -c
   done
 ' bash {} +
 
+# Create export folders in root
+echo "  Creating export-bicep and export-terraform folders..."
+cp -r "$BACKUP_DIR/export-bicep" "$ROOT_DIR/"
+cp -r "$BACKUP_DIR/export-terraform" "$ROOT_DIR/"
+
 echo ""
 echo "✅ Demo State 5 ready!"
 echo "   ✓ Application Definition completed"
 echo "   ✓ Context completed"
 echo "   ✓ Application Architecture completed"
 echo "   ✓ Architecture Decisions completed"
-echo "   ✓ Export completed"
+echo "   ✓ Export completed (export-bicep/, export-terraform/)"
 echo ""
 echo "   🎊 Full workflow demonstration ready!"
 echo "   Run 0.sh to reset to clean state"
