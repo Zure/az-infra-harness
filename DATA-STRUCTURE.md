@@ -58,7 +58,7 @@ When a user runs a command like `/application-overview`, the coding agent should
 |---------|-----------|--------|
 | `/application-overview` | `src/data/application-definition/application-overview.md` | Markdown |
 | `/non-functional-requirements` | `src/data/application-definition/non-functional-requirements.md` | Markdown |
-| `/application-components` | `src/data/application-definition/components/*.json` | JSON (one file per component) |
+| `/application-components` | `src/data/application-definition/application-components.md` | Markdown |
 
 ### File Formats
 
@@ -113,59 +113,70 @@ When a user runs a command like `/application-overview`, the coding agent should
 - **Geographic Distribution**: [percentages by region]
 ```
 
-#### components/[component-name].json
-```json
-{
-  "id": "unique-component-id",
-  "name": "Display Name",
-  "type": "compute|data|networking",
-  "description": "What this component does"
-}
+---
+
+#### 3. application-components.md
+
+**Purpose:** Define application components as a list
+
+**Note:** This file creates a high-level list of components. Detailed configuration for each component is added later in the application-architecture section via `/configure-component`.
+
+**Template:**
+```markdown
+# Application Components
+
+## [Component Name]
+**Type:** Compute|Data|Networking
+
+[Brief description of what this component does]
+
+## [Component Name 2]
+**Type:** Compute|Data|Networking
+
+[Brief description]
 ```
 
 **Valid component types:**
-- `compute` - Application servers, containers, functions
-- `data` - Databases, storage accounts, caches
-- `networking` - Load balancers, gateways, VNets
+- `Compute` - Application servers, containers, functions, background workers
+- `Data` - Databases, storage accounts, caches, blob storage
+- `Networking` - Load balancers, gateways, VNets, firewalls
+- Custom types are also supported based on your application needs
 
-## Creating Components
+**Example:**
 
-### Single Component
-Create one JSON file per component in `src/data/application-definition/components/`
+```markdown
+# Application Components
 
-Example: `src/data/application-definition/components/web-frontend.json`
-```json
-{
-  "id": "web-frontend",
-  "name": "Web Frontend",
-  "type": "compute",
-  "description": "React-based single-page application that provides the customer-facing interface"
-}
+## Web Frontend
+**Type:** Compute
+
+React-based single-page application that provides the customer-facing interface for account management, order tracking, and support.
+
+## API Backend
+**Type:** Compute
+
+RESTful API service that handles business logic, integrates with on-premises systems, and serves data to the web frontend.
+
+## Customer Database
+**Type:** Data
+
+Stores customer profiles, preferences, authentication data, and application state.
+
+## Application Gateway
+**Type:** Networking
+
+Entry point for incoming HTTPS traffic with SSL termination, WAF protection, and routing to backend services.
 ```
 
-### Multiple Components
-The `/application-components` command should create multiple JSON files:
+**More examples:** See `src/data/application-definition/application-components.md`
 
-```bash
-src/data/application-definition/components/
-├── web-frontend.json      # Compute: Web UI
-├── api-backend.json       # Compute: API
-├── background-worker.json # Compute: Background jobs
-├── database.json          # Data: Primary database
-├── cache.json             # Data: Redis cache
-└── app-gateway.json       # Networking: Entry point
-```
+---
 
 ## File Naming Conventions
 
 ### Markdown Files
 - Use lowercase with hyphens: `application-overview.md`
 - Match the command name (without `/`): `/application-overview` → `application-overview.md`
-
-### JSON Files (Components)
-- Use lowercase with hyphens: `web-frontend.json`
-- Should match the component `id` field
-- One component per file
 
 ## Checking Your Work
 
@@ -174,7 +185,7 @@ src/data/application-definition/components/
 Application Definition section is complete when these files exist:
 - ✅ `application-overview.md` (must have content)
 - ✅ `non-functional-requirements.md` (must have content)
-- ✅ At least one file in `components/` directory
+- ✅ `application-components.md` (must have content)
 
 ### Validation
 The UI will show:
@@ -215,29 +226,27 @@ cat > non-functional-requirements.md << 'EOF'
 EOF
 
 # Create components
-mkdir -p components
+cat > application-components.md << 'EOF'
+# Application Components
 
-cat > components/web-frontend.json << 'EOF'
-{
-  "id": "web-frontend",
-  "name": "Web Frontend",
-  "type": "compute",
-  "description": "React-based SPA"
-}
-EOF
+## Web Frontend
+**Type:** Compute
 
-cat > components/api-backend.json << 'EOF'
-{
-  "id": "api-backend",
-  "name": "API Backend",
-  "type": "compute",
-  "description": "RESTful API service"
-}
+React-based single-page application for customer-facing interface.
+
+## API Backend
+**Type:** Compute
+
+RESTful API service that handles business logic.
+
+## Customer Database
+**Type:** Data
+
+Stores customer profiles and authentication data.
 EOF
 
 # Check results
 ls -la
-ls -la components/
 ```
 
 ## Troubleshooting
@@ -249,14 +258,13 @@ ls -la components/
 - Refresh the browser page
 
 ### "Components not showing"
-- Check files are in `components/` subdirectory
-- Check JSON is valid (use `cat file.json | jq` to validate)
-- Check each file has required fields: `id`, `name`, `type`, `description`
-- Check `type` is one of: `compute`, `data`, `networking`
+- Check `application-components.md` file exists
+- Verify markdown structure with h2 headings for each component
+- Ensure each component has **Type:** line
+- Check component types are valid
 
 ### "Continue button still disabled"
-- All three files must exist with content
-- At least one component JSON must exist
+- All three markdown files must exist with content
 - Try hard refresh (Cmd+Shift+R or Ctrl+Shift+R)
 
 ## Next Steps
