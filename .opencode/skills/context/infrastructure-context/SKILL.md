@@ -62,6 +62,9 @@ Important execution rules:
 - "Are there existing resources to integrate (e.g., existing VNets, DNS zones, NSGs)?"
 - "Will we need to provision additional infrastructure layers (e.g., subnets for specific workloads)? Please list them."
 
+This skill MUST comply with the shared Interaction & Validation Standard:
+`.opencode/skills/_shared/interaction-validation-standard.md`
+
 ### Step 3: Validate and Present Findings
 
 Summarize the gathered data:
@@ -140,6 +143,8 @@ Let the user know:
 - User is informed of successful creation and provided with a follow-up command.
 - All questions from Step 2 were explicitly answered or clarified before file generation.
 - No required infrastructure section contains placeholders due to skipped user input.
+
+---
 
 ### Tips:
 
