@@ -126,6 +126,14 @@ Are these accurate? Would you like to add, remove, or rename any components? Are
 
 **Always stop here and present your findings or current state to the user. Wait for their response before proceeding to Step 4.**
 
+Important execution rules:
+
+- Track the component list as: confirmed / needs changes / incomplete.
+- Do not proceed to file generation until the user has explicitly confirmed the final component list.
+- If the user provides partial updates, re-present the full updated list and ask for confirmation again.
+- If required details are missing (name, type, or description), explicitly request them before proceeding.
+- Present an "Open Items" summary if anything remains unclear.
+
 #### If codebase scanning found components (fresh mode):
 
 ```
@@ -420,3 +428,5 @@ The skill is successful when:
 - ✅ File is not empty and is readable
 - ✅ User is informed of successful creation
 - ✅ UI displays the content with blue border after browser refresh
+- ✅ The final component list was explicitly confirmed by the user before file generation
+- ✅ No component is missing a name, type, or description due to skipped input

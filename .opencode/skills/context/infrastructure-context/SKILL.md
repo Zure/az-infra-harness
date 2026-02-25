@@ -33,6 +33,14 @@ If any file is missing or incomplete:
 
 Ask the user clear, individual questions (one topic at a time):
 
+Important execution rules:
+
+- Ask one logical group at a time and explicitly wait for answers before proceeding.
+- Track each question and mark it as "answered", "partially answered", or "unanswered".
+- If a question is skipped, vaguely answered, or ignored, re-ask it later for clarification.
+- Do NOT proceed to file generation until all required sections contain actionable information.
+- If the user provides incomplete input, summarize what is missing and explicitly request the remaining details.
+
 #### **Network Topology**
 
 - "What type of network topology do you envision (e.g., hub-and-spoke, virtual WAN, etc.)?"
@@ -72,6 +80,13 @@ Summarize the gathered data:
 3. **Connectivity Requirements:**
 
 - Governance strategy: Role of inbound and outbound gatekeeping systems.
+
+Before moving to file creation:
+
+- Validate that every question from Step 2 has a corresponding answer.
+- If any required detail is missing (e.g., no topology type defined, no connectivity model specified), pause and ask a focused follow-up question.
+- Present a short "Open Items" list if anything is still unclear.
+- Only continue to Step 4 once all open items are resolved.
 
 ### Step 4: Save File & Validate Output
 
@@ -123,8 +138,11 @@ Let the user know:
 - File aligns with the structure outlined above.
 - Validation ensures the file is not empty or malformed.
 - User is informed of successful creation and provided with a follow-up command.
+- All questions from Step 2 were explicitly answered or clarified before file generation.
+- No required infrastructure section contains placeholders due to skipped user input.
 
 ### Tips:
 
 - Use the Cloud Adoption Framework and Azure Well-Architected Framework principles to answer vague questions or guide the user.
 - Ensure each step gathers clear, actionable data instead of incomplete information.
+- If the user attempts to skip sections, loop back and request clarification before completing the workflow.
