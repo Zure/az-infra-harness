@@ -113,6 +113,13 @@ Pre-Generation Rules:
 - All high-priority tasks must be `completed` before file generation.
 - If any task is `pending` or `in_progress`, trigger the Open Items Gate.
 
+Strict Enforcement:
+
+- If TodoWrite has not been initialized during the session, file generation is prohibited.
+- If required inputs exist without corresponding high-priority todo items, file generation is prohibited.
+- If more than one task is marked `in_progress`, execution must stop and be corrected before continuing.
+- The absence of a todo list is treated as a validation failure.
+
 ---
 
 ## Validation Gate (Reusable Enforcement Layer)
