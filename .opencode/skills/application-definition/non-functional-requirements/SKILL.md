@@ -12,6 +12,7 @@ The generated file will be displayed in the UI when the user runs `npm run dev` 
 ## When to Use
 
 Run this skill when:
+
 - Continuing from `/application-overview` to complete the application definition
 - The non-functional requirements need to be defined or updated
 - User explicitly runs `/non-functional-requirements`
@@ -80,6 +81,7 @@ What would you like to update? You can tell me which section(s) to change, or sa
 ```
 
 Wait for the user's response. Then:
+
 - If the user specifies sections to change, ask only those questions (using the format from Step 2b below)
 - If the user says "all" or "everything", run the full fresh-mode Q&A
 - If the user says the data looks good or confirms it, ask: "Is there anything else you'd like to adjust before I save?" — if not, proceed to Step 3
@@ -90,17 +92,15 @@ Wait for the user's response. Then:
 
 **Ask each section and STOP to wait for the user's answer before continuing to the next section.**
 
-Important execution rules:
+This skill MUST comply with the shared Interaction & Validation Standard:
+`.opencode/skills/_shared/interaction-validation-standard.md`
 
-- Track each section (Scale, Availability, Security & Confidentiality, Integrity, Usage Patterns) as answered / partially answered / unanswered.
-- Do not proceed to the next section if required fields in the current section are missing.
-- If the user skips a required field, explicitly re-ask for that specific item.
-- Before moving to Step 3, ensure all five sections are fully answered.
-- If anything is incomplete, present an "Open Items" list summarizing what is still required.
+All five sections (Scale, Availability, Security & Confidentiality, Integrity, Usage Patterns) must be fully answered before proceeding to Step 3.
 
 Before asking questions, optionally scan the codebase for hints:
 
 **Files to scan (for context hints only):**
+
 1. `README.md` — may mention scale, compliance, or SLA requirements
 2. Configuration files (`.env.example`, `docker-compose.yml`, `kubernetes/`, `helm/`) — may reveal scaling setup
 3. CI/CD files (`.github/`, `azure-pipelines.yml`) — may reveal environment tiers
@@ -127,12 +127,14 @@ Let's start with scale. I need a few numbers to understand the size of your appl
 ```
 
 **Guidelines:**
+
 - All five fields are required
 - Users can give approximate ranges (e.g., "around 50,000")
 - Growth rate can be a percentage or a descriptive answer ("doubling every year")
 - Data volume can be in MB, GB, or TB
 
 **Validation:**
+
 - Must not be empty
 - Numbers must be plausible (not negative, not astronomically large without context)
 
@@ -151,11 +153,13 @@ Now, availability. Help me understand your uptime needs:
 ```
 
 **Guidelines:**
+
 - Uptime can be expressed as a percentage or SLA tier
 - If the user says "high availability", ask them to be specific — "99.9% or more?"
 - Maintenance windows and critical periods help size DR and deployment strategies
 
 **Validation:**
+
 - Must not be empty
 - Uptime percentage should be between 95% and 99.999%
 
@@ -176,11 +180,13 @@ Let's cover security and confidentiality:
 ```
 
 **Guidelines:**
+
 - Compliance can be "none" or "not yet determined" — both are valid answers
 - Sensitive data types help determine what Azure services are appropriate
 - Authentication requirements inform identity provider choices
 
 **Validation:**
+
 - Data sensitivity and authentication fields must not be empty
 - Compliance can explicitly be "none"
 
@@ -200,11 +206,13 @@ Now let's talk about data integrity and recovery:
 ```
 
 **Guidelines:**
+
 - RTO and RPO are often not well-known by users — offer examples: "For RTO: 4 hours means you can be down for up to 4 hours after a failure before it's a problem."
 - If the user doesn't know, suggest conservative defaults: RTO 4h, RPO 24h
 - Data consistency helps choose the right Azure database services
 
 **Validation:**
+
 - RTO and RPO must be provided (even if "not defined yet")
 - Backup frequency must not be empty
 
@@ -224,11 +232,13 @@ Finally, some questions about usage patterns:
 ```
 
 **Guidelines:**
+
 - Traffic type helps choose between autoscaling approaches
 - Geographic distribution informs multi-region vs. single-region decisions
 - Seasonal patterns help with pre-scaling strategies
 
 **Validation:**
+
 - Traffic type and geographic distribution must not be empty
 - Seasonal variance can be "none"
 
@@ -244,17 +254,20 @@ Once all information is gathered and validated, create the markdown file with th
 # Non-Functional Requirements
 
 ## Scale
+
 - **Expected Users**: [total registered users, daily active users]
 - **Concurrent Users**: [peak concurrent users]
 - **Growth**: [year-over-year growth expectation]
 - **Data Volume**: [current size and projected size]
 
 ## Availability
+
 - **Target Uptime**: [percentage or SLA, with equivalent downtime if useful]
 - **Maintenance Windows**: [when maintenance is acceptable]
 - **Critical Period**: [when uptime is most important]
 
 ## Security & Confidentiality
+
 - **Data Sensitivity**: [types of sensitive data handled]
 - **Compliance**: [regulations: GDPR, HIPAA, etc. — or "None"]
 - **Authentication**: [requirements: MFA, SSO, etc.]
@@ -262,12 +275,14 @@ Once all information is gathered and validated, create the markdown file with th
 - **Data in Transit**: [TLS version, etc.]
 
 ## Integrity
+
 - **Backup Frequency**: [schedule]
 - **Recovery Time Objective (RTO)**: [maximum downtime]
 - **Recovery Point Objective (RPO)**: [maximum data loss]
 - **Data Consistency**: [requirements: strong, eventual, etc.]
 
 ## Usage Patterns
+
 - **Traffic Type**: [steady, bursty, predictable, etc.]
 - **Peak Times**: [when traffic is highest]
 - **Seasonal Variance**: [holiday patterns, etc. — or "None"]
@@ -275,6 +290,7 @@ Once all information is gathered and validated, create the markdown file with th
 ```
 
 **Important formatting rules:**
+
 - H1 (`#`) for the file title: exactly `# Non-Functional Requirements`
 - H2 (`##`) for each section: Scale, Availability, Security & Confidentiality, Integrity, Usage Patterns
 - Unordered list (`-`) with bold labels (`**Label**:`) for each item
@@ -290,6 +306,7 @@ Once all information is gathered and validated, create the markdown file with th
 Before saving, verify the generated content meets all requirements:
 
 **Structure validation:**
+
 - ✅ Exactly one H1 heading: `# Non-Functional Requirements`
 - ✅ Five H2 sections: Scale, Availability, Security & Confidentiality, Integrity, Usage Patterns
 - ✅ Scale section has 4 bullet points
@@ -301,12 +318,14 @@ Before saving, verify the generated content meets all requirements:
 - ✅ Proper markdown syntax
 
 **Content validation:**
+
 - ✅ No placeholder text remains (e.g., `[total registered users]`)
 - ✅ All bold labels match the template format
 - ✅ RTO and RPO are present and non-empty
 - ✅ Uptime percentage is realistic
 
 **If validation fails:**
+
 - Show the specific validation error to the user
 - Ask for corrected information for the failing section only
 - Re-validate before proceeding
@@ -318,16 +337,19 @@ Before saving, verify the generated content meets all requirements:
 **Target location:** `src/data/application-definition/non-functional-requirements.md`
 
 **Pre-save checks:**
+
 1. Verify the directory exists: `src/data/application-definition/`
 2. If directory doesn't exist, show error and stop (don't create the directory)
 
 **Save process:**
+
 1. Write the validated markdown content to the file
 2. Verify the file was written successfully
 3. Check the file is not empty
 4. Check the file is readable
 
 **Error handling:**
+
 - If directory missing: "Error: Directory 'src/data/application-definition/' not found. Please ensure you're in the correct project directory."
 - If write fails: "Error: Failed to write file. Please check file permissions and try again."
 - If file empty after write: "Error: File was created but appears empty. Please try again."
@@ -357,15 +379,18 @@ You can now run /application-components to continue with the next step.
 ## Error Handling
 
 ### If codebase scanning fails:
+
 - **Action**: Gracefully fall back to questions without showing inferred context
 - **Message**: Don't mention the scanning failure — just proceed with questions
 - **Reasoning**: User doesn't need to know about internal process failures
 
 ### If directory doesn't exist:
+
 - **Action**: Show clear error, do NOT create directory
 - **Message**: "Error: Directory 'src/data/application-definition/' not found. Are you in the project root directory? This skill expects to be run from the azure-infra-prompt-kit project root."
 
 ### If file write fails:
+
 - **Action**: Show clear error with actionable advice
 - **Message**: "Error: Failed to write file. Possible causes:
   - Insufficient permissions
@@ -375,17 +400,19 @@ You can now run /application-components to continue with the next step.
 Please check permissions and try again."
 
 ### If validation fails:
+
 - **Action**: Show specific validation error with what was expected vs what was provided
 - **Message**: "[Specific validation error]. Please provide corrected information."
 - **Next step**: Ask for corrected information for that specific section only
 - **Re-validate**: Always re-validate before saving
 
 ### If user doesn't know RTO/RPO:
+
 - **Action**: Offer sensible defaults and explain the concepts
 - **Message**: "If you're unsure, here are common defaults:
   - RTO: 4 hours (acceptable to be down for up to 4 hours)
   - RPO: 24 hours (acceptable to lose up to 1 day of data)
-  
+
   Would you like to use these as starting values?"
 
 ---
@@ -421,9 +448,10 @@ Please check permissions and try again."
 **Agent:** "I found your existing non-functional requirements. Here's what's currently captured:
 
 **Scale**
+
 - Expected Users: 50,000 registered users, ~5,000 daily active users
 - Concurrent Users: Peak of 500 concurrent users during business hours
-...
+  ...
 
 What would you like to update? You can tell me which section(s) to change, or say 'all' to go through everything again."
 
@@ -459,6 +487,7 @@ What would you like to update? You can tell me which section(s) to change, or sa
 ## Success Criteria
 
 The skill is successful when:
+
 - ✅ File created at `src/data/application-definition/non-functional-requirements.md`
 - ✅ Content matches the required format exactly
 - ✅ All five sections are present and populated
@@ -466,5 +495,6 @@ The skill is successful when:
 - ✅ File is not empty and is readable
 - ✅ User is informed of successful creation
 - ✅ UI displays the content with blue border after browser refresh
-- ✅ All required section questions were explicitly answered or clarified before file generation
-- ✅ No required fields were skipped or silently defaulted without user confirmation
+- ✅ All interaction requirements defined in the Interaction & Validation Standard were satisfied
+
+---

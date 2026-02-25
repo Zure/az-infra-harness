@@ -12,6 +12,7 @@ The generated file will be displayed in the UI when the user runs `npm run dev` 
 ## When to Use
 
 Run this skill when:
+
 - Continuing from `/non-functional-requirements` to complete the application definition
 - The application components need to be defined or updated
 - User explicitly runs `/application-components`
@@ -20,11 +21,11 @@ Run this skill when:
 
 Components must be classified into exactly one of three types:
 
-| Type | Examples |
-|------|---------|
-| `Compute` | Web servers, APIs, containers, serverless functions, background workers, scheduled jobs |
-| `Data` | Databases (SQL, NoSQL), caches (Redis), blob/file storage, message queues, event streams |
-| `Networking` | Load balancers, application gateways, VNets, private endpoints, CDN, DNS, firewalls |
+| Type         | Examples                                                                                 |
+| ------------ | ---------------------------------------------------------------------------------------- |
+| `Compute`    | Web servers, APIs, containers, serverless functions, background workers, scheduled jobs  |
+| `Data`       | Databases (SQL, NoSQL), caches (Redis), blob/file storage, message queues, event streams |
+| `Networking` | Load balancers, application gateways, VNets, private endpoints, CDN, DNS, firewalls      |
 
 ---
 
@@ -82,6 +83,7 @@ Actively scan the codebase to build a draft component list. The goal is to prese
 **Scan targets and what to look for:**
 
 #### Infrastructure & Deployment Files (highest signal)
+
 - `docker-compose.yml` / `docker-compose*.yml` — each service is likely a component
 - `kubernetes/`, `k8s/`, `helm/` — each Deployment/StatefulSet/Service is a component
 - `azure-pipelines.yml`, `.github/workflows/` — may list deployment targets
@@ -89,17 +91,20 @@ Actively scan the codebase to build a draft component list. The goal is to prese
 - `Dockerfile` files — each one signals a compute component
 
 #### Application Code Structure (medium signal)
+
 - Multi-project solutions (`.sln`, multiple `package.json`, `pom.xml` submodules) — each project may be a component
 - `src/` subdirectories with distinct names (e.g., `src/api/`, `src/web/`, `src/worker/`) — likely separate components
 - Microservice patterns: multiple service directories at the root
 
 #### Configuration Files (medium signal)
+
 - Database connection strings or config (look for SQL, MongoDB, Redis, Cosmos DB mentions)
 - Message queue config (Azure Service Bus, RabbitMQ, Kafka)
 - Storage account references (Azure Blob Storage, Azure Files)
 - API gateway or reverse proxy configs (nginx, APIM)
 
 #### Documentation (lower signal, but useful)
+
 - `README.md` — architecture sections, component diagrams described in text
 - `docs/` — architecture documents
 - `src/data/application-definition/application-overview.md` — already-captured application context
@@ -117,6 +122,7 @@ Are these accurate? Would you like to add, remove, or rename any components? Are
 ```
 
 **If no components found:**
+
 - Don't mention the scanning failure
 - Proceed directly to interactive questions: "I'll help you document your application components. Let me ask a few questions about how your application is structured."
 
@@ -126,13 +132,10 @@ Are these accurate? Would you like to add, remove, or rename any components? Are
 
 **Always stop here and present your findings or current state to the user. Wait for their response before proceeding to Step 4.**
 
-Important execution rules:
+This skill MUST comply with the shared Interaction & Validation Standard:
+`.opencode/skills/_shared/interaction-validation-standard.md`
 
-- Track the component list as: confirmed / needs changes / incomplete.
-- Do not proceed to file generation until the user has explicitly confirmed the final component list.
-- If the user provides partial updates, re-present the full updated list and ask for confirmation again.
-- If required details are missing (name, type, or description), explicitly request them before proceeding.
-- Present an "Open Items" summary if anything remains unclear.
+The final component list must be explicitly confirmed and fully validated before proceeding to file generation.
 
 #### If codebase scanning found components (fresh mode):
 
@@ -152,6 +155,7 @@ Before we finalize:
 Ask the following questions conversationally:
 
 **Question 1: How is the application structured?**
+
 ```
 How is your application structured? For example:
 - Is it a monolith (single deployable unit)?
@@ -161,6 +165,7 @@ How is your application structured? For example:
 ```
 
 **Question 2: List the components**
+
 ```
 Based on that structure, what are the main components? For each, I'll need:
 - A name (e.g., "Web Frontend", "Order API", "Customer Database")
@@ -171,6 +176,7 @@ You can list them in any format — I'll help structure them.
 ```
 
 **After receiving the initial list, always ask:**
+
 ```
 Are there any additional components I should include? Common ones that are sometimes overlooked:
 - Caches (e.g., Redis, Memcached)
@@ -188,17 +194,20 @@ Are there any additional components I should include? Common ones that are somet
 **For any component that doesn't yet have a confirmed description, ask for one before generating the file. In update mode, this was handled conversationally in Step 2a.**
 
 **For each component, verify:**
+
 1. **Name** — Is it clear and meaningful? (e.g., "Web Frontend" is better than "Frontend")
 2. **Type** — Is it correctly classified as Compute, Data, or Networking?
 3. **Description** — Is it a clear single sentence explaining what the component does?
 
 **Type classification guidance:**
+
 - If the user is unsure, offer: "This sounds like a [Compute/Data/Networking] component because [reason]. Does that make sense?"
 - Compute = things that run code and process requests
 - Data = things that store or stream data
 - Networking = things that route, protect, or connect traffic
 
 **Description guidance:**
+
 - Should be one sentence
 - Should explain the component's role in the application (not its technology)
 - Good: "Handles customer authentication, order processing, and business logic for the application."
@@ -216,22 +225,26 @@ Once all components are confirmed, create the markdown file with this **exact st
 # Application Components
 
 ## [Component Name]
+
 **Type:** Compute
 
 [One-sentence description of what this component does in the application.]
 
 ## [Component Name]
+
 **Type:** Data
 
 [One-sentence description of what this component does in the application.]
 
 ## [Component Name]
+
 **Type:** Networking
 
 [One-sentence description of what this component does in the application.]
 ```
 
 **Important formatting rules:**
+
 - H1 (`#`) for the file title: exactly `# Application Components`
 - H2 (`##`) for each component name
 - Bold type label: `**Type:** Compute` (or `Data` or `Networking`) — on its own line immediately after the H2
@@ -252,6 +265,7 @@ Once all components are confirmed, create the markdown file with this **exact st
 Before saving, verify the generated content meets all requirements:
 
 **Structure validation:**
+
 - ✅ Exactly one H1 heading: `# Application Components`
 - ✅ At least 2 H2 headings (one per component)
 - ✅ Each H2 is immediately followed by `**Type:**` line
@@ -261,11 +275,13 @@ Before saving, verify the generated content meets all requirements:
 - ✅ No empty sections
 
 **Content validation:**
+
 - ✅ Component names are meaningful and not just "Component 1"
 - ✅ Descriptions explain the component's role (not just its technology)
 - ✅ Types are correctly classified
 
 **If validation fails:**
+
 - Show the specific validation error to the user
 - Ask for corrected information for the failing component only
 - Re-validate before proceeding
@@ -277,16 +293,19 @@ Before saving, verify the generated content meets all requirements:
 **Target location:** `src/data/application-definition/application-components.md`
 
 **Pre-save checks:**
+
 1. Verify the directory exists: `src/data/application-definition/`
 2. If directory doesn't exist, show error and stop (don't create the directory)
 
 **Save process:**
+
 1. Write the validated markdown content to the file
 2. Verify the file was written successfully
 3. Check the file is not empty
 4. Check the file is readable
 
 **Error handling:**
+
 - If directory missing: "Error: Directory 'src/data/application-definition/' not found. Please ensure you're in the correct project directory."
 - If write fails: "Error: Failed to write file. Please check file permissions and try again."
 - If file empty after write: "Error: File was created but appears empty. Please try again."
@@ -318,15 +337,18 @@ The next step is to run /infrastructure-context to begin defining your infrastru
 ## Error Handling
 
 ### If codebase scanning fails:
+
 - **Action**: Gracefully fall back to questions without showing inferred context
 - **Message**: Don't mention the scanning failure — just proceed with questions
 - **Reasoning**: User doesn't need to know about internal process failures
 
 ### If directory doesn't exist:
+
 - **Action**: Show clear error, do NOT create directory
 - **Message**: "Error: Directory 'src/data/application-definition/' not found. Are you in the project root directory? This skill expects to be run from the azure-infra-prompt-kit project root."
 
 ### If file write fails:
+
 - **Action**: Show clear error with actionable advice
 - **Message**: "Error: Failed to write file. Possible causes:
   - Insufficient permissions
@@ -336,15 +358,18 @@ The next step is to run /infrastructure-context to begin defining your infrastru
 Please check permissions and try again."
 
 ### If validation fails:
+
 - **Action**: Show specific validation error
 - **Message**: "[Specific validation error]. Please provide corrected information."
 - **Next step**: Ask for corrected information for that specific component only
 
 ### If user provides fewer than 2 components:
+
 - **Action**: Ask for more
 - **Message**: "I need at least 2 components to describe an application architecture. Can you think of any other components? For example, even a simple web app typically has a frontend, a backend, and a database."
 
 ### If user is unsure how to classify a component:
+
 - **Action**: Offer guidance and a recommendation
 - **Message**: "Based on what you described, this sounds like a [type] component because [reason]. Does that classification make sense for your use case?"
 
@@ -420,6 +445,7 @@ What would you like to change? You can add, remove, rename, reclassify, or updat
 ## Success Criteria
 
 The skill is successful when:
+
 - ✅ File created at `src/data/application-definition/application-components.md`
 - ✅ Content matches the required format exactly
 - ✅ At least 2 components are documented
@@ -428,5 +454,6 @@ The skill is successful when:
 - ✅ File is not empty and is readable
 - ✅ User is informed of successful creation
 - ✅ UI displays the content with blue border after browser refresh
-- ✅ The final component list was explicitly confirmed by the user before file generation
-- ✅ No component is missing a name, type, or description due to skipped input
+- ✅ All interaction requirements defined in the Interaction & Validation Standard were satisfied
+
+---
