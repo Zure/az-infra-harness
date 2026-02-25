@@ -66,6 +66,13 @@ Is this information accurate? Would you like to use this as a starting point, or
 
 Ask the following questions **one-by-one** in a conversational manner. If information was successfully inferred from the codebase, present it and ask for confirmation or refinement instead of asking from scratch.
 
+Important execution rules:
+
+- Track each required question (Name, Description, Purpose, 5 Features) as answered / partially answered / unanswered.
+- If the user skips a question or provides vague input, explicitly re-ask for clarification before proceeding.
+- Do NOT move to Step 3 until all four sections are fully answered and validated.
+- If anything is missing, present a short "Open Items" list and resolve it before generating the file.
+
 #### Question 1: Application Name
 
 **If found in codebase:**
@@ -395,3 +402,5 @@ The skill is successful when:
 - ✅ File is not empty and is readable
 - ✅ User is informed of successful creation
 - ✅ UI displays the content with blue border after browser refresh
+- ✅ All required questions were explicitly answered or clarified before file generation
+- ✅ No required section contains placeholder or inferred-only content without user confirmation

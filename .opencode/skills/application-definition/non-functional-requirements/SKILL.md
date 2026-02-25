@@ -90,6 +90,14 @@ Wait for the user's response. Then:
 
 **Ask each section and STOP to wait for the user's answer before continuing to the next section.**
 
+Important execution rules:
+
+- Track each section (Scale, Availability, Security & Confidentiality, Integrity, Usage Patterns) as answered / partially answered / unanswered.
+- Do not proceed to the next section if required fields in the current section are missing.
+- If the user skips a required field, explicitly re-ask for that specific item.
+- Before moving to Step 3, ensure all five sections are fully answered.
+- If anything is incomplete, present an "Open Items" list summarizing what is still required.
+
 Before asking questions, optionally scan the codebase for hints:
 
 **Files to scan (for context hints only):**
@@ -458,3 +466,5 @@ The skill is successful when:
 - ✅ File is not empty and is readable
 - ✅ User is informed of successful creation
 - ✅ UI displays the content with blue border after browser refresh
+- ✅ All required section questions were explicitly answered or clarified before file generation
+- ✅ No required fields were skipped or silently defaulted without user confirmation
