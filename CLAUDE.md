@@ -15,6 +15,7 @@ Run these as slash commands to generate infrastructure planning data:
 - `/application-overview` — Generate application overview
 - `/application-components` — Identify and document application components
 - `/non-functional-requirements` — Gather non-functional requirements
+- `/infrastructure-context` — Gather infrastructure context (network topology, landing zones, existing resources)
 - `/export-bicep` — Generate Azure infrastructure as Bicep code
 - `/export-terraform` — Generate Azure infrastructure as Terraform code
 
