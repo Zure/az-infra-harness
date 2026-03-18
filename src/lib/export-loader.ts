@@ -58,68 +58,71 @@ async function scanDirectory(dir: string, baseDir: string = dir): Promise<string
  */
 async function loadExportContents(dir: string, tool: 'bicep' | 'terraform'): Promise<ExportContents | null> {
   try {
-    // Scan the export directory for all files
     const allFiles = await scanDirectory(dir)
-    
-    // Filter files by category
-    const promptFiles = allFiles.filter(f => f.startsWith('prompts/'))
-    const instructionFiles = allFiles.filter(f => f.startsWith('instructions/'))
-    const adrFiles = allFiles.filter(f => f.startsWith('decisions/') || f.startsWith('adrs/'))
-    const configFiles = allFiles.filter(f => f.startsWith('configurations/'))
-    const deploymentFiles = allFiles.filter(f => f.startsWith('deployment/'))
-    const overviewFiles = allFiles.filter(f => 
-      !f.includes('/') || f.startsWith('context/')
+
+    const isBicep = tool === 'bicep'
+    const toolLabel = isBicep ? 'Bicep' : 'Terraform/OpenTofu'
+
+    // Root IaC files (*.bicep or *.tf in export root, excluding modules/)
+    const rootFileExts = isBicep ? ['.bicep'] : ['.tf']
+    const rootFileList = allFiles.filter(f =>
+      !f.includes('/') && rootFileExts.some(ext => f.endsWith(ext))
     )
-    
-    // Prompts
-    const prompts: ExportItem = {
-      path: 'prompts/',
-      description: `Ready-to-use prompts for coding agents to implement infrastructure with ${tool === 'bicep' ? 'Bicep' : 'Terraform/OpenTofu'}`,
-      files: promptFiles.map(f => path.basename(f))
-    }
 
-    // Instructions
-    const instructions: ExportItem = {
-      path: 'instructions/',
-      description: `Step-by-step implementation guidance for ${tool === 'bicep' ? 'Bicep' : 'Terraform/OpenTofu'}`,
-      files: instructionFiles.map(f => path.basename(f))
-    }
-
-    // ADRs
-    const adrs: ExportItem = {
-      path: 'decisions/',
-      description: 'Architecture Decision Records documenting key infrastructure choices',
-      files: adrFiles.map(f => path.basename(f))
-    }
-
-    // Configurations
-    const configurations: ExportItem = {
-      path: 'configurations/',
-      description: `Detailed component configurations and ${tool === 'bicep' ? 'Bicep parameters' : 'Terraform variables'}`,
-      files: configFiles.map(f => path.basename(f))
-    }
-
-    // Deployment
-    const deployment: ExportItem = {
-      path: 'deployment/',
-      description: `CI/CD pipeline configuration for ${tool === 'bicep' ? 'Bicep' : 'Terraform/OpenTofu'} deployments`,
-      files: deploymentFiles.map(f => path.basename(f))
-    }
-
-    // Overview & Context
-    const overview: ExportItem = {
+    const rootFiles: ExportItem = {
       path: './',
-      description: 'Product overview and context information',
-      files: overviewFiles.map(f => path.basename(f))
+      description: `Root ${toolLabel} files — main orchestration and configuration`,
+      files: rootFileList
+    }
+
+    // Modules: files under modules/
+    const moduleFiles = allFiles.filter(f => f.startsWith('modules/'))
+    const modules: ExportItem = {
+      path: 'modules/',
+      description: `${toolLabel} modules for each infrastructure component`,
+      files: moduleFiles.map(f => f.replace(/^modules\//, ''))
+    }
+
+    // Parameters / Variables: *.bicepparam, *.tfvars, or files under parameters/ or environments/
+    const paramFiles = allFiles.filter(f =>
+      f.endsWith('.bicepparam') ||
+      f.endsWith('.tfvars') ||
+      f.startsWith('parameters/') ||
+      f.startsWith('environments/')
+    )
+    const paramPath = isBicep ? 'parameters/' : 'environments/'
+    const parameters: ExportItem = {
+      path: paramPath,
+      description: `Environment-specific ${isBicep ? 'parameter' : 'variable'} files (dev, staging, prod)`,
+      files: paramFiles.map(f => f.replace(/^(parameters|environments)\//, ''))
+    }
+
+    // Pipelines: files under .github/workflows/ or .azuredevops/
+    const pipelineFiles = allFiles.filter(f =>
+      f.startsWith('.github/workflows/') || f.startsWith('.azuredevops/')
+    )
+    const pipelines: ExportItem = {
+      path: pipelineFiles.length > 0 && pipelineFiles[0].startsWith('.azuredevops/')
+        ? '.azuredevops/'
+        : '.github/workflows/',
+      description: 'CI/CD pipeline for automated infrastructure deployment',
+      files: pipelineFiles.map(f => f.replace(/^(\.github\/workflows\/|\.azuredevops\/)/, ''))
+    }
+
+    // Documentation: README.md and other .md files
+    const docFiles = allFiles.filter(f => f.endsWith('.md'))
+    const documentation: ExportItem = {
+      path: './',
+      description: 'Deployment documentation and setup instructions',
+      files: docFiles.map(f => path.basename(f))
     }
 
     return {
-      prompts,
-      instructions,
-      adrs,
-      configurations,
-      deployment,
-      overview
+      rootFiles,
+      modules,
+      parameters,
+      pipelines,
+      documentation
     }
   } catch (error) {
     return null

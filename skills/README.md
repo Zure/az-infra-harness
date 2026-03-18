@@ -41,9 +41,9 @@ These skills are referenced by thin wrappers in each supported agent's config di
 | Refine ADR | `architecture-decisions/refine-adr/SKILL.md` | Not yet implemented |
 | ADR Template | `architecture-decisions/adr-template/SKILL.md` | Not yet implemented |
 
-### Export (Stubs)
+### Export (Implemented)
 
 | Skill | Path | Status |
 |-------|------|--------|
-| Export Bicep | `export/export-bicep/SKILL.md` | Not yet implemented |
-| Export Terraform | `export/export-terraform/SKILL.md` | Not yet implemented |
+| Export Bicep | `export/export-bicep/SKILL.md` | Implemented |
+| Export Terraform | `export/export-terraform/SKILL.md` | Implemented |
