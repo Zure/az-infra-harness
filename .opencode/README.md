@@ -1,12 +1,10 @@
-# Azure Infrastructure Prompt Kit - OpenCode Skills
+# Azure Infrastructure Prompt Kit - OpenCode Configuration
 
-This directory contains OpenCode skills for generating Azure infrastructure planning data.
+This directory contains the OpenCode agent configuration for the Azure Infrastructure Prompt Kit.
 
-For complete documentation on how to use these skills, visit the documentation website.
+Skills are defined in the shared `skills/` directory at the project root. The commands in this directory are thin wrappers that reference those shared skills.
 
-## Available Skills
-
-Skills are organized by workflow section. See individual SKILL.md files for details.
+## Available Commands
 
 ### Application Definition
 - `/application-overview`
