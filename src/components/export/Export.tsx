@@ -1,7 +1,7 @@
 'use client'
 
 import { useState } from 'react'
-import { Terminal, FileCode, BookOpen, FileCheck, Layers, Package, FileText, Download, Check } from 'lucide-react'
+import { Terminal, FileCode, Blocks, Settings2, GitBranch, FileText, Download, Check, Package } from 'lucide-react'
 import { ExportCategoryCard } from './ExportCategoryCard'
 import { CopyButton } from '@/components/shared/CopyButton'
 import type { ExportData, IaCTool } from './types'
@@ -19,7 +19,7 @@ export function Export({ data }: ExportProps) {
     try {
       const response = await fetch(`/api/export/download?tool=${tool}`)
       if (!response.ok) throw new Error('Download failed')
-      
+
       const blob = await response.blob()
       const url = window.URL.createObjectURL(blob)
       const a = document.createElement('a')
@@ -37,15 +37,17 @@ export function Export({ data }: ExportProps) {
     }
   }
 
+  const exportCommand = selectedTool === 'bicep' ? '/export-bicep' : '/export-terraform'
+  const toolLabel = selectedTool === 'bicep' ? 'Bicep' : 'Terraform/OpenTofu'
   const bicepExport = data.bicep
   const terraformExport = data.terraform
   const hasAnyExport = bicepExport.exists || terraformExport.exists
 
   // Get current tool export data
   const currentExport = selectedTool === 'bicep' ? bicepExport : terraformExport
-  
+
   // Format the timestamp
-  const formattedDate = currentExport.timestamp 
+  const formattedDate = currentExport.timestamp
     ? new Date(currentExport.timestamp).toLocaleDateString('en-US', {
         year: 'numeric',
         month: 'long',
@@ -66,54 +68,32 @@ export function Export({ data }: ExportProps) {
           <FileCode className="h-5 w-5 text-blue-600 dark:text-blue-400 shrink-0 mt-0.5" />
           <div>
             <p className="font-medium text-slate-900 dark:text-slate-100">
-              Ready-to-use Prompts
+              IaC Modules
             </p>
             <p className="text-slate-600 dark:text-slate-400">
-              Copy-paste prompts for {selectedTool === 'bicep' ? 'Bicep' : 'Terraform/OpenTofu'} implementation
+              Production-ready {toolLabel} modules for each infrastructure component
             </p>
           </div>
         </div>
         <div className="flex items-start gap-3">
-          <BookOpen className="h-5 w-5 text-blue-600 dark:text-blue-400 shrink-0 mt-0.5" />
+          <Settings2 className="h-5 w-5 text-blue-600 dark:text-blue-400 shrink-0 mt-0.5" />
           <div>
             <p className="font-medium text-slate-900 dark:text-slate-100">
-              Implementation Instructions
+              Parameter Files
             </p>
             <p className="text-slate-600 dark:text-slate-400">
-              Step-by-step guidance for {selectedTool === 'bicep' ? 'Bicep' : 'Terraform/OpenTofu'}
+              Environment-specific {selectedTool === 'bicep' ? 'bicepparam' : 'tfvars'} files for dev, staging, and production
             </p>
           </div>
         </div>
         <div className="flex items-start gap-3">
-          <FileCheck className="h-5 w-5 text-blue-600 dark:text-blue-400 shrink-0 mt-0.5" />
+          <GitBranch className="h-5 w-5 text-blue-600 dark:text-blue-400 shrink-0 mt-0.5" />
           <div>
             <p className="font-medium text-slate-900 dark:text-slate-100">
-              Architecture Decision Records
+              CI/CD Pipeline
             </p>
             <p className="text-slate-600 dark:text-slate-400">
-              All ADRs exported as markdown files
-            </p>
-          </div>
-        </div>
-        <div className="flex items-start gap-3">
-          <Layers className="h-5 w-5 text-blue-600 dark:text-blue-400 shrink-0 mt-0.5" />
-          <div>
-            <p className="font-medium text-slate-900 dark:text-slate-100">
-              Component Configurations
-            </p>
-            <p className="text-slate-600 dark:text-slate-400">
-              Detailed configurations for all Azure services
-            </p>
-          </div>
-        </div>
-        <div className="flex items-start gap-3">
-          <Package className="h-5 w-5 text-blue-600 dark:text-blue-400 shrink-0 mt-0.5" />
-          <div>
-            <p className="font-medium text-slate-900 dark:text-slate-100">
-              Deployment Strategy
-            </p>
-            <p className="text-slate-600 dark:text-slate-400">
-              CI/CD pipeline and deployment process documentation
+              Automated deployment pipeline with validation, preview, and multi-environment deployment
             </p>
           </div>
         </div>
@@ -121,10 +101,10 @@ export function Export({ data }: ExportProps) {
           <FileText className="h-5 w-5 text-blue-600 dark:text-blue-400 shrink-0 mt-0.5" />
           <div>
             <p className="font-medium text-slate-900 dark:text-slate-100">
-              Product Overview & Context
+              Documentation
             </p>
             <p className="text-slate-600 dark:text-slate-400">
-              Complete context about your application and environment
+              README with prerequisites, quick start, and deployment instructions
             </p>
           </div>
         </div>
@@ -140,14 +120,14 @@ export function Export({ data }: ExportProps) {
           <Terminal className="h-5 w-5 text-slate-400 dark:text-slate-500 shrink-0" />
           <div className="min-w-0">
             <p className="text-sm font-medium text-slate-600 dark:text-slate-400">
-              Generate infrastructure planning package by running in coding agent:
+              Generate {toolLabel} infrastructure code by running in coding agent:
             </p>
             <code className="mt-1 block font-mono text-sm text-blue-600 dark:text-blue-400">
-              /export-infrastructure --tool={selectedTool}
+              {exportCommand}
             </code>
           </div>
         </div>
-        <CopyButton text={`/export-infrastructure --tool=${selectedTool}`} />
+        <CopyButton text={exportCommand} />
       </div>
     </div>
   )
@@ -159,10 +139,10 @@ export function Export({ data }: ExportProps) {
         {/* Header */}
         <div className="space-y-2">
           <h1 className="text-3xl font-bold text-slate-900 dark:text-slate-100">
-            Export Infrastructure Plan
+            Export Infrastructure Code
           </h1>
           <p className="text-slate-600 dark:text-slate-400">
-            Generate the complete infrastructure planning package with prompts, instructions, ADRs, and configurations
+            Generate production-ready {toolLabel} infrastructure code with modules, parameters, CI/CD pipelines, and documentation
           </p>
         </div>
 
@@ -207,7 +187,7 @@ export function Export({ data }: ExportProps) {
       {/* Header */}
       <div className="space-y-3">
         <h1 className="text-3xl font-bold text-slate-900 dark:text-slate-100">
-          Export Infrastructure Plan
+          Export Infrastructure Code
         </h1>
         {currentExport.exists && (
           <div className="flex items-center gap-4 text-sm text-slate-600 dark:text-slate-400">
@@ -272,33 +252,28 @@ export function Export({ data }: ExportProps) {
         <>
           <div className="grid gap-6 md:grid-cols-2">
             <ExportCategoryCard
-              title="Prompts"
-              item={currentExport.contents.prompts}
+              title="Root Files"
+              item={currentExport.contents.rootFiles}
               icon={<FileCode className="h-5 w-5 text-blue-600 dark:text-blue-400" />}
             />
             <ExportCategoryCard
-              title="Instructions"
-              item={currentExport.contents.instructions}
-              icon={<BookOpen className="h-5 w-5 text-blue-600 dark:text-blue-400" />}
+              title="IaC Modules"
+              item={currentExport.contents.modules}
+              icon={<Blocks className="h-5 w-5 text-blue-600 dark:text-blue-400" />}
             />
             <ExportCategoryCard
-              title="Architecture Decisions"
-              item={currentExport.contents.adrs}
-              icon={<FileCheck className="h-5 w-5 text-blue-600 dark:text-blue-400" />}
+              title="Parameter Files"
+              item={currentExport.contents.parameters}
+              icon={<Settings2 className="h-5 w-5 text-blue-600 dark:text-blue-400" />}
             />
             <ExportCategoryCard
-              title="Configurations"
-              item={currentExport.contents.configurations}
-              icon={<Layers className="h-5 w-5 text-blue-600 dark:text-blue-400" />}
+              title="CI/CD Pipeline"
+              item={currentExport.contents.pipelines}
+              icon={<GitBranch className="h-5 w-5 text-blue-600 dark:text-blue-400" />}
             />
             <ExportCategoryCard
-              title="Deployment"
-              item={currentExport.contents.deployment}
-              icon={<Package className="h-5 w-5 text-blue-600 dark:text-blue-400" />}
-            />
-            <ExportCategoryCard
-              title="Overview & Context"
-              item={currentExport.contents.overview}
+              title="Documentation"
+              item={currentExport.contents.documentation}
               icon={<FileText className="h-5 w-5 text-blue-600 dark:text-blue-400" />}
             />
           </div>
@@ -308,7 +283,7 @@ export function Export({ data }: ExportProps) {
             <h3 className="text-sm font-semibold text-slate-900 dark:text-slate-100">
               Update or View Export
             </h3>
-            
+
             {/* Update command */}
             <div className="flex items-start justify-between gap-3 rounded border border-slate-200 bg-white p-3 dark:border-slate-600 dark:bg-slate-800">
               <div className="flex items-start gap-3 flex-1 min-w-0">
@@ -318,11 +293,11 @@ export function Export({ data }: ExportProps) {
                     Regenerate export:
                   </p>
                   <code className="mt-0.5 block font-mono text-xs text-slate-700 dark:text-slate-300">
-                    /export-infrastructure --tool={selectedTool}
+                    {exportCommand}
                   </code>
                 </div>
               </div>
-              <CopyButton text={`/export-infrastructure --tool=${selectedTool}`} />
+              <CopyButton text={exportCommand} />
             </div>
 
             {/* Export path */}
@@ -346,13 +321,13 @@ export function Export({ data }: ExportProps) {
           <div className="rounded-lg border border-green-200 bg-green-50 p-5 dark:border-green-800 dark:bg-green-900/20">
             <div className="flex items-start justify-between gap-4">
               <div className="flex gap-3 flex-1">
-                <FileCheck className="h-5 w-5 text-green-600 dark:text-green-400 shrink-0" />
+                <FileCode className="h-5 w-5 text-green-600 dark:text-green-400 shrink-0" />
                 <div>
                   <h4 className="text-sm font-semibold text-green-900 dark:text-green-100">
-                    Infrastructure Plan Ready
+                    Infrastructure Code Ready
                   </h4>
                   <p className="mt-1 text-sm text-green-700 dark:text-green-300">
-                    Your infrastructure planning package for {selectedTool === 'bicep' ? 'Bicep' : 'Terraform/OpenTofu'} has been generated. You can now use the prompts and instructions to implement your Azure infrastructure as code.
+                    Your {toolLabel} infrastructure code has been generated. You can deploy it directly using the instructions below.
                   </p>
                 </div>
               </div>
@@ -370,7 +345,7 @@ export function Export({ data }: ExportProps) {
           {/* How to Use */}
           <div className="rounded-lg border border-slate-200 bg-white p-6 dark:border-slate-700 dark:bg-slate-800">
             <h3 className="mb-4 text-lg font-semibold text-slate-900 dark:text-slate-100">
-              How to Use This Export
+              How to Deploy
             </h3>
             <div className="space-y-4">
               <div>
@@ -378,10 +353,10 @@ export function Export({ data }: ExportProps) {
                   <span className="flex h-6 w-6 items-center justify-center rounded-full bg-blue-100 text-xs font-bold text-blue-700 dark:bg-blue-900 dark:text-blue-300">
                     1
                   </span>
-                  Review the Export Package
+                  Review the Generated Code
                 </h4>
                 <p className="ml-8 text-sm text-slate-600 dark:text-slate-400">
-                  Navigate to the <code className="rounded bg-slate-100 px-1.5 py-0.5 font-mono text-xs dark:bg-slate-900">{currentExport.exportPath}</code> directory and review the generated files. Each section contains documentation and specifications for your infrastructure.
+                  Navigate to the <code className="rounded bg-slate-100 px-1.5 py-0.5 font-mono text-xs dark:bg-slate-900">{currentExport.exportPath}</code> directory and review the generated modules, parameters, and pipeline configuration.
                 </p>
               </div>
 
@@ -390,11 +365,17 @@ export function Export({ data }: ExportProps) {
                   <span className="flex h-6 w-6 items-center justify-center rounded-full bg-blue-100 text-xs font-bold text-blue-700 dark:bg-blue-900 dark:text-blue-300">
                     2
                   </span>
-                  Use the Ready-to-Use Prompt
+                  Deploy to Dev
                 </h4>
-                <p className="ml-8 text-sm text-slate-600 dark:text-slate-400">
-                  Copy the prompt from <code className="rounded bg-slate-100 px-1.5 py-0.5 font-mono text-xs dark:bg-slate-900">prompts/{selectedTool === 'bicep' ? 'bicep' : 'terraform'}-prompt.md</code> and paste it into a coding agent (like Claude, GitHub Copilot, or any AI assistant). The agent will generate complete, production-ready infrastructure code based on your specifications.
-                </p>
+                {selectedTool === 'bicep' ? (
+                  <p className="ml-8 text-sm text-slate-600 dark:text-slate-400">
+                    Run <code className="rounded bg-slate-100 px-1.5 py-0.5 font-mono text-xs dark:bg-slate-900">az deployment sub create --location &lt;region&gt; --template-file main.bicep --parameters parameters/main.dev.bicepparam</code> to deploy to your dev environment.
+                  </p>
+                ) : (
+                  <p className="ml-8 text-sm text-slate-600 dark:text-slate-400">
+                    Run <code className="rounded bg-slate-100 px-1.5 py-0.5 font-mono text-xs dark:bg-slate-900">terraform init && terraform plan -var-file=environments/dev.tfvars</code> followed by <code className="rounded bg-slate-100 px-1.5 py-0.5 font-mono text-xs dark:bg-slate-900">terraform apply -var-file=environments/dev.tfvars</code> to deploy.
+                  </p>
+                )}
               </div>
 
               <div>
@@ -402,10 +383,10 @@ export function Export({ data }: ExportProps) {
                   <span className="flex h-6 w-6 items-center justify-center rounded-full bg-blue-100 text-xs font-bold text-blue-700 dark:bg-blue-900 dark:text-blue-300">
                     3
                   </span>
-                  Reference Architecture Decisions
+                  Set Up CI/CD
                 </h4>
                 <p className="ml-8 text-sm text-slate-600 dark:text-slate-400">
-                  As you implement, refer to the ADRs in the <code className="rounded bg-slate-100 px-1.5 py-0.5 font-mono text-xs dark:bg-slate-900">decisions/</code> directory to understand the rationale behind each infrastructure choice. This helps ensure the implementation aligns with the documented decisions.
+                  Copy the generated pipeline file to your repository. Configure the required secrets (Azure credentials) in your CI/CD platform to enable automated deployments.
                 </p>
               </div>
 
@@ -414,22 +395,10 @@ export function Export({ data }: ExportProps) {
                   <span className="flex h-6 w-6 items-center justify-center rounded-full bg-blue-100 text-xs font-bold text-blue-700 dark:bg-blue-900 dark:text-blue-300">
                     4
                   </span>
-                  Set Up CI/CD Pipeline
+                  Promote to Staging &amp; Production
                 </h4>
                 <p className="ml-8 text-sm text-slate-600 dark:text-slate-400">
-                  Use the workflow files in the <code className="rounded bg-slate-100 px-1.5 py-0.5 font-mono text-xs dark:bg-slate-900">deployment/</code> directory to configure your CI/CD pipeline. These templates are pre-configured for your deployment strategy.
-                </p>
-              </div>
-
-              <div>
-                <h4 className="mb-2 flex items-center gap-2 text-sm font-semibold text-slate-900 dark:text-slate-100">
-                  <span className="flex h-6 w-6 items-center justify-center rounded-full bg-blue-100 text-xs font-bold text-blue-700 dark:bg-blue-900 dark:text-blue-300">
-                    5
-                  </span>
-                  Validate and Deploy
-                </h4>
-                <p className="ml-8 text-sm text-slate-600 dark:text-slate-400">
-                  Use the validation prompt in <code className="rounded bg-slate-100 px-1.5 py-0.5 font-mono text-xs dark:bg-slate-900">prompts/validation-prompt.md</code> to review your infrastructure code before deployment. This ensures best practices and catches potential issues early.
+                  Use the staging and production parameter files to deploy to higher environments. The CI/CD pipeline includes manual approval gates before production deployment.
                 </p>
               </div>
             </div>

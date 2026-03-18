@@ -8,15 +8,14 @@ export interface ExportItem {
 }
 
 /**
- * Contents of the export package
+ * Contents of the export package — IaC-oriented categories
  */
 export interface ExportContents {
-  prompts: ExportItem
-  instructions: ExportItem
-  adrs: ExportItem
-  configurations: ExportItem
-  deployment: ExportItem
-  overview: ExportItem
+  rootFiles: ExportItem
+  modules: ExportItem
+  parameters: ExportItem
+  pipelines: ExportItem
+  documentation: ExportItem
 }
 
 /**
