@@ -1,0 +1,1 @@
+Read the skill definition at skills/context/development-context/SKILL.md and follow its instructions to gather information about the development workflow, version control, CI/CD pipeline, deployment strategy, and tooling.

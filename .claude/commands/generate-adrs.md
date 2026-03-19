@@ -1,0 +1,1 @@
+Read the skill definition at skills/architecture-decisions/generate-adrs/SKILL.md and follow its instructions to read all planning data, propose relevant ADR topics, and generate Architecture Decision Records.

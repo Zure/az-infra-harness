@@ -17,29 +17,29 @@ These skills are referenced by thin wrappers in each supported agent's config di
 | Application Components | `application-definition/application-components/SKILL.md` | Implemented |
 | Non-Functional Requirements | `application-definition/non-functional-requirements/SKILL.md` | Implemented |
 
-### Context (Stubs)
+### Context
 
 | Skill | Path | Status |
 |-------|------|--------|
-| Infrastructure Context | `context/infrastructure-context/SKILL.md` | Not yet implemented |
-| Platform Context | `context/platform-context/SKILL.md` | Not yet implemented |
-| Development Context | `context/development-context/SKILL.md` | Not yet implemented |
+| Infrastructure Context | `context/infrastructure-context/SKILL.md` | Implemented |
+| Platform Context | `context/platform-context/SKILL.md` | Implemented |
+| Development Context | `context/development-context/SKILL.md` | Implemented |
 
-### Application Architecture (Stubs)
-
-| Skill | Path | Status |
-|-------|------|--------|
-| Configure Component | `application-architecture/configure-component/SKILL.md` | Not yet implemented |
-| Deployment Strategy | `application-architecture/deployment-strategy/SKILL.md` | Not yet implemented |
-| Architecture Diagram | `application-architecture/architecture-diagram/SKILL.md` | Not yet implemented |
-
-### Architecture Decisions (Stubs)
+### Application Architecture
 
 | Skill | Path | Status |
 |-------|------|--------|
-| Generate ADRs | `architecture-decisions/generate-adrs/SKILL.md` | Not yet implemented |
-| Refine ADR | `architecture-decisions/refine-adr/SKILL.md` | Not yet implemented |
-| ADR Template | `architecture-decisions/adr-template/SKILL.md` | Not yet implemented |
+| Configure Component | `application-architecture/configure-component/SKILL.md` | Implemented |
+| Deployment Strategy | `application-architecture/deployment-strategy/SKILL.md` | Implemented |
+| Architecture Diagram | `application-architecture/architecture-diagram/SKILL.md` | Implemented |
+
+### Architecture Decisions
+
+| Skill | Path | Status |
+|-------|------|--------|
+| Generate ADRs | `architecture-decisions/generate-adrs/SKILL.md` | Implemented |
+| Refine ADR | `architecture-decisions/refine-adr/SKILL.md` | Implemented |
+| ADR Template | `architecture-decisions/adr-template/SKILL.md` | Implemented |
 
 ### Code Generation (Implemented)
 

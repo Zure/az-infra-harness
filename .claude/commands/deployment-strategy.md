@@ -1,0 +1,1 @@
+Read the skill definition at skills/application-architecture/deployment-strategy/SKILL.md and follow its instructions to document the source control, CI/CD platform, environments, deployment process, and quality gates.

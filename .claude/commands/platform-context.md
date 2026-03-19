@@ -1,0 +1,1 @@
+Read the skill definition at skills/context/platform-context/SKILL.md and follow its instructions to gather information about the Azure platform context (identity, security services, monitoring, and available platform services).
