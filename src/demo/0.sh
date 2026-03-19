@@ -37,10 +37,6 @@ rm -f "$DATA_DIR/architecture-decisions/adr-template.md"
 rm -rf "$DATA_DIR/architecture-decisions/adrs"
 mkdir -p "$DATA_DIR/architecture-decisions/adrs"
 
-# Clean export data (keep structure and READMEs)
-echo "  Cleaning export..."
-find "$DATA_DIR/export" -type f -name "*.md" ! -name "README.md" -delete 2>/dev/null || true
-
 # Remove export folders in root
 echo "  Cleaning export-bicep and export-terraform..."
 rm -rf "$ROOT_DIR/export-bicep"

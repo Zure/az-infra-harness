@@ -1,13 +1,21 @@
-import { FileText, FolderOpen } from 'lucide-react'
-import type { ExportItem } from './types'
+import Link from 'next/link'
+import { FileText, FolderOpen, ChevronRight } from 'lucide-react'
+import type { ExportItem, IaCTool } from './types'
 
 interface ExportCategoryCardProps {
   title: string
   item: ExportItem
   icon: React.ReactNode
+  tool: IaCTool
 }
 
-export function ExportCategoryCard({ title, item, icon }: ExportCategoryCardProps) {
+function buildFilePath(categoryPath: string, fileName: string): string {
+  // Reconstruct the full relative path for linking
+  const base = categoryPath.replace(/^\.\//, '').replace(/\/$/, '')
+  return base ? `${base}/${fileName}` : fileName
+}
+
+export function ExportCategoryCard({ title, item, icon, tool }: ExportCategoryCardProps) {
   return (
     <div className="rounded-lg border-2 border-blue-500 bg-white p-5 dark:border-blue-600 dark:bg-slate-800">
       {/* Header with icon */}
@@ -34,14 +42,24 @@ export function ExportCategoryCard({ title, item, icon }: ExportCategoryCardProp
         <code className="font-mono text-xs">{item.path}</code>
       </div>
 
-      {/* Files list */}
-      <div className="ml-11 space-y-1">
-        {item.files.map((file) => (
-          <div key={file} className="flex items-center gap-2 text-sm text-slate-700 dark:text-slate-300">
-            <FileText className="h-3.5 w-3.5 text-slate-400 dark:text-slate-500" />
-            <code className="font-mono text-xs">{file}</code>
-          </div>
-        ))}
+      {/* Files list - clickable */}
+      <div className="ml-11 space-y-0.5">
+        {item.files.map((file) => {
+          const fullPath = buildFilePath(item.path, file)
+          return (
+            <Link
+              key={file}
+              href={`/code-generation/file/${fullPath}?tool=${tool}`}
+              className="group flex items-center justify-between gap-2 rounded-md px-2 py-1.5 text-sm transition-colors hover:bg-slate-50 dark:hover:bg-slate-700/50"
+            >
+              <div className="flex items-center gap-2 min-w-0">
+                <FileText className="h-3.5 w-3.5 text-slate-400 dark:text-slate-500 shrink-0" />
+                <code className="font-mono text-xs text-slate-700 dark:text-slate-300 group-hover:text-blue-600 dark:group-hover:text-blue-400 truncate">{file}</code>
+              </div>
+              <ChevronRight className="h-3.5 w-3.5 text-slate-300 dark:text-slate-600 shrink-0 opacity-0 group-hover:opacity-100 transition-opacity" />
+            </Link>
+          )
+        })}
       </div>
     </div>
   )

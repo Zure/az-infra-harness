@@ -44,14 +44,14 @@ export async function GET() {
     )
     if (hasADRs) completedSteps.push('decisions')
 
-    // Check Export (check for export folders in root)
+    // Check Code Generation (check for export folders in root)
     const rootDir = cwd.endsWith('src')
       ? path.dirname(cwd)
       : cwd
     const hasExportBicep = await checkDirectoryExists(path.join(rootDir, 'export-bicep'))
     const hasExportTerraform = await checkDirectoryExists(path.join(rootDir, 'export-terraform'))
     const hasExport = hasExportBicep || hasExportTerraform
-    if (hasExport) completedSteps.push('export')
+    if (hasExport) completedSteps.push('code-generation')
 
     return NextResponse.json({
       completedSteps,

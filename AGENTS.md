@@ -10,8 +10,8 @@ The Azure Infra Prompt Kit is a **read-only UI** that displays content generated
 
 | Agent | Config Location | Commands |
 |-------|----------------|----------|
-| OpenCode | `.opencode/commands/` | `/application-overview`, `/export-bicep`, etc. |
-| Claude Code | `.claude/commands/` | `/application-overview`, `/export-bicep`, etc. |
+| OpenCode | `.opencode/commands/` | `/application-overview`, `/generate-code-bicep`, etc. |
+| Claude Code | `.claude/commands/` | `/application-overview`, `/generate-code-bicep`, etc. |
 | GitHub Copilot | `.github/prompts/` | `@workspace /application-overview`, etc. |
 
 All agents share the same skill definitions in `skills/`. Each agent's config contains thin wrappers that reference these shared skills.
@@ -33,7 +33,7 @@ src/data/
 ├── architecture-decisions/
 └── export/                        # ← Placeholder only
 
-# Export output (generated at project root by /export-bicep or /export-terraform):
+# Export output (generated at project root by /generate-code-bicep or /generate-code-terraform):
 export-bicep/                      # Bicep IaC files
 export-terraform/                  # Terraform IaC files
 ```
@@ -326,7 +326,7 @@ The same pattern will be used for:
 - **Context** (`/infrastructure-landscape`, `/platform-setup`, etc.)
 - **Application Architecture** (`/architecture-diagram`, `/deployment-strategy`, etc.)
 - **Architecture Decisions** (`/generate-adrs`, etc.)
-- **Export** (`/export-bicep`, `/export-terraform`) — generates actual IaC files to `export-bicep/` or `export-terraform/`
+- **Code Generation** (`/generate-code-bicep`, `/generate-code-terraform`) — generates actual IaC files to `export-bicep/` or `export-terraform/`
 
 ---
 

@@ -40,17 +40,6 @@ echo "  Restoring Architecture Decisions..."
 cp "$BACKUP_DIR/architecture-decisions/adr-template.md" "$DATA_DIR/architecture-decisions/"
 cp -r "$BACKUP_DIR/architecture-decisions/adrs" "$DATA_DIR/architecture-decisions/"
 
-# Restore export data
-echo "  Restoring Export data..."
-find "$BACKUP_DIR/export" -type f -name "*.md" ! -name "README.md" -exec bash -c '
-  for file; do
-    rel_path="${file#'"$BACKUP_DIR"'/export/}"
-    target_dir="'"$DATA_DIR"'/export/$(dirname "$rel_path")"
-    mkdir -p "$target_dir"
-    cp "$file" "$target_dir/"
-  done
-' bash {} +
-
 # Create export folders in root
 echo "  Creating export-bicep and export-terraform folders..."
 cp -r "$BACKUP_DIR/export-bicep" "$ROOT_DIR/"
