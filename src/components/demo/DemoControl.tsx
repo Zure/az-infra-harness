@@ -46,12 +46,12 @@ const PAGE_CONFIGS: Record<string, PageConfig> = {
       { state: 4, label: 'Filled', description: 'Include ADRs' },
     ],
   },
-  '/export': {
-    name: 'Export',
+  '/code-generation': {
+    name: 'Code Generation',
     states: [
       { state: 0, label: 'Clean', description: 'Remove all data' },
-      { state: 4, label: 'With ADRs', description: 'Ready for export' },
-      { state: 5, label: 'Complete', description: 'All data including exports' },
+      { state: 4, label: 'With ADRs', description: 'Ready for code generation' },
+      { state: 5, label: 'Complete', description: 'All data including generated code' },
     ],
   },
 }

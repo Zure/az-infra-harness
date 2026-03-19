@@ -18,5 +18,5 @@ When a user runs one of these prompts, read the corresponding skill file and fol
 | `application-components` | `skills/application-definition/application-components/SKILL.md` |
 | `non-functional-requirements` | `skills/application-definition/non-functional-requirements/SKILL.md` |
 | `infrastructure-context` | `skills/context/infrastructure-context/SKILL.md` |
-| `export-bicep` | `skills/export/export-bicep/SKILL.md` |
-| `export-terraform` | `skills/export/export-terraform/SKILL.md` |
+| `generate-code-bicep` | `skills/code-generation/generate-code-bicep/SKILL.md` |
+| `generate-code-terraform` | `skills/code-generation/generate-code-terraform/SKILL.md` |

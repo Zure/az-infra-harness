@@ -28,8 +28,8 @@ export function DecisionsClient({ data }: DecisionsClientProps) {
   const handleContinue = () => {
     // Mark current step as complete in workflow context
     completeCurrentStep()
-    // Navigate to export page
-    router.push('/export')
+    // Navigate to code generation page
+    router.push('/code-generation')
   }
 
   return (

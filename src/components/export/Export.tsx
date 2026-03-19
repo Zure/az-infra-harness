@@ -17,7 +17,7 @@ export function Export({ data }: ExportProps) {
   const handleDownload = async (tool: IaCTool) => {
     setIsDownloading(true)
     try {
-      const response = await fetch(`/api/export/download?tool=${tool}`)
+      const response = await fetch(`/api/code-generation/download?tool=${tool}`)
       if (!response.ok) throw new Error('Download failed')
 
       const blob = await response.blob()
@@ -37,7 +37,7 @@ export function Export({ data }: ExportProps) {
     }
   }
 
-  const exportCommand = selectedTool === 'bicep' ? '/export-bicep' : '/export-terraform'
+  const exportCommand = selectedTool === 'bicep' ? '/generate-code-bicep' : '/generate-code-terraform'
   const toolLabel = selectedTool === 'bicep' ? 'Bicep' : 'Terraform/OpenTofu'
   const bicepExport = data.bicep
   const terraformExport = data.terraform
@@ -139,7 +139,7 @@ export function Export({ data }: ExportProps) {
         {/* Header */}
         <div className="space-y-2">
           <h1 className="text-3xl font-bold text-slate-900 dark:text-slate-100">
-            Export Infrastructure Code
+            Code Generation
           </h1>
           <p className="text-slate-600 dark:text-slate-400">
             Generate production-ready {toolLabel} infrastructure code with modules, parameters, CI/CD pipelines, and documentation
@@ -187,7 +187,7 @@ export function Export({ data }: ExportProps) {
       {/* Header */}
       <div className="space-y-3">
         <h1 className="text-3xl font-bold text-slate-900 dark:text-slate-100">
-          Export Infrastructure Code
+          Code Generation
         </h1>
         {currentExport.exists && (
           <div className="flex items-center gap-4 text-sm text-slate-600 dark:text-slate-400">
@@ -255,26 +255,31 @@ export function Export({ data }: ExportProps) {
               title="Root Files"
               item={currentExport.contents.rootFiles}
               icon={<FileCode className="h-5 w-5 text-blue-600 dark:text-blue-400" />}
+              tool={selectedTool}
             />
             <ExportCategoryCard
               title="IaC Modules"
               item={currentExport.contents.modules}
               icon={<Blocks className="h-5 w-5 text-blue-600 dark:text-blue-400" />}
+              tool={selectedTool}
             />
             <ExportCategoryCard
               title="Parameter Files"
               item={currentExport.contents.parameters}
               icon={<Settings2 className="h-5 w-5 text-blue-600 dark:text-blue-400" />}
+              tool={selectedTool}
             />
             <ExportCategoryCard
               title="CI/CD Pipeline"
               item={currentExport.contents.pipelines}
               icon={<GitBranch className="h-5 w-5 text-blue-600 dark:text-blue-400" />}
+              tool={selectedTool}
             />
             <ExportCategoryCard
               title="Documentation"
               item={currentExport.contents.documentation}
               icon={<FileText className="h-5 w-5 text-blue-600 dark:text-blue-400" />}
+              tool={selectedTool}
             />
           </div>
 

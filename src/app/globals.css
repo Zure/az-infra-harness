@@ -56,3 +56,16 @@
 body {
   font-family: var(--font-body);
 }
+
+/* Shiki dual-theme: light theme uses inline color, dark theme uses --shiki-dark */
+.shiki-container .shiki {
+  background-color: transparent !important;
+}
+
+.dark .shiki-container .shiki {
+  background-color: transparent !important;
+}
+
+.dark .shiki-container .shiki span {
+  color: var(--shiki-dark) !important;
+}

@@ -44,9 +44,9 @@ const WORKFLOW_STEPS: WorkflowStep[] = [
     status: 'upcoming',
   },
   {
-    id: 'export',
+    id: 'code-generation',
     number: 5,
-    label: 'Export',
+    label: 'Code Generation',
     status: 'upcoming',
   },
 ]
@@ -57,7 +57,7 @@ const ROUTE_TO_STEP_MAP: Record<string, string> = {
   '/context': 'context',
   '/architecture': 'architecture',
   '/decisions': 'decisions',
-  '/export': 'export',
+  '/code-generation': 'code-generation',
 }
 
 // Get step ID from pathname

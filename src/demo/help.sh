@@ -64,10 +64,20 @@ else
   echo "  ⚬ Architecture Decisions (empty)"
 fi
 
-# Check export
-export_count=$(find "$DATA_DIR/export" -name "*.md" ! -name "README.md" 2>/dev/null | wc -l | tr -d ' ')
-if [ "$export_count" -gt 0 ]; then
-  echo "  ✓ Export ($export_count files)"
+# Check export (root-level export directories)
+ROOT_DIR="$(dirname "$SRC_DIR")"
+has_export=false
+export_tools=""
+if [ -d "$ROOT_DIR/export-bicep" ]; then
+  has_export=true
+  export_tools="Bicep"
+fi
+if [ -d "$ROOT_DIR/export-terraform" ]; then
+  has_export=true
+  [ -n "$export_tools" ] && export_tools="$export_tools, Terraform" || export_tools="Terraform"
+fi
+if $has_export; then
+  echo "  ✓ Export ($export_tools)"
 else
   echo "  ⚬ Export (empty)"
 fi

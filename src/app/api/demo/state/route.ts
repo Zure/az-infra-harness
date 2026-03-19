@@ -182,7 +182,7 @@ function getRedirectPathForState(state: DemoState): string {
     case 4: // + Decisions
       return '/decisions'
     case 5: // Complete
-      return '/export'
+      return '/code-generation'
     default:
       return '/application-definition'
   }
