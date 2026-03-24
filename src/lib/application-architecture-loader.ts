@@ -6,9 +6,10 @@ import type {
   Deployment, 
   ArchitectureDiagram 
 } from '@/components/application-architecture/types'
+import { DATA_DIR as BASE_DATA_DIR } from '@/lib/paths'
 
-const DATA_DIR = path.join(process.cwd(), 'data', 'application-architecture')
-const APP_DEF_DIR = path.join(process.cwd(), 'data', 'application-definition')
+const DATA_DIR = path.join(BASE_DATA_DIR, 'application-architecture')
+const APP_DEF_DIR = path.join(BASE_DATA_DIR, 'application-definition')
 
 /**
  * Reads a markdown file from the data directory

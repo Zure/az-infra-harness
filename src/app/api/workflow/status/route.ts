@@ -1,6 +1,7 @@
 import { NextResponse } from 'next/server'
 import { promises as fs } from 'fs'
 import path from 'path'
+import { DATA_DIR, EXPORT_BICEP_DIR, EXPORT_TERRAFORM_DIR } from '@/lib/paths'
 
 /**
  * GET /api/workflow/status
@@ -8,15 +9,10 @@ import path from 'path'
  */
 export async function GET() {
   try {
-    const cwd = process.cwd()
-    const dataDir = cwd.endsWith('src')
-      ? path.join(cwd, 'data')
-      : path.join(cwd, 'src', 'data')
-
     const completedSteps: string[] = []
 
     // Check Application Definition
-    const hasAppDef = await checkFiles(dataDir, [
+    const hasAppDef = await checkFiles(DATA_DIR, [
       'application-definition/application-overview.md',
       'application-definition/application-components.md',
       'application-definition/non-functional-requirements.md',
@@ -24,7 +20,7 @@ export async function GET() {
     if (hasAppDef) completedSteps.push('application-definition')
 
     // Check Context
-    const hasContext = await checkFiles(dataDir, [
+    const hasContext = await checkFiles(DATA_DIR, [
       'context/infrastructure-context.md',
       'context/platform-context.md',
       'context/development-context.md',
@@ -32,7 +28,7 @@ export async function GET() {
     if (hasContext) completedSteps.push('context')
 
     // Check Architecture
-    const hasArchitecture = await checkFiles(dataDir, [
+    const hasArchitecture = await checkFiles(DATA_DIR, [
       'application-architecture/architecture-diagram.md',
       'application-architecture/deployment-strategy.md',
     ])
@@ -40,16 +36,13 @@ export async function GET() {
 
     // Check Architecture Decisions (need at least 1 ADR)
     const hasADRs = await checkDirectoryHasFiles(
-      path.join(dataDir, 'architecture-decisions/adrs')
+      path.join(DATA_DIR, 'architecture-decisions/adrs')
     )
     if (hasADRs) completedSteps.push('decisions')
 
-    // Check Code Generation (check for export folders in root)
-    const rootDir = cwd.endsWith('src')
-      ? path.dirname(cwd)
-      : cwd
-    const hasExportBicep = await checkDirectoryExists(path.join(rootDir, 'export-bicep'))
-    const hasExportTerraform = await checkDirectoryExists(path.join(rootDir, 'export-terraform'))
+    // Check Code Generation (check for export folders)
+    const hasExportBicep = await checkDirectoryExists(EXPORT_BICEP_DIR)
+    const hasExportTerraform = await checkDirectoryExists(EXPORT_TERRAFORM_DIR)
     const hasExport = hasExportBicep || hasExportTerraform
     if (hasExport) completedSteps.push('code-generation')
 

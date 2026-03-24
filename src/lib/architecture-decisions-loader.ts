@@ -7,8 +7,9 @@ import type {
   ArchitectureDecisionsData,
   ADROption
 } from '@/components/architecture-decisions/types'
+import { DATA_DIR as BASE_DATA_DIR } from '@/lib/paths'
 
-const DATA_DIR = path.join(process.cwd(), 'data', 'architecture-decisions')
+const DATA_DIR = path.join(BASE_DATA_DIR, 'architecture-decisions')
 
 /**
  * Reads a markdown file from the data directory

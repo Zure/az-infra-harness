@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from 'next/server'
 import { promises as fs } from 'fs'
 import path from 'path'
 import archiver from 'archiver'
+import { EXPORT_BICEP_DIR, EXPORT_TERRAFORM_DIR } from '@/lib/paths'
 
 export const dynamic = 'force-dynamic'
 
@@ -17,11 +18,7 @@ export async function GET(request: NextRequest) {
     )
   }
 
-  const EXPORT_DIR = path.join(
-    process.cwd(), 
-    '..', 
-    tool === 'bicep' ? 'export-bicep' : 'export-terraform'
-  )
+  const EXPORT_DIR = tool === 'bicep' ? EXPORT_BICEP_DIR : EXPORT_TERRAFORM_DIR
 
   try {
     // Check if export directory exists

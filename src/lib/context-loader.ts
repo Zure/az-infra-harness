@@ -1,8 +1,9 @@
 import { promises as fs } from 'fs'
 import path from 'path'
 import type { PlanningBox, ContextDefinition } from '@/components/context/types'
+import { DATA_DIR as BASE_DATA_DIR } from '@/lib/paths'
 
-const DATA_DIR = path.join(process.cwd(), 'data', 'context')
+const DATA_DIR = path.join(BASE_DATA_DIR, 'context')
 
 /**
  * Loads a markdown file from the context data directory
