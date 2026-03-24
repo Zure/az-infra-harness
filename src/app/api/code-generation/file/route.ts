@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { promises as fs } from 'fs'
 import path from 'path'
+import { EXPORT_BICEP_DIR, EXPORT_TERRAFORM_DIR } from '@/lib/paths'
 
 export const dynamic = 'force-dynamic'
 
@@ -32,11 +33,7 @@ export async function GET(request: NextRequest) {
     )
   }
 
-  const exportDir = path.join(
-    process.cwd(),
-    '..',
-    tool === 'bicep' ? 'export-bicep' : 'export-terraform'
-  )
+  const exportDir = tool === 'bicep' ? EXPORT_BICEP_DIR : EXPORT_TERRAFORM_DIR
 
   const fullPath = path.join(exportDir, normalizedPath)
 

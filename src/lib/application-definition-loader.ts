@@ -1,8 +1,9 @@
 import { promises as fs } from 'fs'
 import path from 'path'
 import type { PlanningBox, Component, ApplicationDefinition } from '@/components/application-definition/types'
+import { DATA_DIR as BASE_DATA_DIR } from '@/lib/paths'
 
-const DATA_DIR = path.join(process.cwd(), 'data', 'application-definition')
+const DATA_DIR = path.join(BASE_DATA_DIR, 'application-definition')
 
 /**
  * Reads a markdown file from the data directory

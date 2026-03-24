@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from 'next/server'
 import { exec } from 'child_process'
 import { promisify } from 'util'
 import path from 'path'
+import { DATA_DIR, EXPORT_BICEP_DIR, EXPORT_TERRAFORM_DIR } from '@/lib/paths'
 
 const execAsync = promisify(exec)
 
@@ -11,17 +12,9 @@ type DemoState = 0 | 1 | 2 | 3 | 4 | 5
  * Detects current demo state by checking which files exist
  */
 async function detectCurrentState(): Promise<DemoState> {
-  // Determine the correct data directory path
-  const cwd = process.cwd()
-  const dataDir = cwd.endsWith('src')
-    ? path.join(cwd, 'data')
-    : path.join(cwd, 'src', 'data')
-  const rootDir = cwd.endsWith('src')
-    ? path.dirname(cwd)
-    : cwd
-  
   try {
     const fs = require('fs').promises
+    const dataDir = DATA_DIR
     
     // Check each section's key files
     const hasAppDef = await checkFiles(fs, dataDir, [
@@ -40,9 +33,9 @@ async function detectCurrentState(): Promise<DemoState> {
     
     const hasADRs = await checkDirectoryHasFiles(fs, path.join(dataDir, 'architecture-decisions/adrs'))
     
-    // Check for export folders in root
-    const hasExportBicep = await checkDirectoryExists(fs, path.join(rootDir, 'export-bicep'))
-    const hasExportTerraform = await checkDirectoryExists(fs, path.join(rootDir, 'export-terraform'))
+    // Check for export folders
+    const hasExportBicep = await checkDirectoryExists(fs, EXPORT_BICEP_DIR)
+    const hasExportTerraform = await checkDirectoryExists(fs, EXPORT_TERRAFORM_DIR)
     const hasExport = hasExportBicep || hasExportTerraform
     
     // Determine state based on what exists
@@ -118,13 +111,11 @@ export async function POST(request: NextRequest) {
     // Detect current state before changing
     const previousState = await detectCurrentState()
 
-    // Determine the correct demo directory path
-    // If we're running from src/, process.cwd() will be .../src
-    // If we're running from root, process.cwd() will be .../azure-infra-prompt-kit
-    const cwd = process.cwd()
-    const demoDir = cwd.endsWith('src') 
-      ? path.join(cwd, 'demo')
-      : path.join(cwd, 'src', 'demo')
+    // The demo scripts live next to the Next.js app in src/demo/
+    // AIPK_APP_DIR is set by the CLI to the Next.js app directory (src/)
+    // In dev mode (running from src/), process.cwd() is src/
+    const appDir = process.env.AIPK_APP_DIR ?? process.cwd()
+    const demoDir = path.join(appDir, 'demo')
     
     const scriptPath = path.join(demoDir, `${state}.sh`)
     

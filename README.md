@@ -34,6 +34,42 @@ The UI (`npm run dev`) displays what the agent has written. Each card shows a bl
 
 ## Getting Started
 
+## Quick Start (via npx)
+
+The fastest way to get started — no cloning required:
+
+```bash
+# Start the planning UI in your project directory
+npx azure-infra-prompt-kit
+
+# With a custom port
+npx azure-infra-prompt-kit --port 8080
+
+# Read/write data from a specific directory
+npx azure-infra-prompt-kit --data-dir ./my-azure-plan
+```
+
+Then open [http://localhost:3000](http://localhost:3000).
+
+To add coding agent slash commands to your project:
+
+```bash
+# Install commands for Claude Code
+npx azure-infra-prompt-kit init --agent claude
+
+# Install commands for OpenCode
+npx azure-infra-prompt-kit init --agent opencode
+
+# Install commands for GitHub Copilot
+npx azure-infra-prompt-kit init --agent copilot
+```
+
+The UI reads planning files from `./data/`, `./export-bicep/`, and `./export-terraform/` relative to where you run the command.
+
+---
+
+## Getting Started (from source)
+
 ### Prerequisites
 
 - Node.js 18+

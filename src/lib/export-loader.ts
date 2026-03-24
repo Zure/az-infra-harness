@@ -1,10 +1,7 @@
 import { promises as fs } from 'fs'
 import path from 'path'
 import type { ExportData, ToolExportData, ExportContents, ExportItem } from '@/components/export/types'
-
-// The export folders created by the coding agent
-const BICEP_EXPORT_DIR = path.join(process.cwd(), '..', 'export-bicep')
-const TERRAFORM_EXPORT_DIR = path.join(process.cwd(), '..', 'export-terraform')
+import { EXPORT_BICEP_DIR, EXPORT_TERRAFORM_DIR } from '@/lib/paths'
 
 /**
  * Checks if a specific export folder exists
@@ -160,8 +157,8 @@ async function loadToolExport(dir: string, tool: 'bicep' | 'terraform', folderNa
  */
 export async function loadExportData(): Promise<ExportData> {
   const [bicep, terraform] = await Promise.all([
-    loadToolExport(BICEP_EXPORT_DIR, 'bicep', 'export-bicep/'),
-    loadToolExport(TERRAFORM_EXPORT_DIR, 'terraform', 'export-terraform/')
+    loadToolExport(EXPORT_BICEP_DIR, 'bicep', 'export-bicep/'),
+    loadToolExport(EXPORT_TERRAFORM_DIR, 'terraform', 'export-terraform/')
   ])
 
   return {

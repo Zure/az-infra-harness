@@ -1,14 +1,38 @@
 {
   "name": "azure-infra-prompt-kit",
   "version": "0.1.0",
-  "private": true,
+  "description": "Interactive planning tool for Azure infrastructure — generates production-ready Bicep or Terraform code from guided decisions",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/zure/azure-infra-prompt-kit"
+  },
+  "engines": {
+    "node": ">=18"
+  },
+  "bin": {
+    "azure-infra-prompt-kit": "./bin/cli.js"
+  },
+  "files": [
+    ".next/standalone",
+    ".next/static",
+    "public",
+    "bin",
+    ".claude",
+    ".opencode",
+    ".github/prompts",
+    "skills"
+  ],
   "scripts": {
     "dev": "next dev",
-    "build": "next build",
+    "build": "next build && npm run postbuild",
+    "postbuild": "cp -r public .next/standalone/public && cp -r .next/static .next/standalone/.next/static",
     "start": "next start",
     "lint": "eslint",
     "test": "vitest",
-    "test:ui": "vitest --ui"
+    "test:ui": "vitest --ui",
+    "prepublishOnly": "npm run build && cp -r ../.claude . && cp -r ../.opencode . && mkdir -p .github && cp -r ../.github/prompts .github/ && cp -r ../skills .",
+    "postpublish": "rm -rf .claude .opencode skills && rm -rf .github/prompts"
   },
   "dependencies": {
     "@tailwindcss/typography": "^0.5.19",
