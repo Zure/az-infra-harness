@@ -5,7 +5,7 @@ description: Capture scale, availability, security, and integrity requirements f
 
 ## Purpose
 
-This skill captures the non-functional requirements of the application for the Azure Infrastructure Prompt Kit. It generates `src/data/application-definition/non-functional-requirements.md` which is used to inform infrastructure sizing, availability targets, and security configuration.
+This skill captures the non-functional requirements of the application for the Az Infra Harness. It generates `src/data/application-definition/non-functional-requirements.md` which is used to inform infrastructure sizing, availability targets, and security configuration.
 
 The generated file will be displayed in the UI when the user runs `npm run dev` and navigates to the Application Definition section.
 
@@ -387,7 +387,7 @@ You can now run /application-components to continue with the next step.
 ### If directory doesn't exist:
 
 - **Action**: Show clear error, do NOT create directory
-- **Message**: "Error: Directory 'src/data/application-definition/' not found. Are you in the project root directory? This skill expects to be run from the azure-infra-prompt-kit project root."
+- **Message**: "Error: Directory 'src/data/application-definition/' not found. Are you in the project root directory? This skill expects to be run from the az-infra-harness project root."
 
 ### If file write fails:
 

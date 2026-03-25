@@ -46,7 +46,7 @@ function runServer(args) {
   if (!fs.existsSync(standaloneServer)) {
     console.error('❌  Could not find the Next.js server.')
     console.error('   This is likely a packaging issue. Please report it at:')
-    console.error('   https://github.com/zure/azure-infra-prompt-kit/issues')
+    console.error('   https://github.com/zure/az-infra-harness/issues')
     process.exit(1)
   }
 
@@ -54,14 +54,14 @@ function runServer(args) {
     ...process.env,
     PORT: String(port),
     // Tell the Next.js app where to find user data
-    AIPK_DATA_ROOT: userDir,
+    AIH_DATA_ROOT: userDir,
     // Tell the Next.js app where the app itself lives (for demo scripts)
-    AIPK_APP_DIR: appDir,
+    AIH_APP_DIR: appDir,
     // Required for standalone server to find static files
     NODE_ENV: 'production',
   }
 
-  console.log(`🚀  Azure Infrastructure Prompt Kit`)
+  console.log(`🚀  Az Infra Harness`)
   console.log(`    Starting on http://localhost:${port}`)
   console.log(`    Reading data from: ${userDir}`)
   console.log()
@@ -104,12 +104,12 @@ async function runInit(args) {
   const supportedAgents = ['claude', 'opencode', 'copilot']
 
   if (!agent) {
-    console.log('🔧  Azure Infrastructure Prompt Kit — Init')
+    console.log('🔧  Az Infra Harness — Init')
     console.log()
     console.log('This will add slash commands and skill definitions for your coding agent.')
     console.log()
     console.log('Usage:')
-    console.log('  npx azure-infra-prompt-kit init --agent <agent>')
+    console.log('  npx az-infra-harness init --agent <agent>')
     console.log()
     console.log('Supported agents:')
     supportedAgents.forEach(a => console.log(`  - ${a}`))
@@ -125,7 +125,7 @@ async function runInit(args) {
   const appDir = path.join(__dirname, '..')
   const targetDir = process.cwd()
 
-  console.log(`🔧  Installing Azure Infrastructure Prompt Kit for ${agent}`)
+  console.log(`🔧  Installing Az Infra Harness for ${agent}`)
   console.log(`    Target: ${targetDir}`)
   console.log()
 

@@ -19,7 +19,7 @@ const jetbrainsMono = JetBrains_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Azure Infra Prompt Kit",
+  title: "Az Infra Harness",
   description: "Infrastructure planning tool for Azure applications",
 };
 

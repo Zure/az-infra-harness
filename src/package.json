@@ -1,17 +1,17 @@
 {
-  "name": "azure-infra-prompt-kit",
+  "name": "az-infra-harness",
   "version": "0.1.0",
   "description": "Interactive planning tool for Azure infrastructure — generates production-ready Bicep or Terraform code from guided decisions",
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "https://github.com/zure/azure-infra-prompt-kit"
+    "url": "https://github.com/zure/az-infra-harness"
   },
   "engines": {
     "node": ">=18"
   },
   "bin": {
-    "azure-infra-prompt-kit": "./bin/cli.js"
+    "az-infra-harness": "./bin/cli.js"
   },
   "files": [
     ".next/standalone",

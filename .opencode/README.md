@@ -1,6 +1,6 @@
-# Azure Infrastructure Prompt Kit - OpenCode Configuration
+# Az Infra Harness - OpenCode Configuration
 
-This directory contains the OpenCode agent configuration for the Azure Infrastructure Prompt Kit.
+This directory contains the OpenCode agent configuration for the Az Infra Harness.
 
 Skills are defined in the shared `skills/` directory at the project root. The commands in this directory are thin wrappers that reference those shared skills.
 

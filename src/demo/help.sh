@@ -3,7 +3,7 @@
 # Run any of these commands from src/demo directory
 
 echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
-echo "  Azure Infrastructure Prompt Kit - Demo States"
+echo "  Az Infra Harness - Demo States"
 echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
 echo ""
 echo "Available demo states:"

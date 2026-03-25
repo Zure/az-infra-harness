@@ -112,9 +112,9 @@ export async function POST(request: NextRequest) {
     const previousState = await detectCurrentState()
 
     // The demo scripts live next to the Next.js app in src/demo/
-    // AIPK_APP_DIR is set by the CLI to the Next.js app directory (src/)
+    // AIH_APP_DIR is set by the CLI to the Next.js app directory (src/)
     // In dev mode (running from src/), process.cwd() is src/
-    const appDir = process.env.AIPK_APP_DIR ?? process.cwd()
+    const appDir = process.env.AIH_APP_DIR ?? process.cwd()
     const demoDir = path.join(appDir, 'demo')
     
     const scriptPath = path.join(demoDir, `${state}.sh`)

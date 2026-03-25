@@ -429,3 +429,10 @@ FodyWeavers.xsd
 /src/data/**
 # But keep the .gitkeep files to preserve folder structure
 !/src/data/**/.gitkeep
+
+# npm package tarballs and other archives
+*.tgz
+*.tar.gz
+*.zip
+*.tar
+*.gz
