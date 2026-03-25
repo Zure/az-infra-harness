@@ -12,5 +12,17 @@ import path from 'path'
 const DATA_ROOT = process.env.AIPK_DATA_ROOT ?? process.cwd()
 
 export const DATA_DIR = path.join(DATA_ROOT, 'data')
-export const EXPORT_BICEP_DIR = path.join(DATA_ROOT, 'export-bicep')
-export const EXPORT_TERRAFORM_DIR = path.join(DATA_ROOT, 'export-terraform')
+
+/**
+ * Root for export directories (export-bicep/, export-terraform/).
+ *
+ * When AIPK_DATA_ROOT is set (npx mode), exports live alongside data in the
+ * user's project root.
+ *
+ * In dev mode (no AIPK_DATA_ROOT, running from src/), exports live at the
+ * repo root — one level above src/ — matching where coding agents write them.
+ */
+const EXPORT_ROOT = process.env.AIPK_DATA_ROOT ?? path.join(process.cwd(), '..')
+
+export const EXPORT_BICEP_DIR = path.join(EXPORT_ROOT, 'export-bicep')
+export const EXPORT_TERRAFORM_DIR = path.join(EXPORT_ROOT, 'export-terraform')
