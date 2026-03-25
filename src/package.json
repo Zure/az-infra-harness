@@ -31,8 +31,9 @@
     "lint": "eslint",
     "test": "vitest",
     "test:ui": "vitest --ui",
-    "prepublishOnly": "npm run build && cp -r ../.claude . && cp -r ../.opencode . && mkdir -p .github && cp -r ../.github/prompts .github/ && cp -r ../skills .",
-    "postpublish": "rm -rf .claude .opencode skills && rm -rf .github/prompts"
+    "prepack": "npm run build && cp -r ../.claude . && cp -r ../.opencode . && mkdir -p .github && cp -r ../.github/prompts .github/ && cp -r ../skills .",
+    "postpack": "rm -rf .claude .opencode skills && rm -rf .github/prompts",
+    "prepublishOnly": "echo 'Run npm pack first to verify the tarball before publishing'"
   },
   "dependencies": {
     "@tailwindcss/typography": "^0.5.19",
