@@ -1,4 +1,4 @@
-# Azure Infrastructure Prompt Kit
+# Az Infra Harness
 
 An interactive planning tool that guides you through designing Azure infrastructure — and then generates production-ready Bicep or Terraform code from your decisions.
 
@@ -40,13 +40,13 @@ The fastest way to get started — no cloning required:
 
 ```bash
 # Start the planning UI in your project directory
-npx azure-infra-prompt-kit
+npx az-infra-harness
 
 # With a custom port
-npx azure-infra-prompt-kit --port 8080
+npx az-infra-harness --port 8080
 
 # Read/write data from a specific directory
-npx azure-infra-prompt-kit --data-dir ./my-azure-plan
+npx az-infra-harness --data-dir ./my-azure-plan
 ```
 
 Then open [http://localhost:3000](http://localhost:3000).
@@ -55,13 +55,13 @@ To add coding agent slash commands to your project:
 
 ```bash
 # Install commands for Claude Code
-npx azure-infra-prompt-kit init --agent claude
+npx az-infra-harness init --agent claude
 
 # Install commands for OpenCode
-npx azure-infra-prompt-kit init --agent opencode
+npx az-infra-harness init --agent opencode
 
 # Install commands for GitHub Copilot
-npx azure-infra-prompt-kit init --agent copilot
+npx az-infra-harness init --agent copilot
 ```
 
 The UI reads planning files from `./data/`, `./export-bicep/`, and `./export-terraform/` relative to where you run the command.
@@ -78,8 +78,8 @@ The UI reads planning files from `./data/`, `./export-bicep/`, and `./export-ter
 ### 1. Clone and install
 
 ```bash
-git clone https://github.com/zure/azure-infra-prompt-kit
-cd azure-infra-prompt-kit/src
+git clone https://github.com/zure/az-infra-harness
+cd az-infra-harness/src
 npm install
 ```
 
@@ -147,7 +147,7 @@ After each command, refresh your browser to see the card update. When all cards 
 ## Project Structure
 
 ```
-azure-infra-prompt-kit/
+az-infra-harness/
 ├── src/                          # Next.js application
 │   ├── app/                      # Pages (one per workflow phase)
 │   ├── components/               # React components

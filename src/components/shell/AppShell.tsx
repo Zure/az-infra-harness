@@ -46,7 +46,7 @@ export function AppShell({ children, steps, currentStep, completedStepsCount, on
 
           <div className="flex-1">
             <h1 className="text-lg font-semibold text-slate-900 dark:text-slate-100">
-              Azure Infra Prompt Kit
+              Az Infra Harness
             </h1>
             <p className="mt-0.5 text-xs text-slate-500 dark:text-slate-400">
               {/* Show current step on mobile */}
@@ -64,7 +64,7 @@ export function AppShell({ children, steps, currentStep, completedStepsCount, on
             
             {/* GitHub link */}
             <a
-              href="https://github.com/zure/azure-infra-prompt-kit"
+              href="https://github.com/zure/az-infra-harness"
               target="_blank"
               rel="noopener noreferrer"
               className="p-2 text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-slate-100 transition-colors"

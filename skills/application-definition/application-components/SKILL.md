@@ -5,7 +5,7 @@ description: Identify and document application components (compute, data, networ
 
 ## Purpose
 
-This skill identifies and documents the components that make up the application for the Azure Infrastructure Prompt Kit. It generates `src/data/application-definition/application-components.md` which is used to drive the architecture planning phase — each component will later be mapped to Azure services.
+This skill identifies and documents the components that make up the application for the Az Infra Harness. It generates `src/data/application-definition/application-components.md` which is used to drive the architecture planning phase — each component will later be mapped to Azure services.
 
 The generated file will be displayed in the UI when the user runs `npm run dev` and navigates to the Application Definition section.
 
@@ -345,7 +345,7 @@ The next step is to run /infrastructure-context to begin defining your infrastru
 ### If directory doesn't exist:
 
 - **Action**: Show clear error, do NOT create directory
-- **Message**: "Error: Directory 'src/data/application-definition/' not found. Are you in the project root directory? This skill expects to be run from the azure-infra-prompt-kit project root."
+- **Message**: "Error: Directory 'src/data/application-definition/' not found. Are you in the project root directory? This skill expects to be run from the az-infra-harness project root."
 
 ### If file write fails:
 

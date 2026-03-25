@@ -5,7 +5,7 @@ description: Generate high-level application overview with name, description, pu
 
 ## Purpose
 
-This skill creates a structured overview of the application for the Azure Infrastructure Prompt Kit. It generates `src/data/application-definition/application-overview.md` which serves as the foundation for infrastructure planning.
+This skill creates a structured overview of the application for the Az Infra Harness. It generates `src/data/application-definition/application-overview.md` which serves as the foundation for infrastructure planning.
 
 The generated file will be displayed in the UI when the user runs `npm run dev` and navigates to the Application Definition section.
 
@@ -43,7 +43,7 @@ If you find useful information, present it to the user like this:
 ```
 Based on scanning your codebase, I found the following information:
 
-- **Project name**: Azure Infrastructure Prompt Kit
+- **Project name**: Az Infra Harness
 - **Inferred description**: [your inferred description based on README/docs]
 - **Potential purpose**: [inferred business purpose]
 - **Detected features**:
@@ -307,7 +307,7 @@ You can now run /non-functional-requirements to continue with the next step.
 
 ### If directory doesn't exist:
 - **Action**: Show clear error, do NOT create directory
-- **Message**: "Error: Directory 'src/data/application-definition/' not found. Are you in the project root directory? This skill expects to be run from the azure-infra-prompt-kit project root."
+- **Message**: "Error: Directory 'src/data/application-definition/' not found. Are you in the project root directory? This skill expects to be run from the az-infra-harness project root."
 - **Reasoning**: Creating directories might put files in wrong location
 
 ### If file write fails:
@@ -340,7 +340,7 @@ Please check permissions and try again."
 [Scanning happens]
 
 **Agent:** "Based on scanning your codebase, I found:
-- Project name: Azure Infrastructure Prompt Kit
+- Project name: Az Infra Harness
 - Description: An interactive planning tool for Azure infrastructure
 - Features related to application definition, architecture, and deployment
 
@@ -356,7 +356,7 @@ Is this information accurate? I'll use this as a starting point and ask a few cl
 
 [User provides purpose]
 
-**Agent:** "Excellent. Finally, what are the 5 key features of the Azure Infrastructure Prompt Kit?"
+**Agent:** "Excellent. Finally, what are the 5 key features of the Az Infra Harness?"
 
 [User provides 5 features]
 

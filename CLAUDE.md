@@ -1,4 +1,4 @@
-# Azure Infrastructure Prompt Kit
+# Az Infra Harness
 
 This project is an interactive planning tool for Azure infrastructure. A coding agent generates markdown and JSON files in `src/data/` which are displayed in a read-only UI.
 

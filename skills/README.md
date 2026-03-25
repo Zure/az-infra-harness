@@ -1,6 +1,6 @@
-# Azure Infrastructure Prompt Kit - Shared Skills
+# Az Infra Harness - Shared Skills
 
-This directory contains agent-agnostic skill definitions for the Azure Infrastructure Prompt Kit. Each skill is a detailed prompt (SKILL.md) that guides a coding agent through generating infrastructure planning data.
+This directory contains agent-agnostic skill definitions for the Az Infra Harness. Each skill is a detailed prompt (SKILL.md) that guides a coding agent through generating infrastructure planning data.
 
 These skills are referenced by thin wrappers in each supported agent's config directory:
 - **OpenCode**: `.opencode/commands/`

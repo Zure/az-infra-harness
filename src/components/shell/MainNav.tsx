@@ -18,7 +18,7 @@ export function MainNav({ steps, currentStep, onNavigate, isStepClickable }: Mai
           {/* Logo */}
           <div className="flex-shrink-0">
             <h1 className="text-lg font-semibold text-slate-900 dark:text-slate-100">
-              Azure Infra Prompt Kit
+              Az Infra Harness
             </h1>
           </div>
 
