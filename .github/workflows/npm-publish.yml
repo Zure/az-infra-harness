@@ -23,6 +23,9 @@ jobs:
           node-version: '22.14.0'
           registry-url: 'https://registry.npmjs.org'
 
+      - name: Update npm for trusted publishing support
+        run: npm install -g npm@latest
+
       - name: Install dependencies
         working-directory: src
         run: npm ci
