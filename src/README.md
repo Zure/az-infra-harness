@@ -1,36 +1,102 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Az Infra Harness
 
-## Getting Started
+> AI-assisted Azure infrastructure planning — from requirements to production-ready Bicep or Terraform.
 
-First, run the development server:
+## Why this exists
+
+Designing Azure infrastructure for a new application typically means context-switching between documentation, architecture diagrams, decision logs, and IaC code — often before you have a clear picture of your requirements. Important decisions get made informally, never documented, and later become tribal knowledge.
+
+**Az Infra Harness** was built to fix that. It provides a structured, conversation-driven workflow that guides you through every planning phase — from describing your application to generating production-ready IaC — with your AI coding agent doing the heavy lifting. The result is a complete, auditable record of your infrastructure decisions alongside ready-to-deploy Bicep or Terraform code.
+
+## What it does
+
+Az Infra Harness is an interactive planning UI that you run locally next to your coding agent (Claude Code, GitHub Copilot, or OpenCode). You drive the process using slash commands in your agent; the agent asks you questions, captures your answers, and writes structured files that appear in the UI.
+
+The workflow has five phases:
+
+| Phase | What you produce |
+|-------|-----------------|
+| **1. Application Definition** | Overview, components, non-functional requirements |
+| **2. Context** | Infrastructure landscape, platform services, development workflow |
+| **3. Application Architecture** | Azure service mapping, deployment strategy, architecture diagram |
+| **4. Architecture Decisions** | Architecture Decision Records (ADRs) |
+| **5. Code Generation** | Production-ready Bicep or Terraform modules |
+
+At the end you have a fully documented infrastructure design and IaC code ready to drop into your repository.
+
+## Quick start
 
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+npx @zureltd/az-infra-harness
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+This starts the planning UI at [http://localhost:3000](http://localhost:3000).
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+### Options
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+```bash
+npx @zureltd/az-infra-harness                        # default port 3000
+npx @zureltd/az-infra-harness --port 8080            # custom port
+npx @zureltd/az-infra-harness --data-dir ./my-plan   # custom data directory
+```
 
-## Learn More
+### Install agent commands into your project
 
-To learn more about Next.js, take a look at the following resources:
+Before using the slash commands, install the agent configuration for your coding agent of choice:
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+```bash
+npx @zureltd/az-infra-harness init --agent claude    # Claude Code
+npx @zureltd/az-infra-harness init --agent copilot   # GitHub Copilot
+npx @zureltd/az-infra-harness init --agent opencode  # OpenCode
+```
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+This copies the slash command definitions and shared skill files into your project so your agent can use them.
 
-## Deploy on Vercel
+## Using the slash commands
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+Once the UI is running and agent commands are installed, open your coding agent and run commands like:
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+```
+/application-overview
+/application-components
+/non-functional-requirements
+/infrastructure-context
+/platform-context
+/development-context
+/configure-component
+/deployment-strategy
+/architecture-diagram
+/generate-adrs
+/generate-code-bicep
+/generate-code-terraform
+```
+
+Your agent will ask you questions, then write structured files to `src/data/`. Refresh the browser to see your progress reflected in the UI.
+
+## Requirements
+
+- Node.js >= 18
+- A supported coding agent: [Claude Code](https://claude.ai/code), [GitHub Copilot](https://github.com/features/copilot), or [OpenCode](https://opencode.ai)
+
+## Contributing & development
+
+To run from source:
+
+```bash
+git clone https://github.com/Zure/az-infra-harness
+cd az-infra-harness/src
+npm install
+npm run dev
+```
+
+The app will be available at [http://localhost:3000](http://localhost:3000) with hot reload.
+
+```bash
+npm test          # run unit tests
+npm run lint      # run ESLint
+npm run build     # build standalone production bundle
+```
+
+## License
+
+MIT — see [LICENSE](../LICENSE).
