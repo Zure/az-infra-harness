@@ -1,3 +1,5 @@
+export const dynamic = 'force-dynamic'
+
 import { notFound } from 'next/navigation'
 import { loadComponents } from '@/lib/application-architecture-loader'
 import { ComponentDetail } from '@/components/application-architecture'
@@ -25,11 +27,4 @@ export default async function ComponentPage({
   )
 }
 
-// Generate static params for all components
-export async function generateStaticParams() {
-  const components = await loadComponents()
-  
-  return components.map((component) => ({
-    componentId: component.id,
-  }))
-}
+// Component pages are rendered on demand — no static params needed

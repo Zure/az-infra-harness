@@ -1,3 +1,5 @@
+export const dynamic = 'force-dynamic'
+
 import { loadContextData } from '@/lib/context-loader'
 import { ContextClient } from './ContextClient'
 

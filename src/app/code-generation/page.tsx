@@ -1,3 +1,5 @@
+export const dynamic = 'force-dynamic'
+
 import { WorkflowLayout } from '@/components/layouts/WorkflowLayout'
 import { loadExportData } from '@/lib/export-loader'
 import { ExportClient } from './ExportClient'

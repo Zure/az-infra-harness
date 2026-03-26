@@ -117,15 +117,14 @@ export async function POST(request: NextRequest) {
     const appDir = process.env.AIH_APP_DIR ?? process.cwd()
     const demoDir = path.join(appDir, 'demo')
     
-    const scriptPath = path.join(demoDir, `${state}.sh`)
+    const scriptPath = path.join(demoDir, `${state}.js`)
     
     console.log('Executing demo script:', scriptPath)
     console.log('Working directory:', demoDir)
     
-    // Execute the shell script
-    const { stdout, stderr } = await execAsync(`"${scriptPath}"`, {
+    // Execute the Node.js script (cross-platform, no shell required)
+    const { stdout, stderr } = await execAsync(`node "${scriptPath}"`, {
       cwd: demoDir,
-      shell: '/bin/bash',
     })
     
     if (stderr && !stderr.includes('find:')) {

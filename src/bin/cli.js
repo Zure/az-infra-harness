@@ -55,8 +55,8 @@ function runServer(args) {
     PORT: String(port),
     // Tell the Next.js app where to find user data
     AIH_DATA_ROOT: userDir,
-    // Tell the Next.js app where the app itself lives (for demo scripts)
-    AIH_APP_DIR: appDir,
+    // Tell the Next.js app where the standalone runtime lives (demo/ scripts live here)
+    AIH_APP_DIR: path.join(appDir, '.next', 'standalone'),
     // Required for standalone server to find static files
     NODE_ENV: 'production',
   }

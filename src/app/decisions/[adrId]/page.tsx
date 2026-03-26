@@ -1,3 +1,5 @@
+export const dynamic = 'force-dynamic'
+
 import { WorkflowLayout } from '@/components/layouts/WorkflowLayout'
 import { loadADRById } from '@/lib/architecture-decisions-loader'
 import { ADRDetailClient } from './ADRDetailClient'

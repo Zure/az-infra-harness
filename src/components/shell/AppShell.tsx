@@ -53,7 +53,7 @@ export function AppShell({ children, steps, currentStep, completedStepsCount, on
               <span className="md:hidden">
                 Step {currentStep} of {steps.length}: {currentStepData?.label}
               </span>
-              <span className="hidden md:inline">Infrastructure Planning</span>
+              <span className="hidden md:inline">Guided Agentic Infrastructure Creation</span>
             </p>
           </div>
 

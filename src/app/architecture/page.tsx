@@ -1,3 +1,5 @@
+export const dynamic = 'force-dynamic'
+
 import { WorkflowLayout } from '@/components/layouts/WorkflowLayout'
 import { loadApplicationArchitectureData } from '@/lib/application-architecture-loader'
 import { ApplicationArchitectureClient } from './ApplicationArchitectureClient'

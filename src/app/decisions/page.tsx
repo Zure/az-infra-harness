@@ -1,3 +1,5 @@
+export const dynamic = 'force-dynamic'
+
 import { WorkflowLayout } from '@/components/layouts/WorkflowLayout'
 import { loadArchitectureDecisionsData } from '@/lib/architecture-decisions-loader'
 import { DecisionsClient } from './DecisionsClient'

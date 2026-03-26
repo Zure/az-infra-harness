@@ -26,7 +26,7 @@
   "scripts": {
     "dev": "next dev",
     "build": "next build && npm run postbuild",
-    "postbuild": "cp -r public .next/standalone/public && cp -r .next/static .next/standalone/.next/static",
+    "postbuild": "cp -r public .next/standalone/public && cp -r .next/static .next/standalone/.next/static && cp -r demo .next/standalone/demo",
     "start": "next start",
     "lint": "eslint",
     "test": "vitest",
