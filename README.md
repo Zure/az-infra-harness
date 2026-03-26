@@ -40,13 +40,13 @@ The fastest way to get started — no cloning required:
 
 ```bash
 # Start the planning UI in your project directory
-npx az-infra-harness
+npx @zureltd/az-infra-harness
 
 # With a custom port
-npx az-infra-harness --port 8080
+npx @zureltd/az-infra-harness --port 8080
 
 # Read/write data from a specific directory
-npx az-infra-harness --data-dir ./my-azure-plan
+npx @zureltd/az-infra-harness --data-dir ./my-azure-plan
 ```
 
 Then open [http://localhost:3000](http://localhost:3000).
@@ -55,13 +55,13 @@ To add coding agent slash commands to your project:
 
 ```bash
 # Install commands for Claude Code
-npx az-infra-harness init --agent claude
+npx @zureltd/az-infra-harness init --agent claude
 
 # Install commands for OpenCode
-npx az-infra-harness init --agent opencode
+npx @zureltd/az-infra-harness init --agent opencode
 
 # Install commands for GitHub Copilot
-npx az-infra-harness init --agent copilot
+npx @zureltd/az-infra-harness init --agent copilot
 ```
 
 The UI reads planning files from `./data/`, `./export-bicep/`, and `./export-terraform/` relative to where you run the command.
