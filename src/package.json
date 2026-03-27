@@ -1,6 +1,6 @@
 {
   "name": "@zureltd/az-infra-harness",
-  "version": "0.10.0",
+  "version": "0.11.0",
   "description": "Interactive planning tool for Azure infrastructure — generates production-ready Bicep or Terraform code from guided decisions",
   "license": "MIT",
   "repository": {
