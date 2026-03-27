@@ -1,0 +1,6 @@
+---
+name: architecture-diagram
+description: Generate a Mermaid architecture diagram derived from application components and infrastructure context data
+---
+
+Read `skills/application-architecture/architecture-diagram/SKILL.md` and follow its instructions to generate a Mermaid architecture diagram derived from the application components and infrastructure context data.

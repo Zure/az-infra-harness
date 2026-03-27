@@ -1,6 +1,6 @@
 ---
 description: Gather development workflow, version control, CI/CD pipeline, deployment strategy, and tooling information
-agent: build
+mode: agent
 ---
 
-Read the skill definition at skills/context/development-context/SKILL.md and follow its instructions to gather information about the development workflow, version control, CI/CD pipeline, deployment strategy, monitoring & observability, and development tools.
+Read [#file:skills/context/development-context/SKILL.md](skills/context/development-context/SKILL.md) and follow its instructions to gather information about the development workflow, version control, CI/CD pipeline, deployment strategy, monitoring & observability, and development tools.

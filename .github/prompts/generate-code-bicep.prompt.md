@@ -1,6 +1,6 @@
 ---
 description: Generate Azure infrastructure as Bicep code from planning data
-agent: build
+mode: agent
 ---
 
-Read the skill definition at skills/code-generation/generate-code-bicep/SKILL.md and follow its instructions to generate Azure infrastructure as Bicep code.
+Read [#file:skills/code-generation/generate-code-bicep/SKILL.md](skills/code-generation/generate-code-bicep/SKILL.md) and follow its instructions to generate Azure infrastructure as Bicep code.

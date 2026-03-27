@@ -21,6 +21,7 @@
     ".claude",
     ".opencode",
     ".github/prompts",
+    ".github/skills",
     "skills"
   ],
   "scripts": {
@@ -31,8 +32,8 @@
     "lint": "eslint",
     "test": "vitest",
     "test:ui": "vitest --ui",
-    "prepack": "npm run build && cp -r ../.claude . && cp -r ../.opencode . && mkdir -p .github && cp -r ../.github/prompts .github/ && cp -r ../skills .",
-    "postpack": "rm -rf .claude .opencode skills && rm -rf .github/prompts",
+    "prepack": "npm run build && cp -r ../.claude . && cp -r ../.opencode . && mkdir -p .github && cp -r ../.github/prompts .github/ && cp -r ../.github/skills .github/ && cp -r ../skills .",
+    "postpack": "rm -rf .claude .opencode skills && rm -rf .github/prompts .github/skills",
     "prepublishOnly": "echo 'Run npm pack first to verify the tarball before publishing'"
   },
   "dependencies": {
