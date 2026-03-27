@@ -5,7 +5,7 @@ description: Gather development workflow, version control, CI/CD pipeline, deplo
 
 ## Purpose
 
-This skill gathers information about the development process, CI/CD pipeline, and tooling used by the team. It generates `data/context/development-context.md` which informs deployment strategy and infrastructure design decisions.
+This skill gathers information about the development process, CI/CD pipeline, and tooling used by the team. It generates `infra/context/development-context.md` which informs deployment strategy and infrastructure design decisions.
 
 The generated file will be displayed in the UI when the user runs `npx @zureltd/az-infra-harness` and navigates to the Context section.
 
@@ -24,7 +24,7 @@ Before asking questions, scan the codebase for existing CI/CD and development co
 
 **Files and commands to scan:**
 
-1. `data/context/development-context.md` — existing content (Update Mode trigger)
+1. `infra/context/development-context.md` — existing content (Update Mode trigger)
 2. `.github/workflows/` — CI/CD platform and workflow structure; **read the actual YAML contents** to extract triggers, steps, secrets, and environments
 3. `.gitlab-ci.yml`, `azure-pipelines.yml`, `Jenkinsfile` — alternative CI/CD platforms; read contents for pipeline structure
 4. `package.json` (scripts, test frameworks), `jest.config.*`, `vitest.config.*`, `playwright.config.*`, `cypress.config.*`
@@ -324,14 +324,13 @@ Before saving:
 
 ### Step 6: Save File
 
-**Target location:** `data/context/development-context.md`
+**Target location:** `infra/context/development-context.md`
 
 **Pre-save checks:**
-1. Verify directory `data/context/` exists
-2. If not, show error and stop
+1. Verify directory `infra/context/` exists
+2. If the directory does not exist, create it (including all parent directories) and continue.
 
 **Error handling:**
-- If directory missing: "Error: Directory 'data/context/' not found. Please ensure you're in the correct project directory."
 - If write fails: "Error: Failed to write file. Please check file permissions and try again."
 
 ---
@@ -341,7 +340,7 @@ Before saving:
 ```
 ✅ Created development context successfully!
 
-📄 File location: data/context/development-context.md
+📄 File location: infra/context/development-context.md
 
 🌐 To view in the UI:
    1. Ensure the Az Infra Harness is running: `npx @zureltd/az-infra-harness`
@@ -362,8 +361,7 @@ The next step is to run /configure-component to begin defining your application 
 - Present the findings and ask for confirmation: "I found GitHub Actions workflows in your repo. Is this your primary CI/CD platform?"
 
 ### If directory doesn't exist:
-- Show clear error, do NOT create directory
-- Message: "Error: Directory 'data/context/' not found. Are you in the project root directory?"
+- Create the directory (including all parent directories) and continue
 
 ### If user skips sections:
 - Allow "TBD" or "not decided yet" for non-critical sections (e.g., load testing tools)
@@ -388,13 +386,13 @@ The next step is to run /configure-component to begin defining your application 
 
 **Agent:** "✅ Created development context successfully!
 
-📄 File location: data/context/development-context.md"
+📄 File location: infra/context/development-context.md"
 
 ---
 
 ## Reference Files
 
-- **Sample output**: `data/context/development-context.md`
+- **Sample output**: `infra/context/development-context.md`
 - **Interaction standard**: `.opencode/skills/_shared/interaction-validation-standard.md`
 - **Documentation**: `DATA-STRUCTURE.md`
 
@@ -402,7 +400,7 @@ The next step is to run /configure-component to begin defining your application 
 
 ## Success Criteria
 
-- ✅ File created at `data/context/development-context.md`
+- ✅ File created at `infra/context/development-context.md`
 - ✅ Content matches the required format exactly
 - ✅ All eight sections are populated with concrete information
 - ✅ All TodoWrite tasks were used and completed

@@ -4,22 +4,22 @@ You are an expert Azure infrastructure engineer. Your task is to generate a comp
 
 ## Input: Read Planning Data
 
-Read whatever planning data exists in `data/`. Use what's available, gracefully default when files are absent.
+Read whatever planning data exists in `infra/`. Use what's available, gracefully default when files are absent.
 
 ### Required (must exist)
-- `data/application-definition/application-overview.md` — App name, description, purpose, features
+- `infra/application-definition/application-overview.md` — App name, description, purpose, features
 
 ### Optional (use if present, default if absent)
-- `data/application-definition/application-components.md` — Component list in markdown (`## Name`, `**Type:** Compute|Data|Networking`, description)
-- `data/application-definition/non-functional-requirements.md` — Scale, availability, security, etc.
-- `data/context/development-context.md` — CI/CD platform preference (GitHub Actions, Azure DevOps, etc.)
-- `data/context/infrastructure-context.md` — Network topology, landing zones, existing resources, connectivity
-- `data/context/platform-context.md` — Identity, security services, monitoring, platform services
-- `data/application-architecture/` — Architecture details
-- `data/application-architecture/components/*.json` — Azure service configurations per component (`{ azureService, sku, region, settings }`)
-- `data/application-architecture/deployment-strategy.md` — CI/CD and deployment process details
-- `data/application-architecture/architecture-diagram.md` — Mermaid architecture diagram
-- `data/architecture-decisions/adrs/` — ADRs
+- `infra/application-definition/application-components.md` — Component list in markdown (`## Name`, `**Type:** Compute|Data|Networking`, description)
+- `infra/application-definition/non-functional-requirements.md` — Scale, availability, security, etc.
+- `infra/context/development-context.md` — CI/CD platform preference (GitHub Actions, Azure DevOps, etc.)
+- `infra/context/infrastructure-context.md` — Network topology, landing zones, existing resources, connectivity
+- `infra/context/platform-context.md` — Identity, security services, monitoring, platform services
+- `infra/application-architecture/` — Architecture details
+- `infra/application-architecture/components/*.json` — Azure service configurations per component (`{ azureService, sku, region, settings }`)
+- `infra/application-architecture/deployment-strategy.md` — CI/CD and deployment process details
+- `infra/application-architecture/architecture-diagram.md` — Mermaid architecture diagram
+- `infra/architecture-decisions/adrs/` — ADRs
 
 ### Defaults when data is missing
 - **Components absent**: If `application-components.md` is missing, generate a minimal setup with one compute module (Container Apps) and one data module (Azure SQL)
@@ -50,7 +50,7 @@ Use the component `type` and `description` fields to pick the best match. If the
 
 ## Output: Generate Files
 
-Generate all files into the `export-bicep/` directory at the **project root** (alongside the `data/` directory).
+Generate all files into the `export-bicep/` directory at the **project root** (alongside the `infra/` directory).
 
 ### Output Structure
 
@@ -118,7 +118,7 @@ export-bicep/
 - Prod: production SKUs, full redundancy, geo-replication where applicable
 
 #### CI/CD Pipeline
-- Read CI/CD platform from `data/context/development-context.md`
+- Read CI/CD platform from `infra/context/development-context.md`
 - If GitHub Actions (or default): generate `.github/workflows/deploy-infra.yml`
 - If Azure DevOps: generate `.azuredevops/pipelines/deploy-infra.yml`
 - Pipeline stages: validate → what-if → deploy-dev → deploy-staging → deploy-prod
@@ -190,8 +190,8 @@ If `az` is available, present findings: "I see you're logged into subscription '
 
 ## Execution Steps
 
-1. Read all available planning data from `data/` (application-overview.md, application-components.md, non-functional-requirements.md, infrastructure-context.md, platform-context.md, development-context.md, components/*.json, deployment-strategy.md, architecture-diagram.md, adrs/)
-2. Determine components: first check `data/application-architecture/components/*.json` for explicit Azure service configs; fall back to the Azure Service Mapping table for unconfigured components
+1. Read all available planning data from `infra/` (application-overview.md, application-components.md, non-functional-requirements.md, infrastructure-context.md, platform-context.md, development-context.md, components/*.json, deployment-strategy.md, architecture-diagram.md, adrs/)
+2. Determine components: first check `infra/application-architecture/components/*.json` for explicit Azure service configs; fall back to the Azure Service Mapping table for unconfigured components
 3. Determine CI/CD platform preference
 4. Generate all Bicep files to `export-bicep/`
 5. Generate parameter files for all environments

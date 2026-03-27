@@ -5,7 +5,7 @@ description: List existing ADRs, let the user select one, and interactively refi
 
 ## Purpose
 
-This skill allows interactive refinement of an existing Architecture Decision Record. It reads all ADRs in `data/architecture-decisions/adrs/`, lets the user select one, and guides them through updating specific sections.
+This skill allows interactive refinement of an existing Architecture Decision Record. It reads all ADRs in `infra/architecture-decisions/adrs/`, lets the user select one, and guides them through updating specific sections.
 
 The updated ADR will be reflected in the UI when the user refreshes after running `npx @zureltd/az-infra-harness`.
 
@@ -21,11 +21,11 @@ Run this skill when:
 
 ### Step 1: Discover Existing ADRs
 
-Read all files in `data/architecture-decisions/adrs/` and list them.
+Read all files in `infra/architecture-decisions/adrs/` and list them.
 
 If no ADRs exist:
 ```
-No ADRs found in data/architecture-decisions/adrs/. Please run /generate-adrs first to create architecture decision records.
+No ADRs found in infra/architecture-decisions/adrs/. Please run /generate-adrs first to create architecture decision records.
 ```
 Stop the skill.
 
@@ -153,7 +153,7 @@ Wait for confirmation before writing.
 
 ### Step 6: Save Updated File
 
-**Target location:** `data/architecture-decisions/adrs/[original-filename]`
+**Target location:** `infra/architecture-decisions/adrs/[original-filename]`
 
 Overwrite the existing file with the updated content.
 
@@ -172,7 +172,7 @@ Overwrite the existing file with the updated content.
 ```
 ✅ Updated [ADR filename] successfully!
 
-📄 File location: data/architecture-decisions/adrs/[filename]
+📄 File location: infra/architecture-decisions/adrs/[filename]
 
 Changes made:
 - [Brief summary of what was changed]
@@ -232,8 +232,8 @@ Which would you like to refine?"
 
 ## Reference Files
 
-- **ADR template**: `data/architecture-decisions/adr-template.md`
-- **ADR examples**: `data/architecture-decisions/adrs/`
+- **ADR template**: `infra/architecture-decisions/adr-template.md`
+- **ADR examples**: `infra/architecture-decisions/adrs/`
 - **Interaction standard**: `.opencode/skills/_shared/interaction-validation-standard.md`
 - **Documentation**: `DATA-STRUCTURE.md`
 
@@ -241,7 +241,7 @@ Which would you like to refine?"
 
 ## Success Criteria
 
-- ✅ Existing ADR file updated at `data/architecture-decisions/adrs/[filename]`
+- ✅ Existing ADR file updated at `infra/architecture-decisions/adrs/[filename]`
 - ✅ All requested changes applied correctly
 - ✅ ADR structure (H1, status, all required sections) remains intact
 - ✅ User reviewed the full updated ADR before saving

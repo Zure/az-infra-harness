@@ -5,7 +5,7 @@ description: Configure an individual application component by mapping it to an A
 
 ## Purpose
 
-This skill configures a single application component by mapping it to a specific Azure service and capturing the configuration details. It generates `data/application-architecture/components/{component-id}.json` for each configured component.
+This skill configures a single application component by mapping it to a specific Azure service and capturing the configuration details. It generates `infra/application-architecture/components/{component-id}.json` for each configured component.
 
 These JSON files are used by the IaC generation skills (`/generate-code-bicep` and `/generate-code-terraform`) to produce infrastructure code.
 
@@ -18,7 +18,7 @@ Run this skill when:
 - A component's Azure configuration needs to be updated
 - User explicitly runs `/configure-component`
 
-**Prerequisite:** `data/application-definition/application-components.md` must exist with at least one component defined. Run `/application-components` first if it doesn't.
+**Prerequisite:** `infra/application-definition/application-components.md` must exist with at least one component defined. Run `/application-components` first if it doesn't.
 
 ## Component ID Convention
 
@@ -34,10 +34,10 @@ The `{component-id}` used in the filename is derived from the component name in 
 
 Before starting the interactive flow, read existing context data to provide smart defaults:
 
-1. **`data/context/infrastructure-context.md`** — extract the preferred Azure region from network topology
-2. **`data/context/platform-context.md`** — extract shared services (Key Vault, Log Analytics) that may inform settings
-3. **`data/application-definition/non-functional-requirements.md`** — extract scale/availability requirements to suggest appropriate SKUs
-4. **`data/application-architecture/components/*.json`** — check what region and patterns already-configured components use for consistency
+1. **`infra/context/infrastructure-context.md`** — extract the preferred Azure region from network topology
+2. **`infra/context/platform-context.md`** — extract shared services (Key Vault, Log Analytics) that may inform settings
+3. **`infra/application-definition/non-functional-requirements.md`** — extract scale/availability requirements to suggest appropriate SKUs
+4. **`infra/application-architecture/components/*.json`** — check what region and patterns already-configured components use for consistency
 
 Use these as suggestions (clearly labelled) during the interactive flow. For example:
 - If prior components use `eastus2`, suggest that as the default region
@@ -71,7 +71,7 @@ az account list-locations --query "[?metadata.regionType=='Physical'].{name:name
 
 ### Step 1: Read Existing Components
 
-Read `data/application-definition/application-components.md` to get the list of defined components.
+Read `infra/application-definition/application-components.md` to get the list of defined components.
 
 If the file doesn't exist or is empty:
 ```
@@ -79,7 +79,7 @@ I need a list of application components before I can configure them. Please run 
 ```
 Stop the skill.
 
-Also check `data/application-architecture/components/` for any already-configured component JSON files.
+Also check `infra/application-architecture/components/` for any already-configured component JSON files.
 
 ---
 
@@ -293,14 +293,13 @@ Before saving:
 
 ### Step 7: Save File
 
-**Target location:** `data/application-architecture/components/{component-id}.json`
+**Target location:** `infra/application-architecture/components/{component-id}.json`
 
 **Pre-save checks:**
-1. Verify directory `data/application-architecture/components/` exists
-2. If not, show error and stop
+1. Verify directory `infra/application-architecture/components/` exists
+2. If the directory does not exist, create it (including all parent directories) and continue.
 
 **Error handling:**
-- If directory missing: "Error: Directory 'data/application-architecture/components/' not found. Please ensure you're in the correct project directory."
 - If write fails: "Error: Failed to write file. Please check file permissions and try again."
 
 ---
@@ -310,7 +309,7 @@ Before saving:
 ```
 ✅ Configured [Component Name] successfully!
 
-📄 File location: data/application-architecture/components/[component-id].json
+📄 File location: infra/application-architecture/components/[component-id].json
 
 Azure Service: [Azure Service]
 SKU: [SKU]
@@ -342,7 +341,7 @@ If the user wants to configure another component, return to Step 2 with the upda
 - Ask which one to reconfigure: "All components are already configured. Which would you like to update?"
 
 ### If directory doesn't exist:
-- Show clear error, do NOT create directory
+- Create the directory (including all parent directories) and continue
 
 ### If user selects an Azure service outside the suggested list:
 - Accept it — the suggestions are guides, not constraints
@@ -376,7 +375,7 @@ Which component would you like to configure?"
 
 **Agent:** "✅ Configured API Backend successfully!
 
-📄 File location: data/application-architecture/components/api-backend.json
+📄 File location: infra/application-architecture/components/api-backend.json
 
 Would you like to configure another component?"
 
@@ -384,8 +383,8 @@ Would you like to configure another component?"
 
 ## Reference Files
 
-- **Sample output**: `data/application-architecture/components/api-backend.json`
-- **Component list**: `data/application-definition/application-components.md`
+- **Sample output**: `infra/application-architecture/components/api-backend.json`
+- **Component list**: `infra/application-definition/application-components.md`
 - **Interaction standard**: `.opencode/skills/_shared/interaction-validation-standard.md`
 - **Documentation**: `DATA-STRUCTURE.md`
 
@@ -393,7 +392,7 @@ Would you like to configure another component?"
 
 ## Success Criteria
 
-- ✅ JSON file created at `data/application-architecture/components/{component-id}.json`
+- ✅ JSON file created at `infra/application-architecture/components/{component-id}.json`
 - ✅ All required JSON fields are present and correctly typed (`azureService`, `sku`, `region`, `settings`)
 - ✅ All TodoWrite tasks were used and completed
 - ✅ All validation rules pass

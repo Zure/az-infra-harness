@@ -5,7 +5,7 @@ description: Write the canonical ADR template file used by all architecture deci
 
 ## Purpose
 
-This skill writes the canonical Architecture Decision Record (ADR) template to `data/architecture-decisions/adr-template.md`. This file serves as the master template that the `/generate-adrs` skill uses when creating individual ADRs.
+This skill writes the canonical Architecture Decision Record (ADR) template to `infra/architecture-decisions/adr-template.md`. This file serves as the master template that the `/generate-adrs` skill uses when creating individual ADRs.
 
 The generated file will be displayed in the UI when the user runs `npx @zureltd/az-infra-harness` and navigates to the Architecture Decisions section.
 
@@ -20,7 +20,7 @@ Run this skill when:
 
 ### Step 1: Check for Existing File
 
-Check whether `data/architecture-decisions/adr-template.md` already exists and has content.
+Check whether `infra/architecture-decisions/adr-template.md` already exists and has content.
 
 **If the file exists → follow Update Mode (Step 2a).**
 **If the file does not exist → follow Fresh Mode (Step 2b).**
@@ -126,14 +126,13 @@ Before saving:
 
 ### Step 4: Save File
 
-**Target location:** `data/architecture-decisions/adr-template.md`
+**Target location:** `infra/architecture-decisions/adr-template.md`
 
 **Pre-save checks:**
-1. Verify directory `data/architecture-decisions/` exists
-2. If not, show error and stop
+1. Verify directory `infra/architecture-decisions/` exists
+2. If the directory does not exist, create it (including all parent directories) and continue.
 
 **Error handling:**
-- If directory missing: "Error: Directory 'data/architecture-decisions/' not found. Please ensure you're in the correct project directory."
 - If write fails: "Error: Failed to write file. Please check file permissions and try again."
 
 ---
@@ -143,7 +142,7 @@ Before saving:
 ```
 ✅ Created ADR template successfully!
 
-📄 File location: data/architecture-decisions/adr-template.md
+📄 File location: infra/architecture-decisions/adr-template.md
 
 This template will be used by /generate-adrs when creating individual architecture decision records.
 
@@ -160,8 +159,7 @@ You can now run /generate-adrs to generate ADRs based on your planning data.
 ## Error Handling
 
 ### If directory doesn't exist:
-- Show clear error, do NOT create directory
-- Message: "Error: Directory 'data/architecture-decisions/' not found. Are you in the project root directory?"
+- Create the directory (including all parent directories) and continue
 
 ### If write fails:
 - Show clear error with actionable advice
@@ -180,7 +178,7 @@ You can now run /generate-adrs to generate ADRs based on your planning data.
 
 **Agent:** "✅ Created ADR template successfully!
 
-📄 File location: data/architecture-decisions/adr-template.md"
+📄 File location: infra/architecture-decisions/adr-template.md"
 
 ---
 
@@ -200,15 +198,15 @@ You can now run /generate-adrs to generate ADRs based on your planning data.
 
 ## Reference Files
 
-- **Sample output**: `data/architecture-decisions/adr-template.md`
-- **ADR example**: `data/architecture-decisions/adrs/adr-001-container-platform.md`
+- **Sample output**: `infra/architecture-decisions/adr-template.md`
+- **ADR example**: `infra/architecture-decisions/adrs/adr-001-container-platform.md`
 - **Documentation**: `DATA-STRUCTURE.md`
 
 ---
 
 ## Success Criteria
 
-- ✅ File created at `data/architecture-decisions/adr-template.md`
+- ✅ File created at `infra/architecture-decisions/adr-template.md`
 - ✅ Template contains all required sections (Title, Status, Context, Options, Decision, Rationale, Consequences, Related Components)
 - ✅ File is not empty and is readable
 - ✅ User confirmed the template before saving (either "use default" or approved customizations)

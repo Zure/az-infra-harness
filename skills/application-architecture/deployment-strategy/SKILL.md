@@ -5,7 +5,7 @@ description: Document source control, CI/CD platform, environments, deployment p
 
 ## Purpose
 
-This skill documents the end-to-end deployment strategy for the application. It generates `data/application-architecture/deployment-strategy.md` which serves as the reference for CI/CD pipeline design and IaC deployment automation.
+This skill documents the end-to-end deployment strategy for the application. It generates `infra/application-architecture/deployment-strategy.md` which serves as the reference for CI/CD pipeline design and IaC deployment automation.
 
 The generated file will be displayed in the UI when the user runs `npx @zureltd/az-infra-harness` and navigates to the Application Architecture section.
 
@@ -20,13 +20,13 @@ Run this skill when:
 
 ### Step 1: Check for Existing File + Codebase Discovery
 
-Check whether `data/application-architecture/deployment-strategy.md` already exists.
+Check whether `infra/application-architecture/deployment-strategy.md` already exists.
 
 Also scan the codebase for existing CI/CD configuration:
 - `.github/workflows/` — GitHub Actions workflows
 - `azure-pipelines.yml` — Azure Pipelines
 - `.gitlab-ci.yml` — GitLab CI
-- `data/context/development-context.md` — already-captured development context (reuse this!)
+- `infra/context/development-context.md` — already-captured development context (reuse this!)
 
 **If existing deployment strategy file found → follow Update Mode (Step 2a).**
 **If no existing file → follow Fresh Mode (Step 2b).**
@@ -54,7 +54,7 @@ Wait for the user's response, then make changes. Ask "Anything else to update, o
 This skill MUST comply with the shared Interaction & Validation Standard:
 `.opencode/skills/_shared/interaction-validation-standard.md`
 
-**Important:** First check `data/context/development-context.md` — if it exists, many answers may already be captured there. Pre-populate what you can from that file and ask the user to confirm rather than asking from scratch.
+**Important:** First check `infra/context/development-context.md` — if it exists, many answers may already be captured there. Pre-populate what you can from that file and ask the user to confirm rather than asking from scratch.
 
 Use the **TodoWrite** tool to create a task list at the start with these high-priority items:
 1. Source Control
@@ -224,14 +224,13 @@ Before saving:
 
 ### Step 6: Save File
 
-**Target location:** `data/application-architecture/deployment-strategy.md`
+**Target location:** `infra/application-architecture/deployment-strategy.md`
 
 **Pre-save checks:**
-1. Verify directory `data/application-architecture/` exists
-2. If not, show error and stop
+1. Verify directory `infra/application-architecture/` exists
+2. If the directory does not exist, create it (including all parent directories) and continue.
 
 **Error handling:**
-- If directory missing: "Error: Directory 'data/application-architecture/' not found. Please ensure you're in the correct project directory."
 - If write fails: "Error: Failed to write file. Please check file permissions and try again."
 
 ---
@@ -241,7 +240,7 @@ Before saving:
 ```
 ✅ Created deployment strategy successfully!
 
-📄 File location: data/application-architecture/deployment-strategy.md
+📄 File location: infra/application-architecture/deployment-strategy.md
 
 🌐 To view in the UI:
    1. Ensure the Az Infra Harness is running: `npx @zureltd/az-infra-harness`
@@ -261,7 +260,7 @@ You can now run /configure-component to configure individual components, or /arc
 - Confirm with the user rather than re-asking the same questions
 
 ### If directory doesn't exist:
-- Show clear error, do NOT create directory
+- Create the directory (including all parent directories) and continue
 
 ### If user provides fewer than 2 environments:
 - Ask: "Most applications have at least a dev and a production environment. Can you describe the additional environment(s)?"
@@ -285,14 +284,14 @@ You can now run /configure-component to configure individual components, or /arc
 
 **Agent:** "✅ Created deployment strategy successfully!
 
-📄 File location: data/application-architecture/deployment-strategy.md"
+📄 File location: infra/application-architecture/deployment-strategy.md"
 
 ---
 
 ## Reference Files
 
-- **Sample output**: `data/application-architecture/deployment-strategy.md`
-- **Related data**: `data/context/development-context.md`
+- **Sample output**: `infra/application-architecture/deployment-strategy.md`
+- **Related data**: `infra/context/development-context.md`
 - **Interaction standard**: `.opencode/skills/_shared/interaction-validation-standard.md`
 - **Documentation**: `DATA-STRUCTURE.md`
 
@@ -300,7 +299,7 @@ You can now run /configure-component to configure individual components, or /arc
 
 ## Success Criteria
 
-- ✅ File created at `data/application-architecture/deployment-strategy.md`
+- ✅ File created at `infra/application-architecture/deployment-strategy.md`
 - ✅ Content matches the required format exactly
 - ✅ All five sections are populated with concrete information
 - ✅ Deployment Process section has numbered steps

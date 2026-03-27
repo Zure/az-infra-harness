@@ -5,7 +5,7 @@ description: Gather identity & access, security services, monitoring, and platfo
 
 ## Purpose
 
-This skill gathers information about the Azure platform services available to the application. It generates `data/context/platform-context.md` which informs security, monitoring, and identity decisions during architecture planning.
+This skill gathers information about the Azure platform services available to the application. It generates `infra/context/platform-context.md` which informs security, monitoring, and identity decisions during architecture planning.
 
 The generated file will be displayed in the UI when the user runs `npx @zureltd/az-infra-harness` and navigates to the Context section.
 
@@ -20,7 +20,7 @@ Run this skill when:
 
 ### Step 1: Check for Existing File
 
-Check whether `data/context/platform-context.md` already exists and has content.
+Check whether `infra/context/platform-context.md` already exists and has content.
 
 **If the file exists and has content → follow Update Mode (Step 2a).**
 **If the file does not exist or is empty → follow Fresh Mode (Step 2b).**
@@ -263,14 +263,13 @@ Before saving:
 
 ### Step 6: Save File
 
-**Target location:** `data/context/platform-context.md`
+**Target location:** `infra/context/platform-context.md`
 
 **Pre-save checks:**
-1. Verify directory `data/context/` exists
-2. If not, show error and stop
+1. Verify directory `infra/context/` exists
+2. If the directory does not exist, create it (including all parent directories) and continue.
 
 **Error handling:**
-- If directory missing: "Error: Directory 'data/context/' not found. Please ensure you're in the correct project directory."
 - If write fails: "Error: Failed to write file. Please check file permissions and try again."
 
 ---
@@ -280,7 +279,7 @@ Before saving:
 ```
 ✅ Created platform context successfully!
 
-📄 File location: data/context/platform-context.md
+📄 File location: infra/context/platform-context.md
 
 🌐 To view in the UI:
    1. Ensure the Az Infra Harness is running: `npx @zureltd/az-infra-harness`
@@ -299,8 +298,7 @@ You can now run /development-context to continue with the next step.
 - Fall back to questions without mentioning the failure
 
 ### If directory doesn't exist:
-- Show clear error, do NOT create directory
-- Message: "Error: Directory 'data/context/' not found. Are you in the project root directory?"
+- Create the directory (including all parent directories) and continue
 
 ### If user is unsure about platform-managed services:
 - Suggest marking items as "TBD — confirm with platform team" rather than leaving them blank
@@ -325,13 +323,13 @@ You can now run /development-context to continue with the next step.
 
 **Agent:** "✅ Created platform context successfully!
 
-📄 File location: data/context/platform-context.md"
+📄 File location: infra/context/platform-context.md"
 
 ---
 
 ## Reference Files
 
-- **Sample output**: `data/context/platform-context.md`
+- **Sample output**: `infra/context/platform-context.md`
 - **Interaction standard**: `.opencode/skills/_shared/interaction-validation-standard.md`
 - **Documentation**: `DATA-STRUCTURE.md`
 
@@ -339,7 +337,7 @@ You can now run /development-context to continue with the next step.
 
 ## Success Criteria
 
-- ✅ File created at `data/context/platform-context.md`
+- ✅ File created at `infra/context/platform-context.md`
 - ✅ Content matches the required format exactly
 - ✅ All four sections are populated with concrete information
 - ✅ All TodoWrite tasks were used and completed

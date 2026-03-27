@@ -16,7 +16,7 @@ Check which files exist:
 
 ```bash
 # From src/ directory
-ls -la data/application-definition/
+ls -la infra/application-definition/
 ```
 
 Expected files for complete section:
@@ -125,7 +125,7 @@ When a user runs `/application-overview`, `/non-functional-requirements`, or `/a
 ### Creating application-overview.md
 
 ```bash
-# Save to: src/data/application-definition/application-overview.md
+# Save to: src/infra/application-definition/application-overview.md
 cat > application-overview.md << 'EOF'
 # Customer Portal
 
@@ -147,7 +147,7 @@ EOF
 ### Creating non-functional-requirements.md
 
 ```bash
-# Save to: src/data/application-definition/non-functional-requirements.md
+# Save to: src/infra/application-definition/non-functional-requirements.md
 cat > non-functional-requirements.md << 'EOF'
 # Non-Functional Requirements
 
@@ -166,7 +166,7 @@ EOF
 ### Creating application-components.md
 
 ```bash
-# Save to: src/data/application-definition/application-components.md
+# Save to: src/infra/application-definition/application-components.md
 cat > application-components.md << 'EOF'
 # Application Components
 
@@ -200,7 +200,7 @@ After creating files:
 
 1. **Check files exist:**
    ```bash
-   ls -la data/application-definition/
+   ls -la infra/application-definition/
    ```
 
 2. **Refresh the browser** to see content appear in the UI

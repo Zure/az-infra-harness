@@ -5,7 +5,7 @@ description: Identify and document application components (compute, data, networ
 
 ## Purpose
 
-This skill identifies and documents the components that make up the application for the Az Infra Harness. It generates `data/application-definition/application-components.md` which is used to drive the architecture planning phase — each component will later be mapped to Azure services.
+This skill identifies and documents the components that make up the application for the Az Infra Harness. It generates `infra/application-definition/application-components.md` which is used to drive the architecture planning phase — each component will later be mapped to Azure services.
 
 The generated file will be displayed in the UI when the user runs `npx @zureltd/az-infra-harness` and navigates to the Application Definition section.
 
@@ -44,7 +44,7 @@ There are two modes depending on whether a file already exists:
 
 ### Step 1: Check for Existing File
 
-Check whether `data/application-definition/application-components.md` already exists and has content.
+Check whether `infra/application-definition/application-components.md` already exists and has content.
 
 **If the file exists and has content → follow the "Update Mode" workflow (Step 2a).**
 
@@ -107,7 +107,7 @@ Actively scan the codebase to build a draft component list. The goal is to prese
 
 - `README.md` — architecture sections, component diagrams described in text
 - `docs/` — architecture documents
-- `data/application-definition/application-overview.md` — already-captured application context
+- `infra/application-definition/application-overview.md` — already-captured application context
 
 #### Azure CLI Discovery (if available)
 
@@ -323,12 +323,12 @@ Before saving, verify the generated content meets all requirements:
 
 ### Step 7: Save File
 
-**Target location:** `data/application-definition/application-components.md`
+**Target location:** `infra/application-definition/application-components.md`
 
 **Pre-save checks:**
 
-1. Verify the directory exists: `data/application-definition/`
-2. If directory doesn't exist, show error and stop (don't create the directory)
+1. Verify the directory exists: `infra/application-definition/`
+2. If the directory does not exist, create it (including all parent directories) and continue.
 
 **Save process:**
 
@@ -339,7 +339,6 @@ Before saving, verify the generated content meets all requirements:
 
 **Error handling:**
 
-- If directory missing: "Error: Directory 'data/application-definition/' not found. Please ensure you're in the correct project directory."
 - If write fails: "Error: Failed to write file. Please check file permissions and try again."
 - If file empty after write: "Error: File was created but appears empty. Please try again."
 
@@ -352,7 +351,7 @@ After successful file creation, inform the user:
 ```
 ✅ Created application components successfully!
 
-📄 File location: data/application-definition/application-components.md
+📄 File location: infra/application-definition/application-components.md
 
 🌐 To view in the UI:
    1. Ensure the Az Infra Harness is running: `npx @zureltd/az-infra-harness`
@@ -377,8 +376,7 @@ The next step is to run /infrastructure-context to begin defining your infrastru
 
 ### If directory doesn't exist:
 
-- **Action**: Show clear error, do NOT create directory
-- **Message**: "Error: Directory 'data/application-definition/' not found. Are you in the project root directory? This skill expects to be run from the az-infra-harness project root."
+- **Action**: Create the directory (including all parent directories) and continue
 
 ### If file write fails:
 
@@ -458,8 +456,8 @@ What would you like to change? You can add, remove, rename, reclassify, or updat
 
 ## Reference Files
 
-- **Sample output**: See `data/application-definition/application-components.md` for a complete example
-- **Template reference**: See `data/application-definition/README.md` for format specification
+- **Sample output**: See `infra/application-definition/application-components.md` for a complete example
+- **Template reference**: See `infra/application-definition/README.md` for format specification
 - **Documentation**: See `DATA-STRUCTURE.md` for overall structure
 
 ---
@@ -479,7 +477,7 @@ What would you like to change? You can add, remove, rename, reclassify, or updat
 
 The skill is successful when:
 
-- ✅ File created at `data/application-definition/application-components.md`
+- ✅ File created at `infra/application-definition/application-components.md`
 - ✅ Content matches the required format exactly
 - ✅ At least 2 components are documented
 - ✅ All type values are valid (Compute, Data, or Networking)

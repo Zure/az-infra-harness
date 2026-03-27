@@ -5,7 +5,7 @@ description: Read all planning data, propose relevant ADR topics, and generate A
 
 ## Purpose
 
-This skill reads all available planning data and generates Architecture Decision Records (ADRs) for the most significant architectural decisions. It creates one or more files at `data/architecture-decisions/adrs/adr-{NNN}-{slug}.md` following the template in `data/architecture-decisions/adr-template.md`.
+This skill reads all available planning data and generates Architecture Decision Records (ADRs) for the most significant architectural decisions. It creates one or more files at `infra/architecture-decisions/adrs/adr-{NNN}-{slug}.md` following the template in `infra/architecture-decisions/adr-template.md`.
 
 The generated ADRs will be displayed in the UI when the user runs `npx @zureltd/az-infra-harness` and navigates to the Architecture Decisions section.
 
@@ -27,17 +27,17 @@ Run this skill when:
 
 Read all available planning data files:
 
-1. `data/application-definition/application-overview.md`
-2. `data/application-definition/application-components.md`
-3. `data/application-definition/non-functional-requirements.md`
-4. `data/context/infrastructure-context.md`
-5. `data/context/platform-context.md`
-6. `data/context/development-context.md`
-7. `data/application-architecture/components/*.json`
-8. `data/application-architecture/deployment-strategy.md`
-9. `data/architecture-decisions/adr-template.md`
+1. `infra/application-definition/application-overview.md`
+2. `infra/application-definition/application-components.md`
+3. `infra/application-definition/non-functional-requirements.md`
+4. `infra/context/infrastructure-context.md`
+5. `infra/context/platform-context.md`
+6. `infra/context/development-context.md`
+7. `infra/application-architecture/components/*.json`
+8. `infra/application-architecture/deployment-strategy.md`
+9. `infra/architecture-decisions/adr-template.md`
 
-Also check `data/architecture-decisions/adrs/` for any existing ADRs to:
+Also check `infra/architecture-decisions/adrs/` for any existing ADRs to:
 - Determine the next ADR number (highest existing NNN + 1)
 - Avoid proposing ADRs for decisions already documented
 
@@ -114,7 +114,7 @@ Only ask if the information isn't already in the planning data. If the planning 
 
 ### Step 4: Generate ADRs
 
-For each selected topic, generate an ADR following the template in `data/architecture-decisions/adr-template.md`.
+For each selected topic, generate an ADR following the template in `infra/architecture-decisions/adr-template.md`.
 
 **File naming convention:**
 - `adr-001-{slug}.md` where NNN is zero-padded (3 digits)
@@ -160,17 +160,16 @@ If the user wants to review a specific ADR, show its full content and allow edit
 
 ### Step 6: Save Files
 
-**Target location:** `data/architecture-decisions/adrs/`
+**Target location:** `infra/architecture-decisions/adrs/`
 
 **Pre-save checks:**
-1. Verify directory `data/architecture-decisions/adrs/` exists
-2. If not, show error and stop
+1. Verify directory `infra/architecture-decisions/adrs/` exists
+2. If the directory does not exist, create it (including all parent directories) and continue.
 3. Check for filename conflicts (existing ADRs with the same number)
 
 **Conflict resolution:** If `adr-001-*.md` already exists, increment to `adr-002-*.md` for the new ADR (don't overwrite).
 
 **Error handling:**
-- If directory missing: "Error: Directory 'data/architecture-decisions/adrs/' not found. Please ensure you're in the correct project directory."
 - If write fails: "Error: Failed to write [filename]. Please check file permissions and try again."
 
 ---
@@ -181,8 +180,8 @@ If the user wants to review a specific ADR, show its full content and allow edit
 ✅ Generated [N] ADR(s) successfully!
 
 📄 Files created:
-   - data/architecture-decisions/adrs/adr-001-container-platform.md
-   - data/architecture-decisions/adrs/adr-002-database-selection.md
+   - infra/architecture-decisions/adrs/adr-001-container-platform.md
+   - infra/architecture-decisions/adrs/adr-002-database-selection.md
    [etc.]
 
 🌐 To view in the UI:
@@ -203,14 +202,14 @@ You can use /refine-adr to update the status of any ADR (e.g., from draft to acc
 - Offer to generate a generic set of ADRs with placeholder content (but warn these will need heavy customization)
 
 ### If ADR template is missing:
-- Warn the user: "No ADR template found at data/architecture-decisions/adr-template.md. Run /adr-template first, or I can use the default template."
+- Warn the user: "No ADR template found at infra/architecture-decisions/adr-template.md. Run /adr-template first, or I can use the default template."
 - Use the built-in default template if the user agrees
 
 ### If user selects no topics:
 - "No problem! When you're ready to document your architectural decisions, run /generate-adrs again."
 
 ### If directory doesn't exist:
-- Show clear error, do NOT create directory
+- Create the directory (including all parent directories) and continue
 
 ---
 
@@ -241,8 +240,8 @@ Which would you like to generate? Say 'all' or list numbers."
 
 ## Reference Files
 
-- **ADR template**: `data/architecture-decisions/adr-template.md`
-- **ADR example**: `data/architecture-decisions/adrs/adr-001-container-platform.md`
+- **ADR template**: `infra/architecture-decisions/adr-template.md`
+- **ADR example**: `infra/architecture-decisions/adrs/adr-001-container-platform.md`
 - **Interaction standard**: `.opencode/skills/_shared/interaction-validation-standard.md`
 - **Documentation**: `DATA-STRUCTURE.md`
 
@@ -250,7 +249,7 @@ Which would you like to generate? Say 'all' or list numbers."
 
 ## Success Criteria
 
-- ✅ At least one ADR file created at `data/architecture-decisions/adrs/`
+- ✅ At least one ADR file created at `infra/architecture-decisions/adrs/`
 - ✅ Each ADR follows the template structure
 - ✅ ADRs contain project-specific content (not generic placeholders)
 - ✅ File naming follows the `adr-{NNN}-{slug}.md` convention

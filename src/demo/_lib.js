@@ -10,8 +10,8 @@ const fs = require('fs')
  */
 function resolvePaths() {
   const dataDir = process.env.AIH_DATA_ROOT
-    ? path.join(process.env.AIH_DATA_ROOT, 'data')
-    : path.join(__dirname, '..', 'data')
+    ? path.join(process.env.AIH_DATA_ROOT, 'infra')
+    : path.join(__dirname, '..', 'infra')
 
   const rootDir = process.env.AIH_DATA_ROOT
     ? process.env.AIH_DATA_ROOT

@@ -193,32 +193,32 @@ The UI reads these files at request time — no build step needed, just refresh.
 
 | Command | Output file | Description |
 |---------|-------------|-------------|
-| `/application-overview` | `data/application-definition/application-overview.md` | Application name, description, purpose, 5 key features |
-| `/non-functional-requirements` | `data/application-definition/non-functional-requirements.md` | Scale, availability, security, integrity, usage patterns |
-| `/application-components` | `data/application-definition/application-components.md` | Component list with type (Compute/Data/Networking) and descriptions |
+| `/application-overview` | `infra/application-definition/application-overview.md` | Application name, description, purpose, 5 key features |
+| `/non-functional-requirements` | `infra/application-definition/non-functional-requirements.md` | Scale, availability, security, integrity, usage patterns |
+| `/application-components` | `infra/application-definition/application-components.md` | Component list with type (Compute/Data/Networking) and descriptions |
 
 ### Context
 
 | Command | Output file | Description |
 |---------|-------------|-------------|
-| `/infrastructure-context` | `data/context/infrastructure-context.md` | Network topology, landing zone, existing resources, connectivity |
-| `/platform-context` | `data/context/platform-context.md` | Identity, Key Vault, monitoring, platform services |
-| `/development-context` | `data/context/development-context.md` | Workflow, version control, CI/CD, testing, deployment tools |
+| `/infrastructure-context` | `infra/context/infrastructure-context.md` | Network topology, landing zone, existing resources, connectivity |
+| `/platform-context` | `infra/context/platform-context.md` | Identity, Key Vault, monitoring, platform services |
+| `/development-context` | `infra/context/development-context.md` | Workflow, version control, CI/CD, testing, deployment tools |
 
 ### Application Architecture
 
 | Command | Output file | Description |
 |---------|-------------|-------------|
-| `/configure-component` | `data/application-architecture/components/{id}.json` | Maps a component to an Azure service with SKU and settings |
-| `/deployment-strategy` | `data/application-architecture/deployment-strategy.md` | Source control, CI/CD, environments, quality gates |
-| `/architecture-diagram` | `data/application-architecture/architecture-diagram.md` | Mermaid network diagram derived from planning data |
+| `/configure-component` | `infra/application-architecture/components/{id}.json` | Maps a component to an Azure service with SKU and settings |
+| `/deployment-strategy` | `infra/application-architecture/deployment-strategy.md` | Source control, CI/CD, environments, quality gates |
+| `/architecture-diagram` | `infra/application-architecture/architecture-diagram.md` | Mermaid network diagram derived from planning data |
 
 ### Architecture Decisions
 
 | Command | Output file | Description |
 |---------|-------------|-------------|
-| `/adr-template` | `data/architecture-decisions/adr-template.md` | Canonical ADR template for this project |
-| `/generate-adrs` | `data/architecture-decisions/adrs/adr-{NNN}-{slug}.md` | Generates ADRs from planning data (one per decision) |
+| `/adr-template` | `infra/architecture-decisions/adr-template.md` | Canonical ADR template for this project |
+| `/generate-adrs` | `infra/architecture-decisions/adrs/adr-{NNN}-{slug}.md` | Generates ADRs from planning data (one per decision) |
 | `/refine-adr` | Updates existing ADR file | Change status, add alternatives, update consequences |
 
 ### Code Generation

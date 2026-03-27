@@ -36,7 +36,7 @@ function runServer(args) {
     }
   }
 
-  // The user's project directory — where data/, export-bicep/, export-terraform/ should live
+  // The user's project directory — where infra/, export-bicep/, export-terraform/ should live
   const userDir = dataDir ?? process.cwd()
 
   // The Next.js standalone server lives next to this CLI script

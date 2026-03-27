@@ -5,7 +5,7 @@ description: Generate high-level application overview with name, description, pu
 
 ## Purpose
 
-This skill creates a structured overview of the application for the Az Infra Harness. It generates `data/application-definition/application-overview.md` which serves as the foundation for infrastructure planning.
+This skill creates a structured overview of the application for the Az Infra Harness. It generates `infra/application-definition/application-overview.md` which serves as the foundation for infrastructure planning.
 
 The generated file will be displayed in the UI when the user runs `npx @zureltd/az-infra-harness` and navigates to the Application Definition section.
 
@@ -259,11 +259,11 @@ Before saving, verify the generated content meets all requirements:
 
 ### Step 5: Save File
 
-**Target location:** `data/application-definition/application-overview.md`
+**Target location:** `infra/application-definition/application-overview.md`
 
 **Pre-save checks:**
-1. Verify the directory exists: `data/application-definition/`
-2. If directory doesn't exist, show error and stop (don't create the directory)
+1. Verify the directory exists: `infra/application-definition/`
+2. If the directory does not exist, create it (including all parent directories) and continue.
 
 **Save process:**
 1. Write the validated markdown content to the file
@@ -272,7 +272,6 @@ Before saving, verify the generated content meets all requirements:
 4. Check the file is readable
 
 **Error handling:**
-- If directory missing: "Error: Directory 'data/application-definition/' not found. Please ensure you're in the correct project directory."
 - If write fails: "Error: Failed to write file. Please check file permissions and try again."
 - If file empty after write: "Error: File was created but appears empty. Please try again."
 
@@ -285,7 +284,7 @@ After successful file creation, inform the user with this message format:
 ```
 ✅ Created application overview successfully!
 
-📄 File location: data/application-definition/application-overview.md
+📄 File location: infra/application-definition/application-overview.md
 
 🌐 To view in the UI:
    1. Ensure the Az Infra Harness is running: `npx @zureltd/az-infra-harness`
@@ -306,9 +305,7 @@ You can now run /non-functional-requirements to continue with the next step.
 - **Reasoning**: User doesn't need to know about internal process failures
 
 ### If directory doesn't exist:
-- **Action**: Show clear error, do NOT create directory
-- **Message**: "Error: Directory 'data/application-definition/' not found. Are you in the project root directory? This skill expects to be run from the az-infra-harness project root."
-- **Reasoning**: Creating directories might put files in wrong location
+- **Action**: Create the directory (including all parent directories) and continue
 
 ### If file write fails:
 - **Action**: Show clear error with actionable advice
@@ -366,7 +363,7 @@ Is this information accurate? I'll use this as a starting point and ask a few cl
 
 **Agent:** "✅ Created application overview successfully!
 
-📄 File location: data/application-definition/application-overview.md
+📄 File location: infra/application-definition/application-overview.md
 
 🌐 Refresh your browser to see the content in the UI."
 
@@ -374,8 +371,8 @@ Is this information accurate? I'll use this as a starting point and ask a few cl
 
 ## Reference Files
 
-- **Sample output**: See `data/application-definition/application-overview.md` for a complete example
-- **Template reference**: See `data/application-definition/README.md` for format specification
+- **Sample output**: See `infra/application-definition/application-overview.md` for a complete example
+- **Template reference**: See `infra/application-definition/README.md` for format specification
 - **Documentation**: See `DATA-STRUCTURE.md` for overall structure
 
 ---
@@ -394,7 +391,7 @@ Is this information accurate? I'll use this as a starting point and ask a few cl
 ## Success Criteria
 
 The skill is successful when:
-- ✅ File created at `data/application-definition/application-overview.md`
+- ✅ File created at `infra/application-definition/application-overview.md`
 - ✅ Content matches the required format exactly
 - ✅ All validation rules pass
 - ✅ File is not empty and is readable

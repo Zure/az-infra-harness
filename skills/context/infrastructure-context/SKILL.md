@@ -5,7 +5,7 @@ description: Gather network topology, landing zones, existing resources, and con
 
 ## Purpose
 
-This skill gathers information about the existing (or planned) Azure infrastructure context. It generates `data/context/infrastructure-context.md` which serves as the foundation for infrastructure architecture decisions and IaC code generation.
+This skill gathers information about the existing (or planned) Azure infrastructure context. It generates `infra/context/infrastructure-context.md` which serves as the foundation for infrastructure architecture decisions and IaC code generation.
 
 The generated file will be displayed in the UI when the user runs `npx @zureltd/az-infra-harness` and navigates to the Context section.
 
@@ -23,7 +23,7 @@ Run this skill when:
 Before asking questions, scan the codebase for any existing infrastructure definitions that might reveal context.
 
 **Files to scan:**
-1. `data/context/infrastructure-context.md` — existing content (Update Mode trigger)
+1. `infra/context/infrastructure-context.md` — existing content (Update Mode trigger)
 2. `bicep/`, `terraform/`, `infrastructure/` — VNet names, address spaces, hub/spoke patterns
 3. `*.bicep`, `*.tf` — resource group names, location, subscription references
 4. `README.md`, `docs/` — architecture or network diagrams described in text
@@ -278,14 +278,13 @@ Before saving:
 
 ### Step 6: Save File
 
-**Target location:** `data/context/infrastructure-context.md`
+**Target location:** `infra/context/infrastructure-context.md`
 
 **Pre-save checks:**
-1. Verify directory `data/context/` exists
-2. If not, show error and stop
+1. Verify directory `infra/context/` exists
+2. If the directory does not exist, create it (including all parent directories) and continue.
 
 **Error handling:**
-- If directory missing: "Error: Directory 'data/context/' not found. Please ensure you're in the correct project directory."
 - If write fails: "Error: Failed to write file. Please check file permissions and try again."
 
 ---
@@ -295,7 +294,7 @@ Before saving:
 ```
 ✅ Created infrastructure context successfully!
 
-📄 File location: data/context/infrastructure-context.md
+📄 File location: infra/context/infrastructure-context.md
 
 🌐 To view in the UI:
    1. Ensure the Az Infra Harness is running: `npx @zureltd/az-infra-harness`
@@ -314,8 +313,7 @@ You can now run /platform-context to continue with the next step.
 - Fall back to questions without mentioning the failure
 
 ### If directory doesn't exist:
-- Show clear error, do NOT create directory
-- Message: "Error: Directory 'data/context/' not found. Are you in the project root directory?"
+- Create the directory (including all parent directories) and continue
 
 ### If file write fails:
 - Show clear error with actionable advice
@@ -344,13 +342,13 @@ You can now run /platform-context to continue with the next step.
 
 **Agent:** "✅ Created infrastructure context successfully!
 
-📄 File location: data/context/infrastructure-context.md"
+📄 File location: infra/context/infrastructure-context.md"
 
 ---
 
 ## Reference Files
 
-- **Sample output**: `data/context/infrastructure-context.md`
+- **Sample output**: `infra/context/infrastructure-context.md`
 - **Interaction standard**: `.opencode/skills/_shared/interaction-validation-standard.md`
 - **Documentation**: `DATA-STRUCTURE.md`
 
@@ -358,7 +356,7 @@ You can now run /platform-context to continue with the next step.
 
 ## Success Criteria
 
-- ✅ File created at `data/context/infrastructure-context.md`
+- ✅ File created at `infra/context/infrastructure-context.md`
 - ✅ Content matches the required format exactly
 - ✅ All four sections are populated with concrete information
 - ✅ All TodoWrite tasks were used and completed

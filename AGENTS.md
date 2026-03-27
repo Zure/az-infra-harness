@@ -1,6 +1,6 @@
 # Data Structure Guide for Coding Agents
 
-> **Quick Start:** When users run commands like `/application-overview`, create files in `data/` following the structure below.
+> **Quick Start:** When users run commands like `/application-overview`, create files in `infra/` following the structure below.
 
 ## Overview
 
@@ -54,7 +54,7 @@ export-terraform/                  # Terraform IaC files
 When a user runs a slash command:
 1. **Read** the corresponding skill file from `skills/`
 2. **Follow** the skill instructions to gather information and generate content
-3. **Save** to the correct file path in `data/`
+3. **Save** to the correct file path in `infra/`
 4. **Follow** the naming conventions and formats in `DATA-STRUCTURE.md`
 
 ## Section 1: Application Definition
@@ -63,9 +63,9 @@ When a user runs a slash command:
 
 | User runs | Agent creates | Format |
 |-----------|---------------|--------|
-| `/application-overview` | `data/application-definition/application-overview.md` | Markdown |
-| `/non-functional-requirements` | `data/application-definition/non-functional-requirements.md` | Markdown |
-| `/application-components` | `data/application-definition/components/*.json` | JSON (one file per component) |
+| `/application-overview` | `infra/application-definition/application-overview.md` | Markdown |
+| `/non-functional-requirements` | `infra/application-definition/non-functional-requirements.md` | Markdown |
+| `/application-components` | `infra/application-definition/components/*.json` | JSON (one file per component) |
 
 ### File Formats & Templates
 
@@ -91,7 +91,7 @@ When a user runs a slash command:
 - Feature 5 description
 ```
 
-**Example:** See `data/application-definition/application-overview.md`
+**Example:** See `infra/application-definition/application-overview.md`
 
 ---
 
@@ -134,7 +134,7 @@ When a user runs a slash command:
 - **Geographic Distribution**: [regions where users are located]
 ```
 
-**Example:** See `data/application-definition/non-functional-requirements.md`
+**Example:** See `infra/application-definition/non-functional-requirements.md`
 
 ---
 
@@ -194,7 +194,7 @@ When a user runs a slash command:
 }
 ```
 
-**More examples:** See `data/application-definition/components/`
+**More examples:** See `infra/application-definition/components/`
 
 ---
 
@@ -227,7 +227,7 @@ ${appInfo.features.map(f => `- ${f}`).join('\n')}
 `
 
   // 3. Save to correct location
-  const filePath = 'data/application-definition/application-overview.md'
+  const filePath = 'infra/application-definition/application-overview.md'
   await fs.writeFile(filePath, content)
 
   // 4. Confirm to user
@@ -254,7 +254,7 @@ async function handleNonFunctionalRequirements(userInput) {
 
   // Save
   await fs.writeFile(
-    'data/application-definition/non-functional-requirements.md',
+    'infra/application-definition/non-functional-requirements.md',
     content
   )
 }
@@ -268,12 +268,12 @@ async function handleApplicationComponents(userInput) {
   const components = await identifyComponents(userInput)
 
   // 2. Create components directory if needed
-  await fs.mkdir('data/application-definition/components', { recursive: true })
+  await fs.mkdir('infra/application-definition/components', { recursive: true })
 
   // 3. Save each component as separate JSON file
   for (const component of components) {
     const filename = `${component.id}.json`
-    const filePath = `data/application-definition/components/${filename}`
+    const filePath = `infra/application-definition/components/${filename}`
     await fs.writeFile(filePath, JSON.stringify(component, null, 2))
   }
 }
@@ -287,8 +287,8 @@ async function handleApplicationComponents(userInput) {
 
 ```bash
 # Check all required files are present
-ls -la data/application-definition/
-ls -la data/application-definition/components/
+ls -la infra/application-definition/
+ls -la infra/application-definition/components/
 ```
 
 ### Check Completion
@@ -305,15 +305,15 @@ In the UI, verify:
 
 ```
 /application-overview
-  → data/application-definition/application-overview.md
+  → infra/application-definition/application-overview.md
   → Markdown file with # heading, ## sections
 
 /non-functional-requirements
-  → data/application-definition/non-functional-requirements.md
+  → infra/application-definition/non-functional-requirements.md
   → Markdown with Scale, Availability, Security, etc.
 
 /application-components
-  → data/application-definition/components/*.json
+  → infra/application-definition/components/*.json
   → One JSON file per component
   → Each has: id, name, type, description
 ```

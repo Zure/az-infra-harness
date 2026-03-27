@@ -7,4 +7,4 @@ Read the skill definition at skills/application-definition/application-component
 
 Also read DATA-STRUCTURE.md for output format and file location requirements.
 
-The skill will scan the codebase to detect components, ask clarifying questions, and generate a markdown file at `data/application-definition/application-components.md`.
+The skill will scan the codebase to detect components, ask clarifying questions, and generate a markdown file at `infra/application-definition/application-components.md`.
