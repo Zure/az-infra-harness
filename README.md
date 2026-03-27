@@ -20,7 +20,7 @@ You interact with a coding agent (Claude Code, OpenCode, or GitHub Copilot) usin
 
 Each phase is driven by **slash commands** you run in your coding agent. The agent follows detailed skill definitions (in `skills/`) that guide the conversation, validate your answers, and write the output files.
 
-The UI (`npm run dev`) displays what the agent has written. Each card shows a blue border and checkmark when its data file exists. You never edit files manually — the agent does it.
+The UI (`npx @zureltd/az-infra-harness`) displays what the agent has written. Each card shows a blue border and checkmark when its data file exists. You never edit files manually — the agent does it.
 
 ### Supported agents
 
@@ -87,7 +87,7 @@ npm install
 
 ```bash
 cd src
-npm run dev
+npx @zureltd/az-infra-harness
 ```
 
 Open [http://localhost:3000](http://localhost:3000). You'll see the empty planning board — all cards grey, waiting for data.
@@ -158,7 +158,7 @@ az-infra-harness/
 │   │   │   └── components/       # One JSON file per configured component
 │   │   └── architecture-decisions/
 │   │       └── adrs/             # One markdown file per ADR
-│   ├── lib/                      # File loaders (read src/data/ at request time)
+│   ├── lib/                      # File loaders (read data/ at request time)
 │   └── demo/                     # Demo state scripts (see below)
 ├── skills/                       # Agent skill definitions (SKILL.md per command)
 │   ├── application-definition/
@@ -180,7 +180,7 @@ Each slash command reads a `SKILL.md` file from `skills/`. The skill instructs t
 1. Scan the codebase for existing information
 2. Ask questions interactively (one section at a time)
 3. Validate answers before writing
-4. Write a markdown or JSON file into `src/data/`
+4. Write a markdown or JSON file into `data/`
 5. Confirm the file location and next step
 
 The UI reads these files at request time — no build step needed, just refresh.
@@ -193,32 +193,32 @@ The UI reads these files at request time — no build step needed, just refresh.
 
 | Command | Output file | Description |
 |---------|-------------|-------------|
-| `/application-overview` | `src/data/application-definition/application-overview.md` | Application name, description, purpose, 5 key features |
-| `/non-functional-requirements` | `src/data/application-definition/non-functional-requirements.md` | Scale, availability, security, integrity, usage patterns |
-| `/application-components` | `src/data/application-definition/application-components.md` | Component list with type (Compute/Data/Networking) and descriptions |
+| `/application-overview` | `data/application-definition/application-overview.md` | Application name, description, purpose, 5 key features |
+| `/non-functional-requirements` | `data/application-definition/non-functional-requirements.md` | Scale, availability, security, integrity, usage patterns |
+| `/application-components` | `data/application-definition/application-components.md` | Component list with type (Compute/Data/Networking) and descriptions |
 
 ### Context
 
 | Command | Output file | Description |
 |---------|-------------|-------------|
-| `/infrastructure-context` | `src/data/context/infrastructure-context.md` | Network topology, landing zone, existing resources, connectivity |
-| `/platform-context` | `src/data/context/platform-context.md` | Identity, Key Vault, monitoring, platform services |
-| `/development-context` | `src/data/context/development-context.md` | Workflow, version control, CI/CD, testing, deployment tools |
+| `/infrastructure-context` | `data/context/infrastructure-context.md` | Network topology, landing zone, existing resources, connectivity |
+| `/platform-context` | `data/context/platform-context.md` | Identity, Key Vault, monitoring, platform services |
+| `/development-context` | `data/context/development-context.md` | Workflow, version control, CI/CD, testing, deployment tools |
 
 ### Application Architecture
 
 | Command | Output file | Description |
 |---------|-------------|-------------|
-| `/configure-component` | `src/data/application-architecture/components/{id}.json` | Maps a component to an Azure service with SKU and settings |
-| `/deployment-strategy` | `src/data/application-architecture/deployment-strategy.md` | Source control, CI/CD, environments, quality gates |
-| `/architecture-diagram` | `src/data/application-architecture/architecture-diagram.md` | Mermaid network diagram derived from planning data |
+| `/configure-component` | `data/application-architecture/components/{id}.json` | Maps a component to an Azure service with SKU and settings |
+| `/deployment-strategy` | `data/application-architecture/deployment-strategy.md` | Source control, CI/CD, environments, quality gates |
+| `/architecture-diagram` | `data/application-architecture/architecture-diagram.md` | Mermaid network diagram derived from planning data |
 
 ### Architecture Decisions
 
 | Command | Output file | Description |
 |---------|-------------|-------------|
-| `/adr-template` | `src/data/architecture-decisions/adr-template.md` | Canonical ADR template for this project |
-| `/generate-adrs` | `src/data/architecture-decisions/adrs/adr-{NNN}-{slug}.md` | Generates ADRs from planning data (one per decision) |
+| `/adr-template` | `data/architecture-decisions/adr-template.md` | Canonical ADR template for this project |
+| `/generate-adrs` | `data/architecture-decisions/adrs/adr-{NNN}-{slug}.md` | Generates ADRs from planning data (one per decision) |
 | `/refine-adr` | Updates existing ADR file | Change status, add alternatives, update consequences |
 
 ### Code Generation
@@ -267,7 +267,7 @@ After running a script, **refresh your browser** to see the updated state.
 - All demo data lives in `src/demo/data-backup/` — a snapshot of a complete "Customer Portal" example application
 - Each script starts by running `0.sh` (wipe all data), then selectively copies data back up to the chosen state
 - Scripts are idempotent — safe to run multiple times
-- The demo does not affect the skills, commands, or UI code — only the `src/data/` files
+- The demo does not affect the skills, commands, or UI code — only the `data/` files
 
 ### Resetting after a demo
 

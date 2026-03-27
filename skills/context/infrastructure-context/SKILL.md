@@ -5,9 +5,9 @@ description: Gather network topology, landing zones, existing resources, and con
 
 ## Purpose
 
-This skill gathers information about the existing (or planned) Azure infrastructure context. It generates `src/data/context/infrastructure-context.md` which serves as the foundation for infrastructure architecture decisions and IaC code generation.
+This skill gathers information about the existing (or planned) Azure infrastructure context. It generates `data/context/infrastructure-context.md` which serves as the foundation for infrastructure architecture decisions and IaC code generation.
 
-The generated file will be displayed in the UI when the user runs `npm run dev` and navigates to the Context section.
+The generated file will be displayed in the UI when the user runs `npx @zureltd/az-infra-harness` and navigates to the Context section.
 
 ## When to Use
 
@@ -23,7 +23,7 @@ Run this skill when:
 Before asking questions, scan the codebase for any existing infrastructure definitions that might reveal context.
 
 **Files to scan:**
-1. `src/data/context/infrastructure-context.md` — existing content (Update Mode trigger)
+1. `data/context/infrastructure-context.md` — existing content (Update Mode trigger)
 2. `bicep/`, `terraform/`, `infrastructure/` — VNet names, address spaces, hub/spoke patterns
 3. `*.bicep`, `*.tf` — resource group names, location, subscription references
 4. `README.md`, `docs/` — architecture or network diagrams described in text
@@ -49,6 +49,78 @@ What would you like to update? You can modify any section, or say "looks good" t
 ```
 
 Wait for the user's response, then make the requested changes. Ask "Anything else to update, or shall I save?" before proceeding to Step 5.
+
+---
+
+### Step 1b: Azure CLI Discovery (Recommended)
+
+If the Azure CLI (`az`) is available and the user is logged in, run discovery commands to pre-populate context automatically. This dramatically reduces the number of questions the user needs to answer.
+
+**Check if logged in first:**
+```bash
+az account show --query "{subscription:name, id:id, tenantId:tenantId}" -o json 2>/dev/null
+```
+
+If logged in, run these discovery commands:
+
+```bash
+# Discover existing VNets and their address spaces
+az network vnet list --query "[].{name:name, addressSpace:addressSpace.addressPrefixes[0], location:location, rg:resourceGroup, subnets:subnets[].{name:name, prefix:addressPrefix}}" -o json 2>/dev/null
+
+# Check for hub-spoke pattern (look for VNet peerings)
+az network vnet peering list --vnet-name <hub-vnet-name> --resource-group <hub-rg> --query "[].{name:name, remoteVnet:remoteVirtualNetwork.id, peeringState:peeringState}" -o json 2>/dev/null
+
+# Discover ExpressRoute circuits
+az network express-route list --query "[].{name:name, location:location, peeringLocation:peeringLocation, bandwidth:bandwidthInMbps, sku:sku.tier}" -o json 2>/dev/null
+
+# Discover VPN Gateways
+az network vnet-gateway list --resource-group <rg> --query "[].{name:name, type:vpnType, sku:sku.name}" -o json 2>/dev/null
+
+# Discover NSGs
+az network nsg list --query "[].{name:name, rg:resourceGroup, location:location, rules:securityRules[].{name:name, direction:direction, access:access}}" -o json 2>/dev/null
+
+# Discover Route Tables (UDRs)
+az network route-table list --query "[].{name:name, rg:resourceGroup, routes:routes[].{name:name, prefix:addressPrefix, nextHop:nextHopType}}" -o json 2>/dev/null
+
+# Discover Private DNS Zones
+az network private-dns zone list --query "[].{name:name, rg:resourceGroup}" -o json 2>/dev/null
+
+# Discover Azure Firewall
+az network firewall list --query "[].{name:name, location:location, rg:resourceGroup, sku:sku.tier}" -o json 2>/dev/null
+
+# List resource groups to understand existing structure
+az group list --query "[].{name:name, location:location, tags:tags}" -o json 2>/dev/null
+
+# Check management group hierarchy
+az account management-group list --query "[].{name:name, displayName:displayName}" -o json 2>/dev/null
+```
+
+**How to present findings:**
+
+```
+I've scanned your Azure subscription "[subscription name]" and found:
+
+**Network Topology:**
+- VNet: [vnet-name] (10.0.0.0/16) in [location] — with [N] subnets
+- VNet: [spoke-vnet] (10.1.0.0/16) in [location] — peered to [hub-vnet]
+- [ExpressRoute/VPN Gateway found or "No on-premises connectivity detected"]
+
+**Existing Resources:**
+- [N] NSGs, [N] Route Tables, [N] Private DNS Zones
+- Azure Firewall: [found/not found]
+
+**Landing Zone:**
+- Subscription: [name] ([id])
+- Management Group: [group name or "not detected"]
+- Resource Groups: [list of relevant RGs]
+
+Is this information accurate? I'll use this as a starting point — let me ask a few clarifying questions.
+```
+
+**If `az` is not available or not logged in:**
+- Don't mention the scanning attempt
+- Proceed directly to interactive questions
+- Optionally suggest: "If you have Azure CLI available, logging in with `az login` would let me auto-discover your existing infrastructure."
 
 ---
 
@@ -206,14 +278,14 @@ Before saving:
 
 ### Step 6: Save File
 
-**Target location:** `src/data/context/infrastructure-context.md`
+**Target location:** `data/context/infrastructure-context.md`
 
 **Pre-save checks:**
-1. Verify directory `src/data/context/` exists
+1. Verify directory `data/context/` exists
 2. If not, show error and stop
 
 **Error handling:**
-- If directory missing: "Error: Directory 'src/data/context/' not found. Please ensure you're in the correct project directory."
+- If directory missing: "Error: Directory 'data/context/' not found. Please ensure you're in the correct project directory."
 - If write fails: "Error: Failed to write file. Please check file permissions and try again."
 
 ---
@@ -223,10 +295,10 @@ Before saving:
 ```
 ✅ Created infrastructure context successfully!
 
-📄 File location: src/data/context/infrastructure-context.md
+📄 File location: data/context/infrastructure-context.md
 
 🌐 To view in the UI:
-   1. Ensure the development server is running: npm run dev
+   1. Ensure the Az Infra Harness is running: `npx @zureltd/az-infra-harness`
    2. Refresh your browser
    3. Navigate to the Context section
    4. The infrastructure context card should now show a blue border with a checkmark
@@ -243,7 +315,7 @@ You can now run /platform-context to continue with the next step.
 
 ### If directory doesn't exist:
 - Show clear error, do NOT create directory
-- Message: "Error: Directory 'src/data/context/' not found. Are you in the project root directory?"
+- Message: "Error: Directory 'data/context/' not found. Are you in the project root directory?"
 
 ### If file write fails:
 - Show clear error with actionable advice
@@ -272,13 +344,13 @@ You can now run /platform-context to continue with the next step.
 
 **Agent:** "✅ Created infrastructure context successfully!
 
-📄 File location: src/data/context/infrastructure-context.md"
+📄 File location: data/context/infrastructure-context.md"
 
 ---
 
 ## Reference Files
 
-- **Sample output**: `src/data/context/infrastructure-context.md`
+- **Sample output**: `data/context/infrastructure-context.md`
 - **Interaction standard**: `.opencode/skills/_shared/interaction-validation-standard.md`
 - **Documentation**: `DATA-STRUCTURE.md`
 
@@ -286,7 +358,7 @@ You can now run /platform-context to continue with the next step.
 
 ## Success Criteria
 
-- ✅ File created at `src/data/context/infrastructure-context.md`
+- ✅ File created at `data/context/infrastructure-context.md`
 - ✅ Content matches the required format exactly
 - ✅ All four sections are populated with concrete information
 - ✅ All TodoWrite tasks were used and completed

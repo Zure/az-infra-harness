@@ -5,9 +5,9 @@ description: Write the canonical ADR template file used by all architecture deci
 
 ## Purpose
 
-This skill writes the canonical Architecture Decision Record (ADR) template to `src/data/architecture-decisions/adr-template.md`. This file serves as the master template that the `/generate-adrs` skill uses when creating individual ADRs.
+This skill writes the canonical Architecture Decision Record (ADR) template to `data/architecture-decisions/adr-template.md`. This file serves as the master template that the `/generate-adrs` skill uses when creating individual ADRs.
 
-The generated file will be displayed in the UI when the user runs `npm run dev` and navigates to the Architecture Decisions section.
+The generated file will be displayed in the UI when the user runs `npx @zureltd/az-infra-harness` and navigates to the Architecture Decisions section.
 
 ## When to Use
 
@@ -20,7 +20,7 @@ Run this skill when:
 
 ### Step 1: Check for Existing File
 
-Check whether `src/data/architecture-decisions/adr-template.md` already exists and has content.
+Check whether `data/architecture-decisions/adr-template.md` already exists and has content.
 
 **If the file exists → follow Update Mode (Step 2a).**
 **If the file does not exist → follow Fresh Mode (Step 2b).**
@@ -126,14 +126,14 @@ Before saving:
 
 ### Step 4: Save File
 
-**Target location:** `src/data/architecture-decisions/adr-template.md`
+**Target location:** `data/architecture-decisions/adr-template.md`
 
 **Pre-save checks:**
-1. Verify directory `src/data/architecture-decisions/` exists
+1. Verify directory `data/architecture-decisions/` exists
 2. If not, show error and stop
 
 **Error handling:**
-- If directory missing: "Error: Directory 'src/data/architecture-decisions/' not found. Please ensure you're in the correct project directory."
+- If directory missing: "Error: Directory 'data/architecture-decisions/' not found. Please ensure you're in the correct project directory."
 - If write fails: "Error: Failed to write file. Please check file permissions and try again."
 
 ---
@@ -143,12 +143,12 @@ Before saving:
 ```
 ✅ Created ADR template successfully!
 
-📄 File location: src/data/architecture-decisions/adr-template.md
+📄 File location: data/architecture-decisions/adr-template.md
 
 This template will be used by /generate-adrs when creating individual architecture decision records.
 
 🌐 To view in the UI:
-   1. Ensure the development server is running: npm run dev
+   1. Ensure the Az Infra Harness is running: `npx @zureltd/az-infra-harness`
    2. Refresh your browser
    3. Navigate to the Architecture Decisions section
 
@@ -161,7 +161,7 @@ You can now run /generate-adrs to generate ADRs based on your planning data.
 
 ### If directory doesn't exist:
 - Show clear error, do NOT create directory
-- Message: "Error: Directory 'src/data/architecture-decisions/' not found. Are you in the project root directory?"
+- Message: "Error: Directory 'data/architecture-decisions/' not found. Are you in the project root directory?"
 
 ### If write fails:
 - Show clear error with actionable advice
@@ -180,7 +180,7 @@ You can now run /generate-adrs to generate ADRs based on your planning data.
 
 **Agent:** "✅ Created ADR template successfully!
 
-📄 File location: src/data/architecture-decisions/adr-template.md"
+📄 File location: data/architecture-decisions/adr-template.md"
 
 ---
 
@@ -200,15 +200,15 @@ You can now run /generate-adrs to generate ADRs based on your planning data.
 
 ## Reference Files
 
-- **Sample output**: `src/data/architecture-decisions/adr-template.md`
-- **ADR example**: `src/data/architecture-decisions/adrs/adr-001-container-platform.md`
+- **Sample output**: `data/architecture-decisions/adr-template.md`
+- **ADR example**: `data/architecture-decisions/adrs/adr-001-container-platform.md`
 - **Documentation**: `DATA-STRUCTURE.md`
 
 ---
 
 ## Success Criteria
 
-- ✅ File created at `src/data/architecture-decisions/adr-template.md`
+- ✅ File created at `data/architecture-decisions/adr-template.md`
 - ✅ Template contains all required sections (Title, Status, Context, Options, Decision, Rationale, Consequences, Related Components)
 - ✅ File is not empty and is readable
 - ✅ User confirmed the template before saving (either "use default" or approved customizations)

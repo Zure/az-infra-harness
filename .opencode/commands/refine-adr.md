@@ -7,4 +7,4 @@ Please use the refine-adr skill to refine an existing Architecture Decision Reco
 
 This skill lists your existing ADRs, lets you select one, shows its current content, and guides you through updating specific sections such as status (draft/reviewed/accepted), context, options considered, rationale, and consequences.
 The updated file will be saved back to
-`src/data/architecture-decisions/adrs/`.
+`data/architecture-decisions/adrs/`.

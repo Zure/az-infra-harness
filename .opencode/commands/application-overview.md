@@ -7,4 +7,4 @@ Read the skill definition at skills/application-definition/application-overview/
 
 Also read DATA-STRUCTURE.md for output format and file location requirements.
 
-The skill will guide you through gathering information about the application and generate a markdown file at `src/data/application-definition/application-overview.md`.
+The skill will guide you through gathering information about the application and generate a markdown file at `data/application-definition/application-overview.md`.

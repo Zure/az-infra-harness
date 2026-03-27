@@ -5,9 +5,9 @@ description: Generate high-level application overview with name, description, pu
 
 ## Purpose
 
-This skill creates a structured overview of the application for the Az Infra Harness. It generates `src/data/application-definition/application-overview.md` which serves as the foundation for infrastructure planning.
+This skill creates a structured overview of the application for the Az Infra Harness. It generates `data/application-definition/application-overview.md` which serves as the foundation for infrastructure planning.
 
-The generated file will be displayed in the UI when the user runs `npm run dev` and navigates to the Application Definition section.
+The generated file will be displayed in the UI when the user runs `npx @zureltd/az-infra-harness` and navigates to the Application Definition section.
 
 ## When to Use
 
@@ -259,10 +259,10 @@ Before saving, verify the generated content meets all requirements:
 
 ### Step 5: Save File
 
-**Target location:** `src/data/application-definition/application-overview.md`
+**Target location:** `data/application-definition/application-overview.md`
 
 **Pre-save checks:**
-1. Verify the directory exists: `src/data/application-definition/`
+1. Verify the directory exists: `data/application-definition/`
 2. If directory doesn't exist, show error and stop (don't create the directory)
 
 **Save process:**
@@ -272,7 +272,7 @@ Before saving, verify the generated content meets all requirements:
 4. Check the file is readable
 
 **Error handling:**
-- If directory missing: "Error: Directory 'src/data/application-definition/' not found. Please ensure you're in the correct project directory."
+- If directory missing: "Error: Directory 'data/application-definition/' not found. Please ensure you're in the correct project directory."
 - If write fails: "Error: Failed to write file. Please check file permissions and try again."
 - If file empty after write: "Error: File was created but appears empty. Please try again."
 
@@ -285,10 +285,10 @@ After successful file creation, inform the user with this message format:
 ```
 ✅ Created application overview successfully!
 
-📄 File location: src/data/application-definition/application-overview.md
+📄 File location: data/application-definition/application-overview.md
 
 🌐 To view in the UI:
-   1. Ensure the development server is running: npm run dev
+   1. Ensure the Az Infra Harness is running: `npx @zureltd/az-infra-harness`
    2. Refresh your browser
    3. Navigate to the Application Definition section
    4. The overview box should now show a blue border with a checkmark
@@ -307,7 +307,7 @@ You can now run /non-functional-requirements to continue with the next step.
 
 ### If directory doesn't exist:
 - **Action**: Show clear error, do NOT create directory
-- **Message**: "Error: Directory 'src/data/application-definition/' not found. Are you in the project root directory? This skill expects to be run from the az-infra-harness project root."
+- **Message**: "Error: Directory 'data/application-definition/' not found. Are you in the project root directory? This skill expects to be run from the az-infra-harness project root."
 - **Reasoning**: Creating directories might put files in wrong location
 
 ### If file write fails:
@@ -366,7 +366,7 @@ Is this information accurate? I'll use this as a starting point and ask a few cl
 
 **Agent:** "✅ Created application overview successfully!
 
-📄 File location: src/data/application-definition/application-overview.md
+📄 File location: data/application-definition/application-overview.md
 
 🌐 Refresh your browser to see the content in the UI."
 
@@ -374,8 +374,8 @@ Is this information accurate? I'll use this as a starting point and ask a few cl
 
 ## Reference Files
 
-- **Sample output**: See `src/data/application-definition/application-overview.md` for a complete example
-- **Template reference**: See `src/data/application-definition/README.md` for format specification
+- **Sample output**: See `data/application-definition/application-overview.md` for a complete example
+- **Template reference**: See `data/application-definition/README.md` for format specification
 - **Documentation**: See `DATA-STRUCTURE.md` for overall structure
 
 ---
@@ -394,7 +394,7 @@ Is this information accurate? I'll use this as a starting point and ask a few cl
 ## Success Criteria
 
 The skill is successful when:
-- ✅ File created at `src/data/application-definition/application-overview.md`
+- ✅ File created at `data/application-definition/application-overview.md`
 - ✅ Content matches the required format exactly
 - ✅ All validation rules pass
 - ✅ File is not empty and is readable

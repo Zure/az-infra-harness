@@ -5,9 +5,9 @@ description: Capture scale, availability, security, and integrity requirements f
 
 ## Purpose
 
-This skill captures the non-functional requirements of the application for the Az Infra Harness. It generates `src/data/application-definition/non-functional-requirements.md` which is used to inform infrastructure sizing, availability targets, and security configuration.
+This skill captures the non-functional requirements of the application for the Az Infra Harness. It generates `data/application-definition/non-functional-requirements.md` which is used to inform infrastructure sizing, availability targets, and security configuration.
 
-The generated file will be displayed in the UI when the user runs `npm run dev` and navigates to the Application Definition section.
+The generated file will be displayed in the UI when the user runs `npx @zureltd/az-infra-harness` and navigates to the Application Definition section.
 
 ## When to Use
 
@@ -32,7 +32,7 @@ There are two modes depending on whether a file already exists:
 
 ### Step 1: Check for Existing File
 
-Check whether `src/data/application-definition/non-functional-requirements.md` already exists and has content.
+Check whether `data/application-definition/non-functional-requirements.md` already exists and has content.
 
 **If the file exists and has content → follow the "Update Mode" workflow (Step 2a).**
 
@@ -334,11 +334,11 @@ Before saving, verify the generated content meets all requirements:
 
 ### Step 5: Save File
 
-**Target location:** `src/data/application-definition/non-functional-requirements.md`
+**Target location:** `data/application-definition/non-functional-requirements.md`
 
 **Pre-save checks:**
 
-1. Verify the directory exists: `src/data/application-definition/`
+1. Verify the directory exists: `data/application-definition/`
 2. If directory doesn't exist, show error and stop (don't create the directory)
 
 **Save process:**
@@ -350,7 +350,7 @@ Before saving, verify the generated content meets all requirements:
 
 **Error handling:**
 
-- If directory missing: "Error: Directory 'src/data/application-definition/' not found. Please ensure you're in the correct project directory."
+- If directory missing: "Error: Directory 'data/application-definition/' not found. Please ensure you're in the correct project directory."
 - If write fails: "Error: Failed to write file. Please check file permissions and try again."
 - If file empty after write: "Error: File was created but appears empty. Please try again."
 
@@ -363,10 +363,10 @@ After successful file creation, inform the user:
 ```
 ✅ Created non-functional requirements successfully!
 
-📄 File location: src/data/application-definition/non-functional-requirements.md
+📄 File location: data/application-definition/non-functional-requirements.md
 
 🌐 To view in the UI:
-   1. Ensure the development server is running: npm run dev
+   1. Ensure the Az Infra Harness is running: `npx @zureltd/az-infra-harness`
    2. Refresh your browser
    3. Navigate to the Application Definition section
    4. The non-functional requirements box should now show a blue border with a checkmark
@@ -387,7 +387,7 @@ You can now run /application-components to continue with the next step.
 ### If directory doesn't exist:
 
 - **Action**: Show clear error, do NOT create directory
-- **Message**: "Error: Directory 'src/data/application-definition/' not found. Are you in the project root directory? This skill expects to be run from the az-infra-harness project root."
+- **Message**: "Error: Directory 'data/application-definition/' not found. Are you in the project root directory? This skill expects to be run from the az-infra-harness project root."
 
 ### If file write fails:
 
@@ -467,8 +467,8 @@ What would you like to update? You can tell me which section(s) to change, or sa
 
 ## Reference Files
 
-- **Sample output**: See `src/data/application-definition/non-functional-requirements.md` for a complete example
-- **Template reference**: See `src/data/application-definition/README.md` for format specification
+- **Sample output**: See `data/application-definition/non-functional-requirements.md` for a complete example
+- **Template reference**: See `data/application-definition/README.md` for format specification
 - **Documentation**: See `DATA-STRUCTURE.md` for overall structure
 
 ---
@@ -488,7 +488,7 @@ What would you like to update? You can tell me which section(s) to change, or sa
 
 The skill is successful when:
 
-- ✅ File created at `src/data/application-definition/non-functional-requirements.md`
+- ✅ File created at `data/application-definition/non-functional-requirements.md`
 - ✅ Content matches the required format exactly
 - ✅ All five sections are present and populated
 - ✅ All validation rules pass

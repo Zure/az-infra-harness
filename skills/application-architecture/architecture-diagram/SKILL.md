@@ -5,11 +5,11 @@ description: Generate a Mermaid architecture diagram derived from application co
 
 ## Purpose
 
-This skill generates a Mermaid `graph TB` diagram that visualizes the application architecture, including network topology and component relationships. It generates `src/data/application-architecture/architecture-diagram.md`.
+This skill generates a Mermaid `graph TB` diagram that visualizes the application architecture, including network topology and component relationships. It generates `data/application-architecture/architecture-diagram.md`.
 
 Unlike other skills, this one primarily **derives** the diagram from existing planning data rather than asking many questions. The goal is to produce a useful diagram with minimal interaction.
 
-The generated file will be displayed in the UI when the user runs `npm run dev` and navigates to the Application Architecture section.
+The generated file will be displayed in the UI when the user runs `npx @zureltd/az-infra-harness` and navigates to the Application Architecture section.
 
 ## When to Use
 
@@ -24,10 +24,10 @@ Run this skill when:
 
 Read all available planning data to derive the diagram. Gather from:
 
-1. **`src/data/application-definition/application-components.md`** — component names and types
-2. **`src/data/application-architecture/components/*.json`** — Azure services for each component
-3. **`src/data/context/infrastructure-context.md`** — network topology (hub VNet, spoke VNet, subnets)
-4. **`src/data/context/platform-context.md`** — shared services (Key Vault, Log Analytics, Container Registry)
+1. **`data/application-definition/application-components.md`** — component names and types
+2. **`data/application-architecture/components/*.json`** — Azure services for each component
+3. **`data/context/infrastructure-context.md`** — network topology (hub VNet, spoke VNet, subnets)
+4. **`data/context/platform-context.md`** — shared services (Key Vault, Log Analytics, Container Registry)
 
 If `application-components.md` doesn't exist, stop:
 ```
@@ -38,7 +38,7 @@ I need application components to generate a diagram. Please run /application-com
 
 ### Step 2: Check for Existing Diagram
 
-Check whether `src/data/application-architecture/architecture-diagram.md` already exists.
+Check whether `data/application-architecture/architecture-diagram.md` already exists.
 
 **If existing diagram found:**
 ```
@@ -180,14 +180,14 @@ Before saving:
 
 ### Step 7: Save File
 
-**Target location:** `src/data/application-architecture/architecture-diagram.md`
+**Target location:** `data/application-architecture/architecture-diagram.md`
 
 **Pre-save checks:**
-1. Verify directory `src/data/application-architecture/` exists
+1. Verify directory `data/application-architecture/` exists
 2. If not, show error and stop
 
 **Error handling:**
-- If directory missing: "Error: Directory 'src/data/application-architecture/' not found. Please ensure you're in the correct project directory."
+- If directory missing: "Error: Directory 'data/application-architecture/' not found. Please ensure you're in the correct project directory."
 - If write fails: "Error: Failed to write file. Please check file permissions and try again."
 
 ---
@@ -197,10 +197,10 @@ Before saving:
 ```
 ✅ Created architecture diagram successfully!
 
-📄 File location: src/data/application-architecture/architecture-diagram.md
+📄 File location: data/application-architecture/architecture-diagram.md
 
 🌐 To view in the UI:
-   1. Ensure the development server is running: npm run dev
+   1. Ensure the Az Infra Harness is running: `npx @zureltd/az-infra-harness`
    2. Refresh your browser
    3. Navigate to the Application Architecture section
    4. The architecture diagram card should now show a blue border with a checkmark
@@ -258,18 +258,18 @@ Does this look right? Shall I generate the diagram?"
 
 ## Reference Files
 
-- **Sample output**: `src/data/application-architecture/architecture-diagram.md`
-- **Component data**: `src/data/application-definition/application-components.md`
-- **Component config**: `src/data/application-architecture/components/*.json`
-- **Network data**: `src/data/context/infrastructure-context.md`
-- **Platform data**: `src/data/context/platform-context.md`
+- **Sample output**: `data/application-architecture/architecture-diagram.md`
+- **Component data**: `data/application-definition/application-components.md`
+- **Component config**: `data/application-architecture/components/*.json`
+- **Network data**: `data/context/infrastructure-context.md`
+- **Platform data**: `data/context/platform-context.md`
 - **Documentation**: `DATA-STRUCTURE.md`
 
 ---
 
 ## Success Criteria
 
-- ✅ File created at `src/data/application-architecture/architecture-diagram.md`
+- ✅ File created at `data/application-architecture/architecture-diagram.md`
 - ✅ Contains a valid Mermaid `graph TB` diagram
 - ✅ All defined application components appear in the diagram
 - ✅ Network topology matches the infrastructure context data

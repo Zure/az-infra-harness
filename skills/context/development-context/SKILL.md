@@ -5,9 +5,9 @@ description: Gather development workflow, version control, CI/CD pipeline, deplo
 
 ## Purpose
 
-This skill gathers information about the development process, CI/CD pipeline, and tooling used by the team. It generates `src/data/context/development-context.md` which informs deployment strategy and infrastructure design decisions.
+This skill gathers information about the development process, CI/CD pipeline, and tooling used by the team. It generates `data/context/development-context.md` which informs deployment strategy and infrastructure design decisions.
 
-The generated file will be displayed in the UI when the user runs `npm run dev` and navigates to the Context section.
+The generated file will be displayed in the UI when the user runs `npx @zureltd/az-infra-harness` and navigates to the Context section.
 
 ## When to Use
 
@@ -22,13 +22,79 @@ Run this skill when:
 
 Before asking questions, scan the codebase for existing CI/CD and development configuration.
 
-**Files to scan:**
-1. `src/data/context/development-context.md` — existing content (Update Mode trigger)
-2. `.github/workflows/` — CI/CD platform and workflow structure
-3. `.gitlab-ci.yml`, `azure-pipelines.yml`, `Jenkinsfile` — alternative CI/CD platforms
-4. `package.json` (scripts, test frameworks), `jest.config.*`, `playwright.config.*`
-5. `.gitignore`, `.editorconfig`, `commitlint.config.*` — dev tool hints
+**Files and commands to scan:**
+
+1. `data/context/development-context.md` — existing content (Update Mode trigger)
+2. `.github/workflows/` — CI/CD platform and workflow structure; **read the actual YAML contents** to extract triggers, steps, secrets, and environments
+3. `.gitlab-ci.yml`, `azure-pipelines.yml`, `Jenkinsfile` — alternative CI/CD platforms; read contents for pipeline structure
+4. `package.json` (scripts, test frameworks), `jest.config.*`, `vitest.config.*`, `playwright.config.*`, `cypress.config.*`
+5. `.gitignore`, `.editorconfig`, `commitlint.config.*`, `.prettierrc*`, `.eslintrc*`, `eslint.config.*` — dev tool hints
 6. `README.md` — development setup instructions
+7. `Dockerfile*`, `docker-compose*.yml` — containerization and local dev setup
+8. `.devcontainer/` — dev container configuration
+9. `Makefile`, `justfile`, `Taskfile.yml` — build automation
+10. `.env.example`, `.env.template` — environment variable patterns
+
+**Git commands to run for additional context:**
+
+```bash
+# Get the remote repository URL
+git remote -v 2>/dev/null | head -2
+
+# Get the current branch and recent branches
+git branch -a --sort=-committerdate 2>/dev/null | head -10
+
+# Check for branch protection hints (tags, release patterns)
+git tag --sort=-creatordate 2>/dev/null | head -5
+
+# Check commit message patterns (conventional commits?)
+git log --oneline -10 2>/dev/null
+```
+
+**If GitHub CLI (`gh`) is available:**
+
+```bash
+# Get repository details
+gh repo view --json name,description,defaultBranchRef,isPrivate 2>/dev/null
+
+# Check branch protection rules
+gh api repos/{owner}/{repo}/branches/main/protection 2>/dev/null
+
+# List environments
+gh api repos/{owner}/{repo}/environments 2>/dev/null
+
+# List recent workflow runs (CI/CD activity)
+gh run list --limit 5 2>/dev/null
+```
+
+**How to present findings:**
+
+```
+I've scanned your repository and development setup. Here's what I found:
+
+**Version Control:**
+- Repository: [url from git remote]
+- Default branch: [main/master]
+- Branching pattern: [inferred from branch names — e.g., "appears to use GitFlow with feature/ and hotfix/ branches"]
+- Commit style: [conventional commits detected / free-form]
+
+**CI/CD:**
+- Platform: [GitHub Actions / Azure Pipelines / etc.]
+- Workflows found: [list workflow files and their triggers]
+- Environments: [dev, staging, prod — from workflow files or gh api]
+
+**Testing:**
+- Unit tests: [Jest/Vitest/pytest detected from config files]
+- E2E tests: [Playwright/Cypress detected or "none found"]
+- Security scanning: [Snyk/SonarQube detected in workflows or "none found"]
+
+**Development Tools:**
+- Package manager: [npm/yarn/pnpm from lockfile]
+- Containerization: [Docker/Docker Compose detected or "none"]
+- Dev containers: [detected or "none"]
+
+Is this information accurate? Let me ask a few clarifying questions.
+```
 
 **If existing file found with content → follow Update Mode (Step 2a).**
 **If no existing file → follow Fresh Mode (Step 2b).**
@@ -258,14 +324,14 @@ Before saving:
 
 ### Step 6: Save File
 
-**Target location:** `src/data/context/development-context.md`
+**Target location:** `data/context/development-context.md`
 
 **Pre-save checks:**
-1. Verify directory `src/data/context/` exists
+1. Verify directory `data/context/` exists
 2. If not, show error and stop
 
 **Error handling:**
-- If directory missing: "Error: Directory 'src/data/context/' not found. Please ensure you're in the correct project directory."
+- If directory missing: "Error: Directory 'data/context/' not found. Please ensure you're in the correct project directory."
 - If write fails: "Error: Failed to write file. Please check file permissions and try again."
 
 ---
@@ -275,10 +341,10 @@ Before saving:
 ```
 ✅ Created development context successfully!
 
-📄 File location: src/data/context/development-context.md
+📄 File location: data/context/development-context.md
 
 🌐 To view in the UI:
-   1. Ensure the development server is running: npm run dev
+   1. Ensure the Az Infra Harness is running: `npx @zureltd/az-infra-harness`
    2. Refresh your browser
    3. Navigate to the Context section
    4. The development context card should now show a blue border with a checkmark
@@ -297,7 +363,7 @@ The next step is to run /configure-component to begin defining your application 
 
 ### If directory doesn't exist:
 - Show clear error, do NOT create directory
-- Message: "Error: Directory 'src/data/context/' not found. Are you in the project root directory?"
+- Message: "Error: Directory 'data/context/' not found. Are you in the project root directory?"
 
 ### If user skips sections:
 - Allow "TBD" or "not decided yet" for non-critical sections (e.g., load testing tools)
@@ -322,13 +388,13 @@ The next step is to run /configure-component to begin defining your application 
 
 **Agent:** "✅ Created development context successfully!
 
-📄 File location: src/data/context/development-context.md"
+📄 File location: data/context/development-context.md"
 
 ---
 
 ## Reference Files
 
-- **Sample output**: `src/data/context/development-context.md`
+- **Sample output**: `data/context/development-context.md`
 - **Interaction standard**: `.opencode/skills/_shared/interaction-validation-standard.md`
 - **Documentation**: `DATA-STRUCTURE.md`
 
@@ -336,7 +402,7 @@ The next step is to run /configure-component to begin defining your application 
 
 ## Success Criteria
 
-- ✅ File created at `src/data/context/development-context.md`
+- ✅ File created at `data/context/development-context.md`
 - ✅ Content matches the required format exactly
 - ✅ All eight sections are populated with concrete information
 - ✅ All TodoWrite tasks were used and completed

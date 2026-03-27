@@ -5,9 +5,9 @@ description: Gather identity & access, security services, monitoring, and platfo
 
 ## Purpose
 
-This skill gathers information about the Azure platform services available to the application. It generates `src/data/context/platform-context.md` which informs security, monitoring, and identity decisions during architecture planning.
+This skill gathers information about the Azure platform services available to the application. It generates `data/context/platform-context.md` which informs security, monitoring, and identity decisions during architecture planning.
 
-The generated file will be displayed in the UI when the user runs `npm run dev` and navigates to the Context section.
+The generated file will be displayed in the UI when the user runs `npx @zureltd/az-infra-harness` and navigates to the Context section.
 
 ## When to Use
 
@@ -20,7 +20,7 @@ Run this skill when:
 
 ### Step 1: Check for Existing File
 
-Check whether `src/data/context/platform-context.md` already exists and has content.
+Check whether `data/context/platform-context.md` already exists and has content.
 
 **If the file exists and has content → follow Update Mode (Step 2a).**
 **If the file does not exist or is empty → follow Fresh Mode (Step 2b).**
@@ -43,6 +43,74 @@ What would you like to update? You can modify any section, or say "looks good" t
 ```
 
 Wait for the user's response, then make changes. Ask "Anything else to update, or shall I save?" before proceeding to Step 5.
+
+---
+
+### Step 1b: Azure CLI Discovery (Recommended)
+
+If the Azure CLI (`az`) is available and the user is logged in, run discovery commands to pre-populate platform context automatically.
+
+**Check if logged in first:**
+```bash
+az account show --query "{subscription:name, id:id}" -o json 2>/dev/null
+```
+
+If logged in, run these discovery commands:
+
+```bash
+# Discover Key Vaults
+az keyvault list --query "[].{name:name, location:location, rg:resourceGroup, sku:properties.sku.name, enableRbac:properties.enableRbacAuthorization, enablePurgeProtection:properties.enablePurgeProtection}" -o json 2>/dev/null
+
+# Discover Log Analytics workspaces
+az monitor log-analytics workspace list --query "[].{name:name, location:location, rg:resourceGroup, sku:sku.name, retentionDays:retentionInDays}" -o json 2>/dev/null
+
+# Discover Application Insights instances
+az monitor app-insights component show --query "[].{name:name, location:location, rg:resourceGroup, kind:kind, workspaceId:workspaceResourceId}" -o json 2>/dev/null
+
+# Check Microsoft Defender for Cloud status
+az security pricing list --query "[?pricingTier=='Standard'].{name:name, tier:pricingTier}" -o json 2>/dev/null
+
+# Discover Container Registries
+az acr list --query "[].{name:name, location:location, sku:sku.name, adminEnabled:adminUserEnabled}" -o json 2>/dev/null
+
+# Discover Managed Identities (user-assigned)
+az identity list --query "[].{name:name, location:location, rg:resourceGroup, clientId:clientId}" -o json 2>/dev/null
+
+# Check Azure Policy assignments on the subscription
+az policy assignment list --query "[].{name:name, displayName:displayName, enforcement:enforcementMode, scope:scope}" -o json 2>/dev/null
+
+# Check role assignments for the current user
+az role assignment list --assignee $(az ad signed-in-user show --query id -o tsv 2>/dev/null) --query "[].{role:roleDefinitionName, scope:scope}" -o json 2>/dev/null
+```
+
+**How to present findings:**
+
+```
+I've scanned your Azure subscription "[subscription name]" and found:
+
+**Identity & Access:**
+- [N] user-assigned managed identities found
+- Your RBAC roles: [list of roles]
+
+**Security Services:**
+- Key Vault: [kv-name] ([sku], RBAC: [yes/no], Purge Protection: [yes/no])
+- Defender for Cloud: [enabled services or "not enabled"]
+
+**Monitoring & Logging:**
+- Log Analytics: [workspace-name] ([retention] days retention)
+- Application Insights: [instance-name or "none found"]
+
+**Platform Services:**
+- Container Registry: [acr-name] ([sku]) or "none found"
+- Azure Policy: [N] assignments active — [list key ones like required tags, allowed locations]
+
+Is this information accurate? Let me ask a few clarifying questions about how these are managed.
+```
+
+**If `az` is not available or not logged in:**
+- Don't mention the scanning attempt
+- Proceed directly to interactive questions
+- Optionally suggest: "If you have Azure CLI available, logging in with `az login` would let me auto-discover your platform services."
 
 ---
 
@@ -195,14 +263,14 @@ Before saving:
 
 ### Step 6: Save File
 
-**Target location:** `src/data/context/platform-context.md`
+**Target location:** `data/context/platform-context.md`
 
 **Pre-save checks:**
-1. Verify directory `src/data/context/` exists
+1. Verify directory `data/context/` exists
 2. If not, show error and stop
 
 **Error handling:**
-- If directory missing: "Error: Directory 'src/data/context/' not found. Please ensure you're in the correct project directory."
+- If directory missing: "Error: Directory 'data/context/' not found. Please ensure you're in the correct project directory."
 - If write fails: "Error: Failed to write file. Please check file permissions and try again."
 
 ---
@@ -212,10 +280,10 @@ Before saving:
 ```
 ✅ Created platform context successfully!
 
-📄 File location: src/data/context/platform-context.md
+📄 File location: data/context/platform-context.md
 
 🌐 To view in the UI:
-   1. Ensure the development server is running: npm run dev
+   1. Ensure the Az Infra Harness is running: `npx @zureltd/az-infra-harness`
    2. Refresh your browser
    3. Navigate to the Context section
    4. The platform context card should now show a blue border with a checkmark
@@ -232,7 +300,7 @@ You can now run /development-context to continue with the next step.
 
 ### If directory doesn't exist:
 - Show clear error, do NOT create directory
-- Message: "Error: Directory 'src/data/context/' not found. Are you in the project root directory?"
+- Message: "Error: Directory 'data/context/' not found. Are you in the project root directory?"
 
 ### If user is unsure about platform-managed services:
 - Suggest marking items as "TBD — confirm with platform team" rather than leaving them blank
@@ -257,13 +325,13 @@ You can now run /development-context to continue with the next step.
 
 **Agent:** "✅ Created platform context successfully!
 
-📄 File location: src/data/context/platform-context.md"
+📄 File location: data/context/platform-context.md"
 
 ---
 
 ## Reference Files
 
-- **Sample output**: `src/data/context/platform-context.md`
+- **Sample output**: `data/context/platform-context.md`
 - **Interaction standard**: `.opencode/skills/_shared/interaction-validation-standard.md`
 - **Documentation**: `DATA-STRUCTURE.md`
 
@@ -271,7 +339,7 @@ You can now run /development-context to continue with the next step.
 
 ## Success Criteria
 
-- ✅ File created at `src/data/context/platform-context.md`
+- ✅ File created at `data/context/platform-context.md`
 - ✅ Content matches the required format exactly
 - ✅ All four sections are populated with concrete information
 - ✅ All TodoWrite tasks were used and completed

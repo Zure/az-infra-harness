@@ -5,11 +5,11 @@ description: Configure an individual application component by mapping it to an A
 
 ## Purpose
 
-This skill configures a single application component by mapping it to a specific Azure service and capturing the configuration details. It generates `src/data/application-architecture/components/{component-id}.json` for each configured component.
+This skill configures a single application component by mapping it to a specific Azure service and capturing the configuration details. It generates `data/application-architecture/components/{component-id}.json` for each configured component.
 
 These JSON files are used by the IaC generation skills (`/generate-code-bicep` and `/generate-code-terraform`) to produce infrastructure code.
 
-The configured component will be displayed in the UI when the user runs `npm run dev` and navigates to the Application Architecture section.
+The configured component will be displayed in the UI when the user runs `npx @zureltd/az-infra-harness` and navigates to the Application Architecture section.
 
 ## When to Use
 
@@ -18,7 +18,7 @@ Run this skill when:
 - A component's Azure configuration needs to be updated
 - User explicitly runs `/configure-component`
 
-**Prerequisite:** `src/data/application-definition/application-components.md` must exist with at least one component defined. Run `/application-components` first if it doesn't.
+**Prerequisite:** `data/application-definition/application-components.md` must exist with at least one component defined. Run `/application-components` first if it doesn't.
 
 ## Component ID Convention
 
@@ -30,9 +30,48 @@ The `{component-id}` used in the filename is derived from the component name in 
 
 ## Workflow
 
+### Step 0: Read Context for Defaults
+
+Before starting the interactive flow, read existing context data to provide smart defaults:
+
+1. **`data/context/infrastructure-context.md`** — extract the preferred Azure region from network topology
+2. **`data/context/platform-context.md`** — extract shared services (Key Vault, Log Analytics) that may inform settings
+3. **`data/application-definition/non-functional-requirements.md`** — extract scale/availability requirements to suggest appropriate SKUs
+4. **`data/application-architecture/components/*.json`** — check what region and patterns already-configured components use for consistency
+
+Use these as suggestions (clearly labelled) during the interactive flow. For example:
+- If prior components use `eastus2`, suggest that as the default region
+- If NFRs specify 99.9% uptime, recommend HA-capable SKUs
+- If NFRs mention high concurrent users, suggest higher scaling limits
+
+### Step 0b: Azure CLI Discovery (Optional)
+
+If the user has Azure CLI (`az`) available, run discovery commands to suggest existing resources:
+
+```bash
+# Check if logged in
+az account show --query "{subscription:name, id:id}" -o tsv 2>/dev/null
+
+# List existing Container App Environments (for compute components)
+az containerapp env list --query "[].{name:name, location:location, rg:resourceGroup}" -o table 2>/dev/null
+
+# List existing SQL Servers (for data components)
+az sql server list --query "[].{name:name, location:location, rg:resourceGroup}" -o table 2>/dev/null
+
+# List existing Redis caches
+az redis list --query "[].{name:name, location:location, sku:sku.name}" -o table 2>/dev/null
+
+# List available regions
+az account list-locations --query "[?metadata.regionType=='Physical'].{name:name, displayName:displayName}" -o table 2>/dev/null
+```
+
+**If `az` is not available or not logged in:** Skip silently and proceed with manual questions.
+
+**If resources are found:** Present them as context: "I found an existing Container Apps Environment in eastus2 — would you like to deploy to the same region?"
+
 ### Step 1: Read Existing Components
 
-Read `src/data/application-definition/application-components.md` to get the list of defined components.
+Read `data/application-definition/application-components.md` to get the list of defined components.
 
 If the file doesn't exist or is empty:
 ```
@@ -40,7 +79,7 @@ I need a list of application components before I can configure them. Please run 
 ```
 Stop the skill.
 
-Also check `src/data/application-architecture/components/` for any already-configured component JSON files.
+Also check `data/application-architecture/components/` for any already-configured component JSON files.
 
 ---
 
@@ -216,8 +255,6 @@ Once all information is gathered, create the JSON file with this structure:
 
 ```json
 {
-  "componentId": "api-backend",
-  "componentName": "API Backend",
   "azureService": "Container Apps",
   "sku": "Consumption",
   "region": "eastus2",
@@ -233,8 +270,6 @@ Once all information is gathered, create the JSON file with this structure:
 ```
 
 **JSON formatting rules:**
-- `componentId`: kebab-case derived from component name
-- `componentName`: original component name as written in application-components.md
 - `azureService`: full Azure service name (e.g., "Container Apps", "Azure SQL Database")
 - `sku`: tier/SKU name as it appears in Azure portal
 - `region`: Azure region short name (e.g., "eastus2", "westeurope")
@@ -248,8 +283,7 @@ Once all information is gathered, create the JSON file with this structure:
 
 Before saving:
 
-- ✅ All required fields present: `componentId`, `componentName`, `azureService`, `sku`, `region`, `settings`
-- ✅ `componentId` matches the expected filename
+- ✅ All required fields present: `azureService`, `sku`, `region`, `settings`
 - ✅ `settings` contains at least 2 service-specific values
 - ✅ JSON is valid (no syntax errors)
 - ✅ No placeholder text remains
@@ -259,14 +293,14 @@ Before saving:
 
 ### Step 7: Save File
 
-**Target location:** `src/data/application-architecture/components/{component-id}.json`
+**Target location:** `data/application-architecture/components/{component-id}.json`
 
 **Pre-save checks:**
-1. Verify directory `src/data/application-architecture/components/` exists
+1. Verify directory `data/application-architecture/components/` exists
 2. If not, show error and stop
 
 **Error handling:**
-- If directory missing: "Error: Directory 'src/data/application-architecture/components/' not found. Please ensure you're in the correct project directory."
+- If directory missing: "Error: Directory 'data/application-architecture/components/' not found. Please ensure you're in the correct project directory."
 - If write fails: "Error: Failed to write file. Please check file permissions and try again."
 
 ---
@@ -276,14 +310,14 @@ Before saving:
 ```
 ✅ Configured [Component Name] successfully!
 
-📄 File location: src/data/application-architecture/components/[component-id].json
+📄 File location: data/application-architecture/components/[component-id].json
 
 Azure Service: [Azure Service]
 SKU: [SKU]
 Region: [Region]
 
 🌐 To view in the UI:
-   1. Ensure the development server is running: npm run dev
+   1. Ensure the Az Infra Harness is running: `npx @zureltd/az-infra-harness`
    2. Refresh your browser
    3. Navigate to the Application Architecture section
 
@@ -342,7 +376,7 @@ Which component would you like to configure?"
 
 **Agent:** "✅ Configured API Backend successfully!
 
-📄 File location: src/data/application-architecture/components/api-backend.json
+📄 File location: data/application-architecture/components/api-backend.json
 
 Would you like to configure another component?"
 
@@ -350,8 +384,8 @@ Would you like to configure another component?"
 
 ## Reference Files
 
-- **Sample output**: `src/data/application-architecture/components/api-backend.json`
-- **Component list**: `src/data/application-definition/application-components.md`
+- **Sample output**: `data/application-architecture/components/api-backend.json`
+- **Component list**: `data/application-definition/application-components.md`
 - **Interaction standard**: `.opencode/skills/_shared/interaction-validation-standard.md`
 - **Documentation**: `DATA-STRUCTURE.md`
 
@@ -359,9 +393,8 @@ Would you like to configure another component?"
 
 ## Success Criteria
 
-- ✅ JSON file created at `src/data/application-architecture/components/{component-id}.json`
-- ✅ All required JSON fields are present and correctly typed
-- ✅ Component ID in filename matches the `componentId` field in JSON
+- ✅ JSON file created at `data/application-architecture/components/{component-id}.json`
+- ✅ All required JSON fields are present and correctly typed (`azureService`, `sku`, `region`, `settings`)
 - ✅ All TodoWrite tasks were used and completed
 - ✅ All validation rules pass
 - ✅ File is valid JSON (parseable)
