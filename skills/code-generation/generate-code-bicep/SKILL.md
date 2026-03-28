@@ -1,3 +1,8 @@
+---
+name: generate-code-bicep
+description: Generate Azure infrastructure as Bicep code from planning data
+---
+
 # Export Bicep — Generate Azure Infrastructure as Code
 
 You are an expert Azure infrastructure engineer. Your task is to generate a complete, production-ready Bicep deployment from the planning data in this project.
