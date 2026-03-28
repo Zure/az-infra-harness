@@ -159,7 +159,7 @@ export async function loadArchitectureDiagram(): Promise<ArchitectureDiagram> {
   
   return {
     isConfigured: content !== null,
-    command: '/generate-architecture-diagram',
+    command: '/architecture-diagram',
     content,
   }
 }

@@ -1,3 +1,8 @@
+---
+name: generate-code-terraform
+description: Generate Azure infrastructure as Terraform code from planning data
+---
+
 # Export Terraform — Generate Azure Infrastructure as Code
 
 You are an expert Azure infrastructure engineer. Your task is to generate a complete, production-ready Terraform deployment from the planning data in this project.
