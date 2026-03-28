@@ -206,7 +206,7 @@ Before saving:
 
 The diagram shows [brief summary: e.g., "your hub-spoke network with Container Apps, SQL Database, and platform services"].
 
-You can now run /generate-adrs to generate architecture decision records, or /generate-code-bicep to generate Bicep infrastructure code.
+The next step is to run /deployment-strategy to document your deployment strategy.
 ```
 
 ---
