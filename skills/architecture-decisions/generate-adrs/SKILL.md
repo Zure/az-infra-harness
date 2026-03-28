@@ -191,6 +191,8 @@ If the user wants to review a specific ADR, show its full content and allow edit
    4. Each ADR card should now appear with a blue border
 
 You can use /refine-adr to update the status of any ADR (e.g., from draft to accepted), or add more context to any section.
+
+The next step is to run /generate-code-bicep or /generate-code-terraform to generate your infrastructure as code.
 ```
 
 ---

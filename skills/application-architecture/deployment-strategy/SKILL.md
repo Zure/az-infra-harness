@@ -248,7 +248,7 @@ Before saving:
    3. Navigate to the Application Architecture section
    4. The deployment strategy card should now show a blue border with a checkmark
 
-You can now run /configure-component to configure individual components, or /architecture-diagram to generate the architecture diagram.
+The next step is to run /generate-adrs to generate architecture decision records.
 ```
 
 ---

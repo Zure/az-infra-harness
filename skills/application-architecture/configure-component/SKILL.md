@@ -329,6 +329,12 @@ Say "yes" to continue, or "done" when you've configured all the components you n
 
 If the user wants to configure another component, return to Step 2 with the updated list.
 
+When the user says "done" (or all components are configured), display:
+
+```
+The next step is to run /architecture-diagram to generate the architecture diagram for your application.
+```
+
 ---
 
 ## Error Handling
