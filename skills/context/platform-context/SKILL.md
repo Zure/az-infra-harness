@@ -27,26 +27,30 @@ Check whether `infra/context/platform-context.md` already exists and has content
 
 ---
 
-### Step 2a: Update Mode (File Already Exists)
+### Step 1b: Ask Before Azure CLI Scanning
 
-Read the existing file and present the current content to the user.
+**Always ask the user before running any Azure CLI commands.** Present this prompt:
 
 ```
-I found your existing platform context. Here's what's currently documented:
+Would you like me to scan your existing Azure environment using the Azure CLI to pre-populate the platform context?
 
-**Identity & Access**: [current content]
-**Security Services**: [current content]
-**Monitoring & Logging**: [current content]
-**Platform Services Available**: [current content]
+1. **Yes, scan my Azure environment** — I'm logged in (or can run `az login`) and platform services already exist
+2. **No, this is a greenfield scenario** — No platform services are set up yet; I'll answer questions manually
+3. **No, I'll answer manually** — I prefer not to run CLI commands
 
-What would you like to update? You can modify any section, or say "looks good" to confirm everything is correct.
 ```
 
-Wait for the user's response, then make changes. Ask "Anything else to update, or shall I save?" before proceeding to Step 5.
+Wait for the user's response before proceeding:
+- If **option 1**: proceed to Azure CLI Discovery (Step 1c)
+- If **option 2** or **option 3**: skip directly to Fresh Mode (Step 2b)
+
+> The user may also type a custom response. Accept any confirmation of intent to scan ("yes", "go ahead", "scan it") as option 1, and any refusal ("no", "skip", "greenfield") as options 2/3.
 
 ---
 
-### Step 1b: Azure CLI Discovery (Recommended)
+### Step 1c: Azure CLI Discovery
+
+Only run these commands if the user explicitly consented in Step 1b.
 
 If the Azure CLI (`az`) is available and the user is logged in, run discovery commands to pre-populate platform context automatically.
 
@@ -108,9 +112,26 @@ Is this information accurate? Let me ask a few clarifying questions about how th
 ```
 
 **If `az` is not available or not logged in:**
-- Don't mention the scanning attempt
-- Proceed directly to interactive questions
-- Optionally suggest: "If you have Azure CLI available, logging in with `az login` would let me auto-discover your platform services."
+- Inform the user and fall back to interactive questions (Step 2b)
+
+---
+
+### Step 2a: Update Mode (File Already Exists)
+
+Read the existing file and present the current content to the user.
+
+```
+I found your existing platform context. Here's what's currently documented:
+
+**Identity & Access**: [current content]
+**Security Services**: [current content]
+**Monitoring & Logging**: [current content]
+**Platform Services Available**: [current content]
+
+What would you like to update? You can modify any section, or say "looks good" to confirm everything is correct.
+```
+
+Wait for the user's response, then make changes. Ask "Anything else to update, or shall I save?" before proceeding to Step 5.
 
 ---
 

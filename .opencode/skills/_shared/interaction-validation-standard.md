@@ -33,6 +33,18 @@ Do not proceed until all required items are marked as **answered**.
 
 ---
 
+### 6. Always Allow Freeform Input
+
+Whenever a question offers a list of predefined options, the user must also be able to type their own custom answer. Always end option lists with a prompt like:
+
+```
+Or type your own answer if none of the above apply.
+```
+
+Never treat the predefined choices as exhaustive. If the user provides a freeform answer that doesn't match a listed option, accept it and proceed without asking them to choose from the list.
+
+---
+
 ### 3. Open Items Gate
 
 Before file generation:

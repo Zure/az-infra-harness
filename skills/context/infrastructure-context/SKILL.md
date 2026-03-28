@@ -33,6 +33,33 @@ Before asking questions, scan the codebase for any existing infrastructure defin
 
 ---
 
+### Step 1b: Ask Before Azure CLI Scanning
+
+**Always ask the user before running any Azure CLI commands.** Present this prompt:
+
+```
+Would you like me to scan your existing Azure environment using the Azure CLI to pre-populate the infrastructure context?
+
+1. **Yes, scan my Azure environment** — I'm logged in (or can run `az login`) and this is an existing environment
+2. **No, this is a greenfield scenario** — No Azure resources exist yet; I'll answer questions manually
+3. **No, I'll answer manually** — I prefer not to run CLI commands
+
+```
+
+Wait for the user's response before proceeding:
+- If **option 1**: proceed to Azure CLI Discovery (Step 1c)
+- If **option 2** or **option 3**: skip to Fresh Mode (Step 2b); for greenfield, pre-answer the "Existing Resources" section with "Greenfield — no existing resources"
+
+> The user may also type a custom response. Accept any confirmation of intent to scan ("yes", "go ahead", "scan it") as option 1, and any refusal ("no", "skip", "greenfield") as options 2/3.
+
+---
+
+### Step 1c: Azure CLI Discovery
+
+Only run these commands if the user explicitly consented in Step 1b.
+
+---
+
 ### Step 2a: Update Mode (File Already Exists)
 
 Read the existing file and present the current content to the user.
@@ -52,7 +79,9 @@ Wait for the user's response, then make the requested changes. Ask "Anything els
 
 ---
 
-### Step 1b: Azure CLI Discovery (Recommended)
+### Step 1c: Azure CLI Discovery
+
+Only run these commands if the user explicitly consented in Step 1b.
 
 If the Azure CLI (`az`) is available and the user is logged in, run discovery commands to pre-populate context automatically. This dramatically reduces the number of questions the user needs to answer.
 
@@ -148,6 +177,8 @@ Let's start with your network topology. Which model best describes your Azure ne
 - **Virtual WAN**: Microsoft-managed hub with automated routing
 - **Flat/single VNet**: All resources in one VNet (simpler, smaller deployments)
 - **Greenfield**: No VNet exists yet — we'll design from scratch
+
+Or type your own answer if none of the above apply.
 
 Once you tell me the model, I'll ask about the specific VNet address spaces and spoke VNets.
 ```
