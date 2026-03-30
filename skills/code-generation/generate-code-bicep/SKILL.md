@@ -55,12 +55,12 @@ Use the component `type` and `description` fields to pick the best match. If the
 
 ## Output: Generate Files
 
-Generate all files into the `export-bicep/` directory at the **project root** (alongside the `infra/` directory).
+Generate all files into the `infra/bicep/` directory (inside the `infra/` directory alongside all other planning data).
 
 ### Output Structure
 
 ```
-export-bicep/
+infra/bicep/
 ├── main.bicep                    # Orchestration: calls all modules
 ├── modules/
 │   ├── networking.bicep          # VNet, subnets, NSGs
@@ -198,7 +198,7 @@ If `az` is available, present findings: "I see you're logged into subscription '
 1. Read all available planning data from `infra/` (application-overview.md, application-components.md, non-functional-requirements.md, infrastructure-context.md, platform-context.md, development-context.md, components/*.json, deployment-strategy.md, architecture-diagram.md, adrs/)
 2. Determine components: first check `infra/application-architecture/components/*.json` for explicit Azure service configs; fall back to the Azure Service Mapping table for unconfigured components
 3. Determine CI/CD platform preference
-4. Generate all Bicep files to `export-bicep/`
+4. Generate all Bicep files to `infra/bicep/`
 5. Generate parameter files for all environments
 6. Generate CI/CD pipeline
 7. Generate README.md

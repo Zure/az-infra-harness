@@ -31,9 +31,9 @@ rmFile(path.join(dataDir, 'architecture-decisions/adr-template.md'))
 rmDir(path.join(dataDir, 'architecture-decisions/adrs'))
 ensureDir(path.join(dataDir, 'architecture-decisions/adrs'))
 
-console.log('  Cleaning export-bicep and export-terraform...')
-rmDir(path.join(rootDir, 'export-bicep'))
-rmDir(path.join(rootDir, 'export-terraform'))
+console.log('  Cleaning infra/bicep and infra/tf...')
+rmDir(path.join(dataDir, 'bicep'))
+rmDir(path.join(dataDir, 'tf'))
 
 console.log('')
 console.log('✅ Demo State 0 ready!')

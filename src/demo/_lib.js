@@ -64,8 +64,8 @@ function clean(dataDir, rootDir) {
   rmDir(path.join(dataDir, 'architecture-decisions/adrs'))
   ensureDir(path.join(dataDir, 'architecture-decisions/adrs'))
 
-  rmDir(path.join(rootDir, 'export-bicep'))
-  rmDir(path.join(rootDir, 'export-terraform'))
+  rmDir(path.join(dataDir, 'bicep'))
+  rmDir(path.join(dataDir, 'tf'))
 }
 
 module.exports = { resolvePaths, clean, rmFile, rmDir, ensureDir, copyFile, copyDir }

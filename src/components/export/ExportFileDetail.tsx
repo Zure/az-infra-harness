@@ -34,7 +34,7 @@ export function ExportFileDetail({ filePath, tool, content, highlightedHtml, loa
   const [copied, setCopied] = useState(false)
 
   const toolLabel = tool === 'bicep' ? 'Bicep' : 'Terraform'
-  const exportDir = tool === 'bicep' ? 'export-bicep' : 'export-terraform'
+  const exportDir = tool === 'bicep' ? 'infra/bicep' : 'infra/tf'
   const fileName = getFileName(filePath)
   const language = getLanguage(filePath)
 
