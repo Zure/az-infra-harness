@@ -32,6 +32,78 @@ The UI (`npx @zureltd/az-infra-harness`) displays what the agent has written. Ea
 
 ---
 
+## Walkthrough
+
+The following screenshots show how Az Infra Harness looks when working through the [eShop on Containers](https://github.com/dotnet/eShop) reference application — a microservices-based e-commerce app by Microsoft.
+
+### Phase 1 — Application Definition
+
+Start with an empty planning board. All cards are grey, waiting for data.
+
+![Application Definition — empty](docs/img/application-definition-empty.png)
+
+After running `/application-overview`, `/non-functional-requirements`, and `/application-components`, each card turns blue with a checkmark. The sidebar tracks overall progress.
+
+![Application Definition — completed](docs/img/application-definition-completed.png)
+
+---
+
+### Phase 2 — Context
+
+Move on to describe your existing infrastructure, platform services, and development workflow.
+
+![Application Context — empty](docs/img/application-context-empty.png)
+
+After running `/infrastructure-context`, `/platform-context`, and `/development-context`, all three cards complete.
+
+![Application Context — completed](docs/img/application-context-completed.png)
+
+---
+
+### Phase 3 — Application Architecture
+
+Map your components to Azure services and generate an architecture diagram.
+
+![Application Architecture — empty](docs/img/application-architecture-empty.png)
+
+After running `/configure-component`, `/deployment-strategy`, and `/architecture-diagram`, the architecture diagram renders and all component cards are filled in.
+
+![Application Architecture — completed](docs/img/application-architecture-completed.png)
+
+Each component card can be expanded to see the full Azure service configuration — service, SKU, region, and settings.
+
+![Application Architecture — component detail](docs/img/application-architecture-detail-completed.png)
+
+---
+
+### Phase 4 — Architecture Decisions
+
+Document the trade-offs you made using Architecture Decision Records (ADRs).
+
+![Architecture Decisions — empty](docs/img/architecture-decisions-empty.png)
+
+After running `/generate-adrs`, the agent proposes and creates ADRs for each significant decision.
+
+![Architecture Decisions — completed](docs/img/architecture-decisions-completed.png)
+
+Each ADR can be opened to read the full context, decision rationale, alternatives considered, and consequences.
+
+![Architecture Decision — detail view](docs/img/architecture-decision-detail-completed.png)
+
+---
+
+### Phase 5 — Code Generation
+
+Generate production-ready Bicep or Terraform from everything captured so far.
+
+![Code Generation — empty](docs/img/code-generation-empty.png)
+
+After running `/generate-code-terraform` (or `/generate-code-bicep`), the agent creates a complete IaC module structure — root files, per-component modules, parameter files, and a CI/CD pipeline — all available as a downloadable ZIP.
+
+![Code Generation — completed](docs/img/code-generation-completed.png)
+
+---
+
 ## Getting Started
 
 ## Quick Start (via npx)
