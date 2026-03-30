@@ -151,14 +151,16 @@ az-infra-harness/
 ├── src/                          # Next.js application
 │   ├── app/                      # Pages (one per workflow phase)
 │   ├── components/               # React components
-│   ├── data/                     # Agent-generated planning files (the "database")
+│   ├── infra/                    # Agent-generated planning files (the "database")
 │   │   ├── application-definition/
 │   │   ├── context/
 │   │   ├── application-architecture/
 │   │   │   └── components/       # One JSON file per configured component
-│   │   └── architecture-decisions/
-│   │       └── adrs/             # One markdown file per ADR
-│   ├── lib/                      # File loaders (read data/ at request time)
+│   │   ├── architecture-decisions/
+│   │   │   └── adrs/             # One markdown file per ADR
+│   │   ├── bicep/                # Generated Bicep IaC (created by /generate-code-bicep)
+│   │   └── tf/                   # Generated Terraform IaC (created by /generate-code-terraform)
+│   ├── lib/                      # File loaders (read infra/ at request time)
 │   └── demo/                     # Demo state scripts (see below)
 ├── skills/                       # Agent skill definitions (SKILL.md per command)
 │   ├── application-definition/
@@ -178,7 +180,7 @@ Each slash command reads a `SKILL.md` file from `skills/`. The skill instructs t
 1. Scan the codebase for existing information
 2. Ask questions interactively (one section at a time)
 3. Validate answers before writing
-4. Write a markdown or JSON file into `data/`
+4. Write a markdown or JSON file into `infra/`
 5. Confirm the file location and next step
 
 The UI reads these files at request time — no build step needed, just refresh.
@@ -265,7 +267,7 @@ After running a script, **refresh your browser** to see the updated state.
 - All demo data lives in `src/demo/data-backup/` — a snapshot of a complete "Customer Portal" example application
 - Each script starts by running `0.sh` (wipe all data), then selectively copies data back up to the chosen state
 - Scripts are idempotent — safe to run multiple times
-- The demo does not affect the skills, commands, or UI code — only the `data/` files
+- The demo does not affect the skills, commands, or UI code — only the `infra/` files
 
 ### Resetting after a demo
 
