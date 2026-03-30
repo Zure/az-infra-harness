@@ -2,9 +2,11 @@
 
 [![npm version](https://img.shields.io/npm/v/@zureltd/az-infra-harness?style=flat-square&color=blue)](https://www.npmjs.com/package/@zureltd/az-infra-harness)
 
-An interactive planning tool that guides you through designing Azure infrastructure — and then generates production-ready Bicep or Terraform code from your decisions.
+An interactive planning tool that guides you through designing Azure infrastructure and then generates production-ready Bicep or Terraform code from your decisions.
 
 You interact with a coding agent (Claude Code, OpenCode, or GitHub Copilot) using slash commands. The agent asks you questions, captures your answers, and writes structured files that appear in a read-only Next.js UI. Once your planning is complete, a final command generates the IaC.
+
+Setting the right context by answering guided questions improves the quality of code that is being generated. In the 5 steps the `az infra harness` uses it collects all context of your application. from a functional level to security & availability and it 
 
 ---
 

@@ -5,6 +5,87 @@ const path = require('path')
 const { spawn } = require('child_process')
 const fs = require('fs')
 
+// ---------------------------------------------------------------------------
+// ANSI color helpers
+// ---------------------------------------------------------------------------
+
+const C = {
+  reset:     '\x1b[0m',
+  bold:      '\x1b[1m',
+  dim:       '\x1b[2m',
+  cyan:      '\x1b[36m',
+  blue:      '\x1b[34m',
+  blueBold:  '\x1b[1;34m',
+  brightBlue:'\x1b[94m',
+  green:     '\x1b[32m',
+  yellow:    '\x1b[33m',
+  white:     '\x1b[37m',
+  brightWhite:'\x1b[97m',
+}
+
+// Skip colors if not a TTY
+const useColor = process.stdout.isTTY
+const c = (code, text) => useColor ? `${code}${text}${C.reset}` : text
+
+// ---------------------------------------------------------------------------
+// Banner
+// ---------------------------------------------------------------------------
+
+// ASCII art generated with figlet -f smslant "AZ Infra Harness"
+const ASCII_ART = [
+  '   ___ ____    ____     ___           __ __                        ',
+  '  / _ /_  /   /  _/__  / _/______ _  / // /__ ________  ___ ___ ___',
+  ' / __ |/ /_  _/ // _ \\/ _/ __/ _ `/ / _  / _ `/ __/ _ \\/ -_|_-<(_-<',
+  '/_/ |_/___/ /___/_//_/_//_/  \\_,_/ /_//_/\\_,_/_/ /_//_/\\__/___/___/',
+]
+
+function printBanner(version) {
+  const art = ASCII_ART.map(line => c(C.brightBlue, line)).join('\n')
+  console.log()
+  console.log(art)
+  console.log()
+  if (version) {
+    console.log(`  ${c(C.dim, `v${version}`)}`)
+    console.log()
+  }
+}
+
+function getVersion() {
+  try {
+    const pkgPath = path.join(__dirname, '..', 'package.json')
+    return JSON.parse(fs.readFileSync(pkgPath, 'utf8')).version
+  } catch {
+    return null
+  }
+}
+
+// ---------------------------------------------------------------------------
+// Spinner
+// ---------------------------------------------------------------------------
+
+const SPINNER_FRAMES = ['⠋', '⠙', '⠹', '⠸', '⠼', '⠴', '⠦', '⠧', '⠇', '⠏']
+
+function createSpinner(label) {
+  if (!useColor || !process.stdout.isTTY) {
+    process.stdout.write(`  ${label}...\n`)
+    return { stop: () => {} }
+  }
+  let i = 0
+  const interval = setInterval(() => {
+    process.stdout.write(`\r  ${c(C.cyan, SPINNER_FRAMES[i++ % SPINNER_FRAMES.length])} ${label}`)
+  }, 80)
+  return {
+    stop(successMsg) {
+      clearInterval(interval)
+      if (successMsg) {
+        process.stdout.write(`\r  ${c(C.green, '✓')} ${successMsg}\n`)
+      } else {
+        process.stdout.write('\r\x1b[K')
+      }
+    }
+  }
+}
+
 const args = process.argv.slice(2)
 const isInit = args[0] === 'init'
 
@@ -44,9 +125,11 @@ function runServer(args) {
   const standaloneServer = path.join(appDir, '.next', 'standalone', 'server.js')
 
   if (!fs.existsSync(standaloneServer)) {
-    console.error('❌  Could not find the Next.js server.')
-    console.error('   This is likely a packaging issue. Please report it at:')
-    console.error('   https://github.com/zure/az-infra-harness/issues')
+    printBanner(getVersion())
+    console.error(`  ${c(C.yellow, '✗')} Could not find the Next.js server.`)
+    console.error(`    This is likely a packaging issue. Please report it at:`)
+    console.error(`    ${c(C.cyan, 'https://github.com/zure/az-infra-harness/issues')}`)
+    console.error()
     process.exit(1)
   }
 
@@ -61,19 +144,53 @@ function runServer(args) {
     NODE_ENV: 'production',
   }
 
-  console.log(`🚀  Az Infra Harness`)
-  console.log(`    Starting on http://localhost:${port}`)
-  console.log(`    Reading data from: ${userDir}`)
-  console.log()
+  printBanner(getVersion())
+
+  const spinner = createSpinner('Starting server')
 
   const server = spawn(process.execPath, [standaloneServer], {
     env,
     cwd: appDir,
-    stdio: 'inherit',
+    stdio: ['inherit', 'pipe', 'pipe'],
   })
 
+  let ready = false
+
+  function onReady() {
+    if (ready) return
+    ready = true
+    spinner.stop(`Ready  ${c(C.brightWhite + C.bold, `http://localhost:${port}`)}`)
+    console.log()
+    console.log(`  ${c(C.dim, `Data  ${userDir}`)}`)
+    console.log()
+    console.log(`  ${c(C.dim, 'Press Ctrl+C to stop')}`)
+    console.log()
+  }
+
+  // Next.js standalone server emits a "Listening" or "ready" line when up
+  server.stdout.on('data', (data) => {
+    const text = data.toString()
+    if (!ready && /listen|ready|started/i.test(text)) {
+      onReady()
+    }
+  })
+
+  // Show server errors but suppress routine startup noise
+  server.stderr.on('data', (data) => {
+    const text = data.toString()
+    // Suppress known Next.js startup lines
+    if (/next\.js|turbopack|compil|✓|▲|\- Local:|\- Network:/i.test(text)) return
+    if (!ready) onReady()
+    process.stderr.write(data)
+  })
+
+  // Fallback: show ready after 5s if no signal received
+  const readyTimeout = setTimeout(onReady, 5000)
+  readyTimeout.unref()
+
   server.on('error', (err) => {
-    console.error('Failed to start server:', err)
+    spinner.stop()
+    console.error(`  ${c(C.yellow, '✗')} Failed to start server: ${err.message}`)
     process.exit(1)
   })
 
@@ -103,30 +220,30 @@ async function runInit(args) {
 
   const supportedAgents = ['claude', 'opencode', 'copilot']
 
+  printBanner(getVersion())
+
   if (!agent) {
-    console.log('🔧  Az Infra Harness — Init')
+    console.log('  This will add slash commands and skill definitions for your coding agent.')
     console.log()
-    console.log('This will add slash commands and skill definitions for your coding agent.')
+    console.log(`  ${c(C.bold, 'Usage:')}`)
+    console.log(`    npx az-infra-harness init --agent <agent>`)
     console.log()
-    console.log('Usage:')
-    console.log('  npx az-infra-harness init --agent <agent>')
-    console.log()
-    console.log('Supported agents:')
-    supportedAgents.forEach(a => console.log(`  - ${a}`))
+    console.log(`  ${c(C.bold, 'Supported agents:')}`)
+    supportedAgents.forEach(a => console.log(`    ${c(C.cyan, '◆')} ${a}`))
     console.log()
     process.exit(0)
   }
 
   if (!supportedAgents.includes(agent)) {
-    console.error(`❌  Unknown agent "${agent}". Supported: ${supportedAgents.join(', ')}`)
+    console.error(`  ${c(C.yellow, '✗')} Unknown agent "${agent}". Supported: ${supportedAgents.join(', ')}`)
     process.exit(1)
   }
 
   const appDir = path.join(__dirname, '..')
   const targetDir = process.cwd()
 
-  console.log(`🔧  Installing Az Infra Harness for ${agent}`)
-  console.log(`    Target: ${targetDir}`)
+  console.log(`  Installing for ${c(C.bold, agent)}`)
+  console.log(`  ${c(C.dim, `Target: ${targetDir}`)}`)
   console.log()
 
   const agentConfig = {
@@ -155,16 +272,17 @@ async function runInit(args) {
 
   try {
     await copyDirectory(config.sourceDir, config.targetDir)
-    console.log(`✅  Installed ${config.label} commands → ${path.relative(targetDir, config.targetDir)}`)
+    console.log(`  ${c(C.green, '✓')} Installed ${config.label} commands  ${c(C.dim, path.relative(targetDir, config.targetDir))}`)
 
     await copyDirectory(skillsSource, skillsTarget)
-    console.log(`✅  Installed skill definitions → skills/`)
+    console.log(`  ${c(C.green, '✓')} Installed skill definitions  ${c(C.dim, 'skills/')}`)
 
     console.log()
-    console.log('🎉  Done! Open your coding agent in this directory and try:')
-    console.log('    /application-overview')
+    console.log(`  ${c(C.green, '✓')} Done! Open your coding agent in this directory and try:`)
+    console.log(`    ${c(C.cyan, '/application-overview')}`)
+    console.log()
   } catch (err) {
-    console.error('❌  Error during init:', err.message)
+    console.error(`  ${c(C.yellow, '✗')} Error during init: ${err.message}`)
     process.exit(1)
   }
 }
@@ -185,7 +303,7 @@ async function copyDirectory(src, dest) {
       await copyDirectory(srcPath, destPath)
     } else {
       if (fs.existsSync(destPath)) {
-        console.log(`  ⏭  Skipping (already exists): ${path.relative(process.cwd(), destPath)}`)
+        console.log(`  ${c(C.dim, `⏭  Skipping (exists): ${path.relative(process.cwd(), destPath)}`)}`)
       } else {
         fs.copyFileSync(srcPath, destPath)
       }
