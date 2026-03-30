@@ -26,13 +26,16 @@ Each phase is driven by **slash commands** you run in your coding agent. The age
 
 The UI (`npx @zureltd/az-infra-harness`) displays what the agent has written. Each card shows a blue border and checkmark when its data file exists. You never edit files manually — the agent does it.
 
+![Local running webserver](docs/img/cli-webserver.png)
+
+
 ### Supported agents
 
 | Agent | Command directory |
 |-------|------------------|
 | [Claude Code](https://claude.ai/code) | `.claude/commands/` |
 | [OpenCode](https://opencode.ai) | `.opencode/commands/` |
-| [GitHub Copilot](https://github.com/features/copilot) | `.github/prompts/` |
+| [GitHub Copilot](https://github.com/features/copilot) | `.github/skills/` |
 
 ---
 
