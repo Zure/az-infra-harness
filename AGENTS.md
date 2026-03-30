@@ -31,11 +31,8 @@ data/
 ├── context/                        # ← Future sections
 ├── application-architecture/
 ├── architecture-decisions/
-└── export/                        # ← Placeholder only
-
-# Export output (generated at project root by /generate-code-bicep or /generate-code-terraform):
-export-bicep/                      # Bicep IaC files
-export-terraform/                  # Terraform IaC files
+├── bicep/                         # Generated Bicep IaC files
+└── tf/                            # Generated Terraform IaC files
 ```
 
 ## How It Works
@@ -326,7 +323,7 @@ The same pattern will be used for:
 - **Context** (`/infrastructure-landscape`, `/platform-setup`, etc.)
 - **Application Architecture** (`/architecture-diagram`, `/deployment-strategy`, etc.)
 - **Architecture Decisions** (`/generate-adrs`, etc.)
-- **Code Generation** (`/generate-code-bicep`, `/generate-code-terraform`) — generates actual IaC files to `export-bicep/` or `export-terraform/`
+- **Code Generation** (`/generate-code-bicep`, `/generate-code-terraform`) — generates actual IaC files to `infra/bicep/` or `infra/tf/`
 
 ---
 

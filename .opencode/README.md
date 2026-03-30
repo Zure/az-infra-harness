@@ -27,5 +27,5 @@ Skills are defined in the shared `skills/` directory at the project root. The co
 - `/adr-template`
 
 ### Export
-- `/export-bicep`
-- `/export-terraform`
+- `/generate-code-bicep`
+- `/generate-code-terraform`

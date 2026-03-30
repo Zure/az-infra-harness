@@ -61,8 +61,8 @@ const adrCount = (() => {
 })()
 console.log(adrCount > 0 ? `  ✓ Architecture Decisions (${adrCount} ADRs)` : '  ⚬ Architecture Decisions (empty)')
 
-const hasBicep = fileExists(path.join(rootDir, 'export-bicep'))
-const hasTerraform = fileExists(path.join(rootDir, 'export-terraform'))
+const hasBicep = fileExists(path.join(dataDir, 'bicep'))
+const hasTerraform = fileExists(path.join(dataDir, 'tf'))
 const exportTools = [hasBicep && 'Bicep', hasTerraform && 'Terraform'].filter(Boolean).join(', ')
 console.log(exportTools ? `  ✓ Export (${exportTools})` : '  ⚬ Export (empty)')
 

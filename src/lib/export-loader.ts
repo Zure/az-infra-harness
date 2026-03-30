@@ -157,8 +157,8 @@ async function loadToolExport(dir: string, tool: 'bicep' | 'terraform', folderNa
  */
 export async function loadExportData(): Promise<ExportData> {
   const [bicep, terraform] = await Promise.all([
-    loadToolExport(EXPORT_BICEP_DIR, 'bicep', 'export-bicep/'),
-    loadToolExport(EXPORT_TERRAFORM_DIR, 'terraform', 'export-terraform/')
+    loadToolExport(EXPORT_BICEP_DIR, 'bicep', 'infra/bicep/'),
+    loadToolExport(EXPORT_TERRAFORM_DIR, 'terraform', 'infra/tf/')
   ])
 
   return {

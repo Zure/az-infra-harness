@@ -64,7 +64,7 @@ npx @zureltd/az-infra-harness init --agent opencode
 npx @zureltd/az-infra-harness init --agent copilot
 ```
 
-The UI reads planning files from `./data/`, `./export-bicep/`, and `./export-terraform/` relative to where you run the command.
+The UI reads planning files from `./infra/` (including generated `infra/bicep/` and `infra/tf/` subdirectories) relative to where you run the command.
 
 ---
 
@@ -166,8 +166,6 @@ az-infra-harness/
 │   ├── application-architecture/
 │   ├── architecture-decisions/
 │   └── code-generation/
-├── export-bicep/                 # Generated Bicep output (created by /generate-code-bicep)
-├── export-terraform/             # Generated Terraform output (created by /generate-code-terraform)
 ├── .claude/commands/             # Claude Code slash command wrappers
 ├── .opencode/commands/           # OpenCode command wrappers
 └── .github/prompts/              # GitHub Copilot prompt files
@@ -225,8 +223,8 @@ The UI reads these files at request time — no build step needed, just refresh.
 
 | Command | Output directory | Description |
 |---------|-----------------|-------------|
-| `/generate-code-bicep` | `export-bicep/` | Production-ready Bicep modules with parameter files |
-| `/generate-code-terraform` | `export-terraform/` | Production-ready Terraform modules with tfvars files |
+| `/generate-code-bicep` | `infra/bicep/` | Production-ready Bicep modules with parameter files |
+| `/generate-code-terraform` | `infra/tf/` | Production-ready Terraform modules with tfvars files |
 
 ---
 
